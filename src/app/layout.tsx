@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -22,11 +23,23 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        {/* SVG Definitions */}
+        <div className="fixed top-0 left-0 w-0 h-0 overflow-hidden">
+          <svg width="0" height="0">
+            <defs>
+              <linearGradient id="icon-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="#FFD54F" />
+                <stop offset="100%" stopColor="#FFB300" />
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
         {children}
       </body>
     </html>
