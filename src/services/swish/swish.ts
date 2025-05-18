@@ -12,9 +12,18 @@ export interface SwishConfig {
 }
 
 export function getSwishConfig(): SwishConfig {
-  const certPath = path.resolve(process.env.SWISH_CERT_PATH!);
-  const keyPath = path.resolve(process.env.SWISH_KEY_PATH!);
-  const caPath = path.resolve(process.env.SWISH_CA_PATH!);
+  const certPath = path.resolve(
+    __dirname,
+    "../../../" + process.env.SWISH_CERT_PATH!
+  );
+  const keyPath = path.resolve(
+    __dirname,
+    "../../../" + process.env.SWISH_KEY_PATH!
+  );
+  const caPath = path.resolve(
+    __dirname,
+    "../../../" + process.env.SWISH_CA_PATH!
+  );
 
   const agent = new https.Agent({
     cert: fs.readFileSync(certPath),
