@@ -21,20 +21,19 @@ const PaymentMethod: React.FC<PaymentMethodProps> = ({
       <button
         type="button"
         onClick={() => onPaymentSelect('swish')}
-        className={`w-full px-4 py-3 border rounded-lg text-left transition-all duration-200 flex items-center justify-between ${
-          selectedPayment === 'swish'
+        className={`w-full px-4 py-3 border rounded-lg text-left transition-all duration-200 flex items-center justify-between ${selectedPayment === 'swish'
             ? 'border-[#FFD54F] bg-yellow-50'
             : 'border-gray-300 hover:border-[#FFD54F]'
-        }`}
+          }`}
       >
         <span className="text-black font-medium">Swish</span>
-        <img 
+        <img
           src="https://i.ibb.co/jPtZxwTR/Swish-Logo-Secondary-Light-BG.png"
           alt="Swish"
           className="h-5 w-auto"
         />
       </button>
-
+      {/* 
       {selectedPayment === 'swish' && (
         <div className="space-y-6">
           <label htmlFor="swishPhone" className="block text-sm font-medium text-gray-700 mb-1">
@@ -51,7 +50,7 @@ const PaymentMethod: React.FC<PaymentMethodProps> = ({
             placeholder="07X XXX XX XX"
           />
         </div>
-      )}
+      )} */}
     </div>
   );
 };

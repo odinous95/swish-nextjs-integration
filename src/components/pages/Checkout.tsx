@@ -1,4 +1,5 @@
 "use client"
+
 import React, { useState, useEffect } from 'react';
 import DeliveryForm from '../checkout/DeliveryForm';
 import DeliveryDate from '../checkout/DeliveryDate';
@@ -17,7 +18,10 @@ type DeliveryDateType = {
   deliveryTime: string;
 };
 
-
+type SwishResponse = {
+  deeplink: string;
+  token?: string;
+};
 
 export function Checkout() {
   const cartItems = useCartStore((state) => state.cartItems);
@@ -30,6 +34,7 @@ export function Checkout() {
     handleInputBlur: onInputBlur,
     handleCheckoutSubmit: onSubmit,
   } = useCheckoutForm();
+
   const [isScrolled, setIsScrolled] = useState(false);
   const [selectedPayment, setSelectedPayment] = useState<string>('');
   const [selectedDeliveryDate, setSelectedDeliveryDate] = useState<string>('');
@@ -39,47 +44,49 @@ export function Checkout() {
   const [campaignCode, setCampaignCode] = useState('');
   const [campaignError, setCampaignError] = useState('');
   const [discountApplied, setDiscountApplied] = useState(false);
-  const [swishPhone, setSwishPhone] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
   const [paymentError, setPaymentError] = useState<string | null>(null);
+
+  // Swish deeplink + token + QR blob URL
+  const [swishDeeplink, setSwishDeeplink] = useState<string>('');
+  const [swishToken, setSwishToken] = useState<string>('');
+  const [showQrFallback, setShowQrFallback] = useState<boolean>(false);
+  const [qrBlobUrl, setQrBlobUrl] = useState<string>('');
+
   const navigate = useRouter();
 
   // Scroll listener
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    const onScroll = () => setIsScrolled(window.scrollY > 20);
+    window.addEventListener('scroll', onScroll);
+    return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  // Initialize available delivery dates
+  // Init delivery dates
   useEffect(() => {
-    const updateAvailableDates = () => {
-      const dates: DeliveryDateType[] = [];
-      const now = new Date();
-      const currentHour = now.getHours();
-      const startDays = currentHour >= 20 ? 2 : 1;
-
-      for (let i = startDays; i <= 7; i++) {
-        const date = new Date();
-        date.setDate(now.getDate() + i);
-        const dayNames = ['Söndag', 'Måndag', 'Tisdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lördag'];
-        const dayName = dayNames[date.getDay()];
-        const formattedDate = date.toLocaleDateString('sv-SE', { month: 'numeric', day: 'numeric' });
-        const deliveryTime = [0, 6].includes(date.getDay()) ? '16:00 - 20:00' : '08:00 - 13:00';
-        dates.push({ dayName, date: formattedDate, fullDate: date, deliveryTime });
-      }
-      setAvailableDates(dates);
-      if (dates.length) setSelectedDeliveryDate(dates[0].date);
-    };
-    updateAvailableDates();
+    const now = new Date();
+    const startDays = now.getHours() >= 20 ? 2 : 1;
+    const dates: DeliveryDateType[] = [];
+    for (let i = startDays; i <= 7; i++) {
+      const d = new Date();
+      d.setDate(now.getDate() + i);
+      const dayNames = ['Söndag', 'Måndag', 'Tisdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lördag'];
+      dates.push({
+        dayName: dayNames[d.getDay()],
+        date: d.toLocaleDateString('sv-SE', { month: 'numeric', day: 'numeric' }),
+        fullDate: d,
+        deliveryTime: [0, 6].includes(d.getDay()) ? '16:00 - 20:00' : '08:00 - 13:00'
+      });
+    }
+    setAvailableDates(dates);
+    if (dates.length) setSelectedDeliveryDate(dates[0].date);
   }, []);
 
+  // Coupon logic
   const validateCoupon = () => {
     if (campaignCode === 'HE59') {
-      const usageCount = parseInt(localStorage.getItem(COUPON_USAGE_KEY) || '0');
+      const usageCount = parseInt(localStorage.getItem(COUPON_USAGE_KEY) || '0', 10);
       const totalItems = cartItems.reduce((t, i) => t + i.quantity, 0);
       if (usageCount >= MAX_COUPON_USES || totalItems > 5) {
         setCampaignError('Koden har löpt ut');
@@ -106,7 +113,9 @@ export function Checkout() {
     onInputBlur();
   };
 
-  const countMealItems = () => cartItems.filter(i => !i.isExtra && i.id !== 'business-50').reduce((s, i) => s + i.quantity, 0);
+  const countMealItems = () =>
+    cartItems.filter(i => !i.isExtra && i.id !== 'business-50').reduce((s, i) => s + i.quantity, 0);
+
   const calculateTotals = () => {
     const subtotal = cartItems.reduce((t, i) => t + i.price * i.quantity, 0);
     const hasBusiness = cartItems.some(i => i.id === 'business-50');
@@ -117,133 +126,110 @@ export function Checkout() {
     return { subtotal, shippingFee, tax, discount, total: base - discount };
   };
 
+  // Fetch QR blob once fallback & token ready
+  // Inside your QR-fallback effect:
+  useEffect(() => {
+    if (showQrFallback && swishToken) {
+      (async () => {
+        try {
+          const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/swish/swishqr`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ token: swishToken }),
+          });
+          if (!response.ok) throw new Error(`QR proxy failed ${response.status}`);
+          const blob = await response.blob();
+          setQrBlobUrl(URL.createObjectURL(blob));
+        } catch (err) {
+          console.error('Failed to load Swish QR image', err);
+        }
+      })();
+    }
+  }, [showQrFallback, swishToken]);
+
+
+  // Open deeplink & schedule fallback
+  useEffect(() => {
+    if (!swishDeeplink) return;
+    window.location.href = swishDeeplink;
+    const timer = setTimeout(() => setShowQrFallback(true), 1000);
+    return () => clearTimeout(timer);
+  }, [swishDeeplink]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (isProcessing) return;
-
     setPaymentError(null);
-
-    // Ensure a payment method and delivery date are selected
     if (!selectedPayment || !selectedDeliveryDate) {
       setPaymentError('Vänligen välj betalningsmetod och leveransdatum.');
       return;
     }
-
     if (selectedPayment === 'swish') {
       setIsProcessing(true);
       const { total } = calculateTotals();
-      const orderId = `order_${Date.now()}`;
-
+      const idDigits = Date.now().toString();
+      const message = `Order ${idDigits}`;
+      const amount = Math.round(total * 100).toString();
       try {
-        // Initiate Swish payment
-        const response = await fetch(
+        const res = await fetch(
           `${process.env.NEXT_PUBLIC_API_URL}/api/swish/paymentrequests`,
           {
             method: 'PUT',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              payerAlias: swishPhone,
-              amount: total.toFixed(2),
-              message: 'Test E-Commerce',
-              callbackIdentifier: orderId,
-            }),
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ amount, message, returnUrl: `${process.env.NEXT_PUBLIC_API_URL}/receipt?order=${idDigits}` }),
           }
         );
-        console.log('Swish response:', response);
-
-        const { id, url } = await response.json();
-        const swishLink = `swish://paymentrequest?token=${id}`;
-        console.log('Swish payment URL:', url);
-        if (url) {
-          window.location.href = swishLink;
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const { deeplink, token: tok }: SwishResponse = await res.json();
+        let t = tok;
+        if (!t) {
+          const u = new URL(deeplink);
+          t = u.searchParams.get('token') || '';
         }
-        {
-          typeof window !== 'undefined' && /Mobi|Android/i.test(navigator.userAgent) && (
-            <a href={`swish://paymentrequest?token=${id}`}>
-              Open in Swish App
-            </a>
-          )
-        }
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const data = await response.json();
-        console.log('Swish payment response:', data);
-
-        if (data.paymentUrl) {
-          // Show loading modal
-          const modal = document.createElement('div');
-          modal.id = 'swish-loading-modal';
-          modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
-          modal.innerHTML = `
-            <div class="bg-white rounded-lg p-8 text-center">
-              <div class="animate-spin rounded-full h-12 w-12 border-4 border-[#FFD54F] border-t-transparent mx-auto mb-4"></div>
-              <p class="text-lg font-semibold">Öppna Swish</p>
-            </div>
-          `;
-          document.body.appendChild(modal);
-
-          // Poll for payment status
-          const pollInterval = setInterval(async () => {
-            try {
-              const statusResponse = await fetch(
-                `${process.env.NEXT_PUBLIC_API_URL}/.netlify/functions/payment-status?orderId=${orderId}`
-              );
-              if (!statusResponse.ok) {
-                throw new Error(`HTTP error! status: ${statusResponse.status}`);
-              }
-              const statusData = await statusResponse.json();
-
-              if (statusData.status === 'PAID') {
-                clearInterval(pollInterval);
-                document.getElementById('swish-loading-modal')?.remove();
-                setPaymentSuccess(true);
-                setIsProcessing(false);
-              }
-            } catch (err) {
-              console.error('Status polling error:', err);
-              clearInterval(pollInterval);
-              document.getElementById('swish-loading-modal')?.remove();
-              setPaymentError('Det gick inte att verifiera betalningen. Vänligen kontakta support.');
-              setIsProcessing(false);
-            }
-          }, 2000);
-
-          // Redirect to Swish
-          window.location.href = data.paymentUrl;
-        } else {
-          throw new Error('Ingen betalningslänk mottagen från server.');
-        }
+        if (!deeplink || !t) throw new Error('Missing deeplink or token');
+        setSwishDeeplink(deeplink);
+        setSwishToken(t);
       } catch (err) {
-        console.error('Payment error:', err);
+        console.error('Swish M-commerce error:', err);
+        setPaymentError('Det gick inte att genomföra betalningen.');
         setIsProcessing(false);
-        document.getElementById('swish-loading-modal')?.remove();
-        setPaymentError('Det gick inte att genomföra betalningen. Vänligen försök igen eller kontakta support.');
       }
-    } else {
-      // Handle other payment methods here
-      onSubmit(e);
+      return;
     }
+    onSubmit(e);
   };
 
+  // QR fallback view
+  if (showQrFallback && qrBlobUrl) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-white p-6">
+        <h1 className="text-xl font-bold mb-4">Skanna QR-koden med Swish</h1>
+        <img src={qrBlobUrl} alt="Swish QR-kod" className="w-64 h-64 mb-6" />
+        <p className="text-gray-600 text-sm text-center">
+          Har du problem? Kopiera länken nedan och öppna i din Swish-app:
+        </p>
+        <a href={qrBlobUrl} className="text-blue-500 text-sm break-all mt-2">
+          {qrBlobUrl}
+        </a>
+      </div>
+    );
+  }
 
+  // Success view
   if (paymentSuccess) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-white">
         <div className="text-center">
-          <div className="w-24 h-24 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-6">
-            <div className="w-12 h-12 text-green-500">✓</div>
+          <div className="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+            <div className="text-green-500 text-2xl">✓</div>
           </div>
-          <h2 className="text-2xl font-bold text-green-600 mb-4">Tack för din beställning!</h2>
+          <h2 className="text-2xl font-bold text-green-600">Tack för din beställning!</h2>
         </div>
       </div>
     );
   }
 
+  // Main checkout form
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar />
@@ -260,7 +246,7 @@ export function Checkout() {
               showPostalCodeError={showPostalCodeError}
               handlePostalCodeChange={onChange}
               handlePostalCodeBlur={handlePostalCodeBlur}
-              onTermsChange={(e) => handleTermsChange(e)}
+              onTermsChange={handleTermsChange}
             />
             <DeliveryDate
               selectedDeliveryDate={selectedDeliveryDate}
@@ -276,21 +262,29 @@ export function Checkout() {
               onCampaignCodeToggle={() => setShowCampaignCode(!showCampaignCode)}
               onCampaignCodeChange={handleCampaignCodeChange}
               onCampaignCodeBlur={validateCoupon}
-              onCampaignCodeKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); validateCoupon(); } }}
+              onCampaignCodeKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  e.preventDefault();
+                  validateCoupon();
+                }
+              }}
               getTotalPrice={calculateTotals}
             />
             <PaymentMethod
               selectedPayment={selectedPayment}
-              onPaymentSelect={setSelectedPayment}
-              swishPhone={swishPhone}
-              onSwishPhoneChange={(e) => setSwishPhone(e.target.value)}
-            />
-            {paymentError && <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">{paymentError}</div>}
+              onPaymentSelect={setSelectedPayment} swishPhone={''} onSwishPhoneChange={function (e: React.ChangeEvent<HTMLInputElement>): void {
+                throw new Error('Function not implemented.');
+              }} />
+            {paymentError && (
+              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+                {paymentError}
+              </div>
+            )}
             <button
-              id="swish-submit"
+              id="checkout-submit"
               type="submit"
-              disabled={!selectedPayment || !selectedDeliveryDate || showPostalCodeError || (selectedPayment === 'swish' && !swishPhone) || !form.termsAccepted || isProcessing}
-              className={`w-full bg-gradient-to-r from-[#FFD54F] to-[#FFB300] text-black font-semibold py-3 px-6 rounded-xl hover:from-[#FFE082] hover:to-[#FFB300] transition-all duration-300 ${(!selectedPayment || !selectedDeliveryDate || showPostalCodeError || (selectedPayment === 'swish' && !swishPhone) || !form.termsAccepted || isProcessing) && 'opacity-50 cursor-not-allowed'}`}
+              disabled={!selectedPayment || !selectedDeliveryDate || showPostalCodeError || !form.termsAccepted || isProcessing}
+              className={`w-full bg-gradient-to-r from-[#FFD54F] to-[#FFB300] text-black font-semibold py-3 px-6 rounded-xl hover:from-[#FFE082] hover:to-[#FFB300] transition-all duration-300 ${(!selectedPayment || !selectedDeliveryDate || showPostalCodeError || !form.termsAccepted || isProcessing) && 'opacity-50 cursor-not-allowed'}`}
             >
               {isProcessing ? 'Bearbetar...' : 'Slutför och betala'}
             </button>
@@ -299,4 +293,4 @@ export function Checkout() {
       </div>
     </div>
   );
-};
+}
