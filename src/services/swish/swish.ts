@@ -32,17 +32,14 @@ export function getSwishConfig(): SwishConfig {
   };
 }
 
-/**
- * Helper to call Swish API
- */
 export async function swishRequest<T = any>(
   method: "GET" | "POST" | "PUT",
   url: string,
   data?: any
-): Promise<T> {
+): Promise<{ data: T; status: number; headers: Record<string, string> }> {
   const { httpsAgent } = getSwishConfig();
 
-  const opts: AxiosRequestConfig = {
+  const resp = await axios.request<T>({
     method,
     url,
     data,
@@ -50,9 +47,14 @@ export async function swishRequest<T = any>(
     headers: {
       "Content-Type": "application/json",
     },
-    validateStatus: () => true, // we'll handle status codes manually
-  };
+    validateStatus: () => true,
+  });
 
-  const resp = await axios.request<T>(opts);
-  return resp.data as T & { status?: number; headers?: any };
+  return {
+    data: resp.data,
+    status: resp.status,
+    headers: Object.fromEntries(
+      Object.entries(resp.headers).map(([k, v]) => [k.toLowerCase(), String(v)])
+    ),
+  };
 }

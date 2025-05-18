@@ -10,10 +10,10 @@ const Testimonials: React.FC = () => {
     if (scrollContainerRef.current) {
       const container = scrollContainerRef.current;
       const scrollAmount = container.clientWidth;
-      const targetScroll = direction === 'left' 
+      const targetScroll = direction === 'left'
         ? container.scrollLeft - scrollAmount
         : container.scrollLeft + scrollAmount;
-      
+
       container.scrollTo({
         left: targetScroll,
         behavior: 'smooth'
@@ -28,13 +28,13 @@ const Testimonials: React.FC = () => {
           Älskad av Healthy Eaters
         </h2>
         <div className="relative">
-          <div 
+          <div
             ref={scrollContainerRef}
             className="flex overflow-x-auto scrollbar-hide snap-x snap-mandatory gap-8 pb-4 scroll-smooth"
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           >
             {testimonials.map((testimonial, index) => (
-              <div 
+              <div
                 key={index}
                 className="flex-none w-full md:w-[calc(33.333%-1.33rem)] snap-center"
               >
@@ -42,7 +42,7 @@ const Testimonials: React.FC = () => {
               </div>
             ))}
           </div>
-          
+
           <NavigationArrows onScroll={scroll} />
           <NavigationArrows onScroll={scroll} isMobile={true} />
         </div>

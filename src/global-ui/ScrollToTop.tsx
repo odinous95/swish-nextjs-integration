@@ -1,8 +1,7 @@
+'use client';
 import { usePathname } from 'next/navigation';
 import { useEffect } from 'react';
-
-
-const ScrollToTop = () => {
+export function ScrollToTop() {
   const pathname = usePathname();
 
   useEffect(() => {
@@ -11,5 +10,3 @@ const ScrollToTop = () => {
 
   return null;
 };
-
-export default ScrollToTop;

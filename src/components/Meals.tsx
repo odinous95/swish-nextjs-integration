@@ -65,10 +65,10 @@ const Meals: React.FC<MealsProps> = ({
     if (scrollContainerRef.current) {
       const container = scrollContainerRef.current;
       const scrollAmount = container.clientWidth;
-      const targetScroll = direction === 'left' 
+      const targetScroll = direction === 'left'
         ? container.scrollLeft - scrollAmount
         : container.scrollLeft + scrollAmount;
-      
+
       container.scrollTo({
         left: targetScroll,
         behavior: 'smooth'
@@ -88,7 +88,7 @@ const Meals: React.FC<MealsProps> = ({
         <h2 className="font-heading font-bold text-3xl md:text-4xl text-center mb-10">
           Utforska Våra Utsökta Måltider
         </h2>
-        
+
         {/* Mobile Layout */}
         <div className="md:hidden space-y-4">
           {meals.map((meal) => (
@@ -107,7 +107,7 @@ const Meals: React.FC<MealsProps> = ({
 
         {/* Mobile Modal */}
         <MealModal
-          meal={selectedMealData}
+          meal={selectedMealData ?? null}
           onClose={() => setSelectedMeal(null)}
           showQuantity={showQuantity}
           quantities={quantities}
@@ -118,7 +118,7 @@ const Meals: React.FC<MealsProps> = ({
 
         {/* Desktop Layout */}
         <div className="relative hidden md:block">
-          <div 
+          <div
             ref={scrollContainerRef}
             className="flex overflow-x-auto scrollbar-hide snap-x snap-mandatory gap-8 pb-4 scroll-smooth"
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}

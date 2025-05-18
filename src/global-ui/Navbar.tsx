@@ -1,16 +1,38 @@
 "use client"
-import React, { JSX, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ShoppingCart, Menu, X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { Logo, ReklamBanner } from '.';
+import { useCartStore } from '@/store';
+export function Navbar() {
+  const {
+    setIsCartOpen,
+    getTotalCartItems,
+  } = useCartStore();
 
-interface NavbarProps {
-  isScrolled: boolean;
-  cartItemCount: number;
-  onCartClick: () => void;
-  scrollToSection: (id: string) => void;
-}
+  const [isScrolled, setIsScrolled] = useState(false);
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
 
-export function Navbar({ isScrolled, cartItemCount, onCartClick, scrollToSection }: NavbarProps) {
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const scrollToSection = (id: string) => {
+    const element = document.getElementById(id);
+    if (element) {
+      const navbarHeight = 70;
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - navbarHeight;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      });
+    }
+  };
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const navigate = useRouter();
 
@@ -37,8 +59,11 @@ export function Navbar({ isScrolled, cartItemCount, onCartClick, scrollToSection
     }
   };
 
+  const cartItemCount = getTotalCartItems();
+
   return (
     <div className="fixed w-full z-40">
+      <ReklamBanner isScrolled={isScrolled} />
       <div className={`bg-black backdrop-blur-sm shadow-lg h-[70px] ${isScrolled ? 'mt-0' : 'mt-[40px]'} transition-all duration-300`}>
         <div className="max-w-6xl mx-auto px-4 h-full flex items-center">
           <button
@@ -56,11 +81,7 @@ export function Navbar({ isScrolled, cartItemCount, onCartClick, scrollToSection
             className="w-[200px] flex items-center gap-3 cursor-pointer"
             onClick={handleLogoClick}
           >
-            <img
-              src="https://i.ibb.co/h1Mskmyq/HElogo-removebg-preview.png"
-              alt="HEALTHY EATING Logo"
-              className="h-12 w-auto"
-            />
+            <Logo />
             <h3 className="font-heading text-transparent bg-gradient-to-r from-[#FFD54F] to-[#FFB300] bg-clip-text text-xl font-bold whitespace-nowrap">HEALTHY EATING</h3>
           </div>
 
@@ -88,11 +109,11 @@ export function Navbar({ isScrolled, cartItemCount, onCartClick, scrollToSection
 
           <div className="w-[200px] flex justify-end">
             <button
-              onClick={onCartClick}
+              onClick={() => setIsCartOpen(true)}
               className="relative p-2 hover:scale-105 hover:cursor-pointer transition-transform duration-300"
             >
-              <ShoppingCart className="w-6 h-6" style={{ stroke: 'url(#icon-gradient)' }} />
-              {cartItemCount > 0 && (
+              <ShoppingCart className="w-6 h-6 text-white" />
+              {cartItemCount && cartItemCount > 0 && (
                 <span className="absolute -top-2 -right-2 bg-gradient-to-r from-[#FFD54F] to-[#FFB300] text-black text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
                   {cartItemCount}
                 </span>
@@ -118,6 +139,6 @@ export function Navbar({ isScrolled, cartItemCount, onCartClick, scrollToSection
           ))}
         </div>
       </div>
-    </div>
+    </div >
   );
 };
