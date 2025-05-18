@@ -1,18 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import Navbar from './Navbar';
-import Footer from './Footer';
 import { Truck, CreditCard, Home, Clock, AlertCircle, UserCheck, ScrollText, UserCog } from 'lucide-react';
-import { useRouter } from 'next/navigation';
 
 interface TermsProps {
   cartItemCount: number;
   onCartClick: () => void;
 }
 
-const Terms: React.FC<TermsProps> = ({ cartItemCount, onCartClick }) => {
-  const [isScrolled, setIsScrolled] = useState(false);
+const Terms: React.FC<TermsProps> = () => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_isScrolled, setIsScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState<string | null>(null);
-  const navigate = useRouter();
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -47,22 +44,22 @@ const Terms: React.FC<TermsProps> = ({ cartItemCount, onCartClick }) => {
     }
   };
 
-  const handleNavClick = (sectionId: string) => {
-    navigate.push('/');
-    setTimeout(() => {
-      const element = document.getElementById(sectionId);
-      if (element) {
-        const navbarHeight = 70;
-        const elementPosition = element.getBoundingClientRect().top;
-        const offsetPosition = elementPosition + window.pageYOffset - navbarHeight;
+  // const handleNavClick = (sectionId: string) => {
+  //   navigate.push('/');
+  //   setTimeout(() => {
+  //     const element = document.getElementById(sectionId);
+  //     if (element) {
+  //       const navbarHeight = 70;
+  //       const elementPosition = element.getBoundingClientRect().top;
+  //       const offsetPosition = elementPosition + window.pageYOffset - navbarHeight;
 
-        window.scrollTo({
-          top: offsetPosition,
-          behavior: 'smooth'
-        });
-      }
-    }, 100);
-  };
+  //       window.scrollTo({
+  //         top: offsetPosition,
+  //         behavior: 'smooth'
+  //       });
+  //     }
+  //   }, 100);
+  // };
 
   const sections = [
     { id: 'service', title: '1. Om tjänsten', icon: ScrollText },
@@ -77,12 +74,6 @@ const Terms: React.FC<TermsProps> = ({ cartItemCount, onCartClick }) => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
-      {/* <Navbar
-        isScrolled={isScrolled}
-        cartItemCount={cartItemCount}
-        onCartClick={onCartClick}
-        scrollToSection={handleNavClick}
-      /> */}
       <div className="pt-[110px]">
         <div className="max-w-6xl mx-auto px-4 py-12">
           <div className="text-center mb-12">
@@ -202,7 +193,6 @@ const Terms: React.FC<TermsProps> = ({ cartItemCount, onCartClick }) => {
           </div>
         </div>
       </div>
-      <Footer />
     </div>
   );
 };

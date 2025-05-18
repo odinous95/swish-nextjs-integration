@@ -19,7 +19,7 @@ interface DeliveryFormProps {
   onInputFocus: (inputName: string) => void;
   onInputBlur: () => void;
   inputRefs: {
-    [key: string]: React.RefObject<HTMLInputElement | HTMLTextAreaElement>;
+    [key: string]: React.RefObject<HTMLInputElement | HTMLTextAreaElement | null>;
   };
   showPostalCodeError: boolean;
   handlePostalCodeChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -40,7 +40,7 @@ const DeliveryForm: React.FC<DeliveryFormProps> = ({
 }) => {
   return (
     <div className="space-y-6">
-      <h4 className="font-heading text-2xl font-bold text-transparent bg-gradient-to-r from-[#FFD54F] to-[#FFB300] bg-clip-text pb-2 border-b-2 border-gradient-to-r from-[#FFD54F] to-[#FFB300]">
+      <h4 className="font-heading text-2xl font-bold text-transparent bg-gradient-to-r bg-clip-text pb-2 border-b-2 border-gradient-to-r from-[#FFD54F] to-[#FFB300]">
         Leveransuppgifter
       </h4>
       <div className="grid grid-cols-2 gap-4">

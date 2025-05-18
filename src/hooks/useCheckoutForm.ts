@@ -17,19 +17,24 @@ export const useCheckoutForm = () => {
     termsAccepted: false,
   });
 
+  interface InputRefs {
+    [key: string]: React.RefObject<
+      HTMLInputElement | HTMLTextAreaElement | null
+    >;
+  }
   const [focusedInput, setFocusedInput] = useState<string | null>(null);
 
   const inputRefs: InputRefs = {
-    firstName: useRef<HTMLInputElement>(null),
-    lastName: useRef<HTMLInputElement>(null),
-    address: useRef<HTMLInputElement>(null),
-    postalCode: useRef<HTMLInputElement>(null),
-    city: useRef<HTMLInputElement>(null),
-    phone: useRef<HTMLInputElement>(null),
-    email: useRef<HTMLInputElement>(null),
-    comment: useRef<HTMLTextAreaElement>(null),
-    doorCode: useRef<HTMLInputElement>(null),
-    floor: useRef<HTMLInputElement>(null),
+    firstName: useRef<HTMLInputElement | HTMLTextAreaElement>(null),
+    lastName: useRef<HTMLInputElement | HTMLTextAreaElement>(null),
+    address: useRef<HTMLInputElement | HTMLTextAreaElement>(null),
+    postalCode: useRef<HTMLInputElement | HTMLTextAreaElement>(null),
+    city: useRef<HTMLInputElement | HTMLTextAreaElement>(null),
+    phone: useRef<HTMLInputElement | HTMLTextAreaElement>(null),
+    email: useRef<HTMLInputElement | HTMLTextAreaElement>(null),
+    comment: useRef<HTMLInputElement | HTMLTextAreaElement>(null),
+    doorCode: useRef<HTMLInputElement | HTMLTextAreaElement>(null),
+    floor: useRef<HTMLInputElement | HTMLTextAreaElement>(null),
   };
 
   useEffect(() => {

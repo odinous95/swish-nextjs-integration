@@ -1,6 +1,7 @@
 import React from 'react';
 import { X } from 'lucide-react';
 import { OrderButton } from '../OrderButton';
+import Image from 'next/image';
 
 interface MealModalProps {
   meal: {
@@ -43,24 +44,24 @@ const MealModal: React.FC<MealModalProps> = ({
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 z-50 md:hidden flex items-center justify-center p-4">
       <div className="bg-white rounded-xl w-full max-w-md max-h-[90vh] overflow-y-auto">
-        <div className="relative">
-          <img 
-            src={meal.image}
-            alt={meal.name}
-            className="w-full aspect-square object-cover"
-          />
-          <button
-            onClick={onClose}
-            className="absolute top-2 right-2 bg-black/50 text-white p-2 rounded-full"
-          >
-            <X className="w-6 h-6" />
-          </button>
-          <div className="absolute top-4 left-4">
-            <div className="bg-white/90 rounded-full w-16 h-16 flex flex-col items-center justify-center text-black shadow-lg p-1">
-              <div className="text-[10px] leading-tight font-semibold text-center">
-                <div>{meal.calories} kcal</div>
-                <div>{meal.protein}g protein</div>
-              </div>
+        <Image
+          src={meal.image}
+          alt={meal.name}
+          width={400}
+          height={400}
+          className="w-full aspect-square object-cover"
+        />
+        <button
+          onClick={onClose}
+          className="absolute top-2 right-2 bg-black/50 text-white p-2 rounded-full"
+        >
+          <X className="w-6 h-6" />
+        </button>
+        <div className="absolute top-4 left-4">
+          <div className="bg-white/90 rounded-full w-16 h-16 flex flex-col items-center justify-center text-black shadow-lg p-1">
+            <div className="text-[10px] leading-tight font-semibold text-center">
+              <div>{meal.calories} kcal</div>
+              <div>{meal.protein}g protein</div>
             </div>
           </div>
         </div>

@@ -1,6 +1,7 @@
 "use client"
 import React, { useState, useRef, useEffect } from 'react';
 import { OrderButton } from '../OrderButton';
+import Image from 'next/image';
 
 interface BusinessCardProps {
   showQuantity: { [key: string]: boolean };
@@ -46,10 +47,13 @@ const BusinessCard: React.FC<BusinessCardProps> = ({
       className="bg-white rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.1)] overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_8px_30px_rgb(0,0,0,0.2)] hover:scale-103"
     >
       <div className="relative h-40 overflow-hidden">
-        <img
+        <Image
           src="https://i.ibb.co/p6jzhSjR/IMAGE-2025-04-17-21-58-08.jpg"
           alt="50st Matlådor"
-          className="w-full h-full object-cover scale-100 transform hover:scale-110 transition-transform duration-300"
+          fill
+          className="object-cover scale-100 transform hover:scale-110 transition-transform duration-300"
+          sizes="100vw"
+          priority
         />
       </div>
       <div className="p-5">

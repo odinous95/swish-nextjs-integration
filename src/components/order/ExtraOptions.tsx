@@ -1,5 +1,6 @@
 import React from 'react';
 import { Plus, Minus } from 'lucide-react';
+import Image from 'next/image';
 
 interface ExtraOptionsProps {
   selectedDrink: boolean;
@@ -28,15 +29,16 @@ export const ExtraOptions: React.FC<ExtraOptionsProps> = ({
           <div className="flex flex-col items-start">
             <button
               onClick={onDrinkToggle}
-              className={`inline-flex items-center gap-2 py-1.5 px-2 rounded-lg text-sm font-medium transition-all duration-200 ${
-                selectedDrink
-                  ? 'bg-gradient-to-r from-[#FFD54F] to-[#FFB300] text-black'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
+              className={`inline-flex items-center gap-2 py-1.5 px-2 rounded-lg text-sm font-medium transition-all duration-200 ${selectedDrink
+                ? 'bg-gradient-to-r from-[#FFD54F] to-[#FFB300] text-black'
+                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
             >
-              <img 
+              <Image
                 src="https://i.ibb.co/k6wgvh98/IMAGE-2025-04-20-22-43-10-removebg-preview.png"
                 alt="Ayran"
+                width={20}
+                height={20}
                 className="w-5 h-5 object-contain rounded-full"
               />
               <span className="whitespace-nowrap">Ayran (+12 kr)</span>
@@ -63,15 +65,16 @@ export const ExtraOptions: React.FC<ExtraOptionsProps> = ({
         {showLemonOption && (
           <button
             onClick={onLemonToggle}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
-              selectedLemon
-                ? 'bg-gradient-to-r from-[#FFD54F] to-[#FFB300] text-black'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-            }`}
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${selectedLemon
+              ? 'bg-gradient-to-r from-[#FFD54F] to-[#FFB300] text-black'
+              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
           >
-            <img 
+            <Image
               src="https://i.ibb.co/nsxDDpRs/IMAGE-2025-04-20-00-21-30-removebg-preview.png"
               alt="Citron"
+              width={24}
+              height={24}
               className="w-6 h-6 object-cover rounded-full"
             />
             Citron (+7 kr)

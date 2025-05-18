@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 
 interface CartItem {
   id: string;
@@ -72,12 +73,13 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
   onCampaignCodeBlur,
   onCampaignCodeKeyDown,
   getTotalPrice,
+
 }) => {
   const { subtotal, shippingFee, tax, discount, total } = getTotalPrice();
 
   return (
     <div className="mt-8 space-y-6">
-      <h4 className="font-heading text-2xl font-bold text-transparent bg-gradient-to-r from-[#FFD54F] to-[#FFB300] bg-clip-text pb-2 border-b-2 border-gradient-to-r from-[#FFD54F] to-[#FFB300]">
+      <h4 className="font-heading text-2xl font-bold text-transparent bg-gradient-to-r from-[#FFD54F] to-[#FFB300] bg-clip-text pb-2 border-b-2 border-gradient-to-r">
         Din beställning
       </h4>
       <div className="space-y-4">
@@ -87,10 +89,12 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
             <div key={item.id} className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 {itemImage && (
-                  <img 
+                  <Image
                     src={itemImage}
                     alt={item.name}
-                    className={`w-12 h-12 ${item.id.startsWith('extra-') ? 'object-contain p-1' : 'object-cover'} rounded-lg`}
+                    width={48}
+                    height={48}
+                    className={`${item.id.startsWith('extra-') ? 'object-contain p-1' : 'object-cover'} rounded-lg w-12 h-12`}
                   />
                 )}
                 <p className="text-sm text-gray-600">{item.quantity}x {item.name}</p>

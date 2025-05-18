@@ -1,9 +1,7 @@
 "use client"
 import React, { useEffect, useState } from 'react';
-import Navbar from './Navbar';
-import Footer from './Footer';
 import { Shield, Lock, UserCheck, Clock, Database, Cookie } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+
 
 
 interface PrivacyPolicyProps {
@@ -11,11 +9,10 @@ interface PrivacyPolicyProps {
   onCartClick: () => void;
 }
 
-const PrivacyPolicy: React.FC<PrivacyPolicyProps> = ({ cartItemCount, onCartClick }) => {
-  const [isScrolled, setIsScrolled] = useState(false);
+const PrivacyPolicy: React.FC<PrivacyPolicyProps> = () => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_isScrolled, setIsScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState<string | null>(null);
-  const navigate = useRouter();
-
   useEffect(() => {
     window.scrollTo(0, 0);
 
@@ -49,22 +46,6 @@ const PrivacyPolicy: React.FC<PrivacyPolicyProps> = ({ cartItemCount, onCartClic
     }
   };
 
-  const handleNavClick = (sectionId: string) => {
-    navigate.push('/');
-    setTimeout(() => {
-      const element = document.getElementById(sectionId);
-      if (element) {
-        const navbarHeight = 70;
-        const elementPosition = element.getBoundingClientRect().top;
-        const offsetPosition = elementPosition + window.pageYOffset - navbarHeight;
-
-        window.scrollTo({
-          top: offsetPosition,
-          behavior: 'smooth'
-        });
-      }
-    }, 100);
-  };
 
   const sections = [
     { id: 'collection', title: '1. Information vi samlar in', icon: Shield },
@@ -77,12 +58,6 @@ const PrivacyPolicy: React.FC<PrivacyPolicyProps> = ({ cartItemCount, onCartClic
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
-      {/* <Navbar
-        isScrolled={isScrolled}
-        cartItemCount={cartItemCount}
-        onCartClick={onCartClick}
-        scrollToSection={handleNavClick}
-      /> */}
       <div className="pt-[110px]">
         <div className="max-w-6xl mx-auto px-4 py-12">
           <div className="text-center mb-12">
@@ -93,7 +68,6 @@ const PrivacyPolicy: React.FC<PrivacyPolicyProps> = ({ cartItemCount, onCartClic
               Din integritet är viktig för oss. Här förklarar vi hur vi hanterar dina personuppgifter.
             </p>
           </div>
-
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="hidden lg:block lg:col-span-1">
               <div className="bg-white rounded-xl p-6 sticky top-[130px] shadow-lg">
@@ -173,7 +147,6 @@ const PrivacyPolicy: React.FC<PrivacyPolicyProps> = ({ cartItemCount, onCartClic
           </div>
         </div>
       </div>
-      <Footer />
     </div>
   );
 };

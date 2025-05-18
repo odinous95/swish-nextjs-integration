@@ -1,6 +1,7 @@
 "use client"
 import React, { useState } from 'react';
 import { Plus, Minus, X } from 'lucide-react';
+import Image from 'next/image';
 
 interface Extra {
   id: string;
@@ -96,11 +97,15 @@ const ExtrasModal: React.FC<ExtrasModalProps> = ({
           {extras.map((extra) => (
             <div key={extra.id} className="flex items-center justify-between bg-gray-50 p-3 rounded-lg">
               <div className="flex items-center gap-3">
-                <img
-                  src={extra.image}
-                  alt={extra.name}
-                  className="w-12 h-12 object-contain rounded-lg"
-                />
+                <div className="w-12 h-12 relative">
+                  <Image
+                    src={extra.image}
+                    alt={extra.name}
+                    fill
+                    className="object-contain rounded-lg"
+                    sizes="48px"
+                  />
+                </div>
                 <div>
                   <h4 className="font-medium text-black text-sm">{extra.name}</h4>
                   <p className="text-xs text-gray-500">{extra.price} kr</p>

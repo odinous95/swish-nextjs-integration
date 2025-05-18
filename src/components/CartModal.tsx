@@ -1,6 +1,7 @@
 import React from 'react';
 import { X, Plus, Minus, Trash2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 
 interface CartItem {
   id: string;
@@ -103,13 +104,15 @@ const CartModal: React.FC<CartModalProps> = ({
                 return (
                   <div key={item.id} className="flex items-center justify-between bg-gray-50 p-4 rounded-lg">
                     <div className="flex items-center gap-4">
-                      {itemImage && (
-                        <img
+                        {itemImage && (
+                        <Image
                           src={itemImage}
                           alt={item.name}
+                          width={64}
+                          height={64}
                           className={`w-16 h-16 ${item.isExtra ? 'object-contain p-2' : 'object-cover'} rounded-lg`}
                         />
-                      )}
+                        )}
                       <div>
                         <h4 className="font-medium text-black text-sm md:text-base">{item.name}</h4>
                         <div className="flex items-center gap-3 mt-2">

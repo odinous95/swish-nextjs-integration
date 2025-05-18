@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { OrderButton } from '../OrderButton';
 import NutritionInfo from '../NutritionInfo';
+import Image from 'next/image';
 
 interface DesktopMealCardProps {
   meal: {
@@ -62,10 +63,13 @@ const DesktopMealCard: React.FC<DesktopMealCardProps> = ({
         }`}
     >
       <div className="relative h-48 overflow-hidden">
-        <img
+        <Image
           src={meal.image}
           alt={meal.name}
-          className="w-full h-full object-cover transform hover:scale-110 transition-transform duration-300"
+          fill
+          className="object-cover transform hover:scale-110 transition-transform duration-300"
+          sizes="100vw"
+          priority
         />
         <NutritionInfo calories={meal.calories} protein={meal.protein} />
       </div>

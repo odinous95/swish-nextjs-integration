@@ -1,7 +1,8 @@
 "use client"
-import React, { JSX, useState } from 'react';
+import React, { useState } from 'react';
 import { ShoppingCart, Menu, X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 
 interface NavbarProps {
   isScrolled: boolean;
@@ -56,12 +57,17 @@ export function Navbar({ isScrolled, cartItemCount, onCartClick, scrollToSection
             className="w-[200px] flex items-center gap-3 cursor-pointer"
             onClick={handleLogoClick}
           >
-            <img
+            <Image
               src="https://i.ibb.co/h1Mskmyq/HElogo-removebg-preview.png"
               alt="HEALTHY EATING Logo"
+              width={48}
+              height={48}
               className="h-12 w-auto"
+              priority
             />
-            <h3 className="font-heading text-transparent bg-gradient-to-r from-[#FFD54F] to-[#FFB300] bg-clip-text text-xl font-bold whitespace-nowrap">HEALTHY EATING</h3>
+            <h3 className="font-heading text-transparent bg-gradient-to-r from-[#FFD54F] to-[#FFB300] bg-clip-text text-xl font-bold whitespace-nowrap">
+              HEALTHY EATING
+            </h3>
           </div>
 
           <div className="flex-1 flex justify-center">

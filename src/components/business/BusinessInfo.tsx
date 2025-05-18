@@ -1,12 +1,15 @@
 import React from 'react';
+import Image from 'next/image';
 
 const BusinessInfo: React.FC = () => {
   return (
     <div className="relative h-full overflow-hidden rounded-xl" style={{ minHeight: '264px' }}>
-      <img 
+      <Image
         src="https://i.ibb.co/zVC9N7j4/jjj.jpg"
-        alt="Business Catering" 
-        className="absolute inset-0 w-full h-full object-cover"
+        alt="Business Catering"
+        fill
+        className="object-cover"
+        priority
       />
       <div className="absolute inset-0 bg-gradient-to-r from-black/50 to-transparent flex items-center">
         <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent"></div>

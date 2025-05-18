@@ -1,5 +1,5 @@
 import React from 'react';
-import { OrderButton } from '../OrderButton';
+import Image from 'next/image';
 
 interface MealCardProps {
   meal: {
@@ -21,11 +21,6 @@ interface MealCardProps {
 
 const MealCard: React.FC<MealCardProps> = ({
   meal,
-  showQuantity,
-  quantities,
-  buttonStates,
-  handleButtonClick,
-  adjustQuantity,
   onMealClick
 }) => {
   const formatPrice = (price: number) => {
@@ -33,15 +28,17 @@ const MealCard: React.FC<MealCardProps> = ({
   };
 
   return (
-    <div 
-      key={meal.id} 
+    <div
+      key={meal.id}
       className="bg-white rounded-xl shadow-md overflow-hidden cursor-pointer"
       onClick={() => onMealClick(meal.id)}
     >
       <div className="flex items-center p-4">
-        <img 
+        <Image
           src={meal.image}
           alt={meal.name}
+          width={80}
+          height={80}
           className="w-20 h-20 object-cover rounded-lg"
         />
         <div className="ml-4 flex-1">

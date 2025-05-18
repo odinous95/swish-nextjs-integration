@@ -4,6 +4,7 @@ import { OrderButtonProps } from './order/OrderButtonTypes';
 import { HeroButton } from './order/HeroButton';
 import { QuantityControls } from './order/QuantityControls';
 import { SauceSelection } from './order/SauceSelection';
+import Image from 'next/image';
 
 export const OrderButton: React.FC<OrderButtonProps> = ({
   id,
@@ -12,12 +13,12 @@ export const OrderButton: React.FC<OrderButtonProps> = ({
   small = false,
   className = '',
   isHeroButton = false,
-  showQuantity = {},
+  // showQuantity = {},
   quantities = {},
   buttonStates = {},
-  handleButtonClick = () => {},
-  adjustQuantity = () => {},
-  scrollToSection = () => {},
+  handleButtonClick = () => { },
+  adjustQuantity = () => { },
+  scrollToSection = () => { },
 }) => {
   const [selectedSauce, setSelectedSauce] = useState<string>('');
   const [selectedLemon, setSelectedLemon] = useState<boolean>(false);
@@ -36,7 +37,7 @@ export const OrderButton: React.FC<OrderButtonProps> = ({
       return;
     }
 
-    const mealQuantity = quantities[id] || 1;
+    // const mealQuantity = quantities[id] || 1;
     let finalName = name;
 
     // Add sauce to the meal name if selected
@@ -52,11 +53,10 @@ export const OrderButton: React.FC<OrderButtonProps> = ({
       handleButtonClick(
         'extra-lemon',
         'Citron',
-        7,
-        true
+        7
       );
     }
-    
+
     // Reset selections
     setSelectedSauce('');
     setSelectedLemon(false);
@@ -84,16 +84,17 @@ export const OrderButton: React.FC<OrderButtonProps> = ({
             <p className="text-sm font-medium text-gray-700 mb-2">Tillval:</p>
             <button
               onClick={() => setSelectedLemon(!selectedLemon)}
-              className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
-                selectedLemon
-                  ? 'bg-gradient-to-r from-[#FFD54F] to-[#FFB300] text-black'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${selectedLemon
+                ? 'bg-gradient-to-r from-[#FFD54F] to-[#FFB300] text-black'
+                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
             >
-              <img 
+              <Image
                 src="https://i.ibb.co/nsxDDpRs/IMAGE-2025-04-20-00-21-30-removebg-preview.png"
                 alt="Citron"
-                className="w-6 h-6 object-cover rounded-full"
+                width={24}
+                height={24}
+                className="rounded-full"
               />
               Citron (+7 kr)
             </button>
@@ -112,7 +113,7 @@ export const OrderButton: React.FC<OrderButtonProps> = ({
             quantity={currentQuantity}
             onAdjust={(delta) => adjustQuantity(id, delta)}
           />
-          
+
           <div className="text-center text-sm text-gray-600">
             Totalt: {finalTotalPrice.toFixed(2).replace('.', ',')} kr
           </div>
@@ -121,9 +122,8 @@ export const OrderButton: React.FC<OrderButtonProps> = ({
         <button
           onClick={handleAddToCart}
           disabled={needsSauceSelection && !selectedSauce}
-          className={`relative bg-gradient-to-r from-[#FFD54F] to-[#FFB300] text-black rounded-xl font-semibold hover:from-[#FFE082] hover:to-[#FFB300] transition-all duration-300 shadow-[0_8px_30px_rgb(255,213,79,0.15)] hover:scale-105 hover:shadow-[0_8px_30px_rgb(255,213,79,0.25)] overflow-hidden group ${
-            needsSauceSelection && !selectedSauce ? 'opacity-50 cursor-not-allowed' : ''
-          } ${small ? 'px-8 py-3 text-sm' : 'w-full px-6 py-3'} ${className}`}
+          className={`relative bg-gradient-to-r from-[#FFD54F] to-[#FFB300] text-black rounded-xl font-semibold hover:from-[#FFE082] hover:to-[#FFB300] transition-all duration-300 shadow-[0_8px_30px_rgb(255,213,79,0.15)] hover:scale-105 hover:shadow-[0_8px_30px_rgb(255,213,79,0.25)] overflow-hidden group ${needsSauceSelection && !selectedSauce ? 'opacity-50 cursor-not-allowed' : ''
+            } ${small ? 'px-8 py-3 text-sm' : 'w-full px-6 py-3'} ${className}`}
         >
           <span className={`absolute inset-0 flex items-center justify-center transition-opacity duration-300 ${buttonStates[id] ? 'opacity-100' : 'opacity-0'}`}>
             <Check className="w-6 h-6" />

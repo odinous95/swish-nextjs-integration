@@ -2,7 +2,7 @@
 import fs from "fs";
 import path from "path";
 import https from "https";
-import axios, { AxiosRequestConfig } from "axios";
+import axios from "axios";
 
 export interface SwishConfig {
   payeeAlias: string;

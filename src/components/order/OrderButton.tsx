@@ -13,12 +13,12 @@ export const OrderButton: React.FC<OrderButtonProps> = ({
   small = false,
   className = '',
   isHeroButton = false,
-  showQuantity = {},
+  // showQuantity = {},
   quantities = {},
   buttonStates = {},
-  handleButtonClick = () => {},
-  adjustQuantity = () => {},
-  scrollToSection = () => {},
+  handleButtonClick = () => { },
+  adjustQuantity = () => { },
+  scrollToSection = () => { },
 }) => {
   const [selectedSauce, setSelectedSauce] = useState<string>('');
   const [selectedLemon, setSelectedLemon] = useState<boolean>(false);
@@ -50,13 +50,13 @@ export const OrderButton: React.FC<OrderButtonProps> = ({
 
     // Add extras if selected
     if ((id === 'lax' || id === 'teriyaki') && selectedLemon) {
-      handleButtonClick('extra-lemon', 'Citron', 7, true);
+      handleButtonClick('extra-lemon', 'Citron', 7);
     }
 
     if (selectedDrink) {
-      handleButtonClick('extra-ayran', 'Ayran', 15 * ayranQuantity, true);
+      handleButtonClick('extra-ayran', 'Ayran', 15 * ayranQuantity);
     }
-    
+
     // Reset selections
     setSelectedSauce('');
     setSelectedLemon(false);
@@ -96,7 +96,7 @@ export const OrderButton: React.FC<OrderButtonProps> = ({
             quantity={currentQuantity}
             onAdjust={(delta) => adjustQuantity(id, delta)}
           />
-          
+
           <div className="text-center text-sm text-gray-600">
             Totalt: {totalPrice.toFixed(2).replace('.', ',')} kr
           </div>
@@ -105,9 +105,8 @@ export const OrderButton: React.FC<OrderButtonProps> = ({
         <button
           onClick={handleAddToCart}
           disabled={needsSauceSelection && !selectedSauce}
-          className={`relative bg-gradient-to-r from-[#FFD54F] to-[#FFB300] text-black rounded-xl font-semibold hover:from-[#FFE082] hover:to-[#FFB300] transition-all duration-300 shadow-[0_8px_30px_rgb(255,213,79,0.15)] hover:scale-105 hover:shadow-[0_8px_30px_rgb(255,213,79,0.25)] overflow-hidden group ${
-            needsSauceSelection && !selectedSauce ? 'opacity-50 cursor-not-allowed' : ''
-          } ${small ? 'px-8 py-3 text-sm' : 'w-full px-6 py-3'} ${className}`}
+          className={`relative bg-gradient-to-r from-[#FFD54F] to-[#FFB300] text-black rounded-xl font-semibold hover:from-[#FFE082] hover:to-[#FFB300] transition-all duration-300 shadow-[0_8px_30px_rgb(255,213,79,0.15)] hover:scale-105 hover:shadow-[0_8px_30px_rgb(255,213,79,0.25)] overflow-hidden group ${needsSauceSelection && !selectedSauce ? 'opacity-50 cursor-not-allowed' : ''
+            } ${small ? 'px-8 py-3 text-sm' : 'w-full px-6 py-3'} ${className}`}
         >
           <span className={`absolute inset-0 flex items-center justify-center transition-opacity duration-300 ${buttonStates[id] ? 'opacity-100' : 'opacity-0'}`}>
             <Check className="w-6 h-6" />

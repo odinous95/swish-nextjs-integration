@@ -5,11 +5,11 @@ import DeliveryForm from '../checkout/DeliveryForm';
 import DeliveryDate from '../checkout/DeliveryDate';
 import PaymentMethod from '../checkout/PaymentMethod';
 import OrderSummary from '../checkout/OrderSummary';
-import { useRouter } from 'next/navigation';
 import { Navbar } from '@/global-ui';
 import { useCheckoutForm } from '@/hooks/useCheckoutForm';
 import { useCartStore } from '@/store';
 import { COUPON_USAGE_KEY, MAX_COUPON_USES, validPostalCodes } from '@/data';
+import Image from 'next/image';
 
 type DeliveryDateType = {
   dayName: string;
@@ -22,7 +22,6 @@ type SwishResponse = {
   deeplink: string;
   token?: string;
 };
-
 export function Checkout() {
   const cartItems = useCartStore((state) => state.cartItems);
   const {
@@ -34,8 +33,8 @@ export function Checkout() {
     handleInputBlur: onInputBlur,
     handleCheckoutSubmit: onSubmit,
   } = useCheckoutForm();
-
-  const [isScrolled, setIsScrolled] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_isScrolled, setIsScrolled] = useState(false);
   const [selectedPayment, setSelectedPayment] = useState<string>('');
   const [selectedDeliveryDate, setSelectedDeliveryDate] = useState<string>('');
   const [availableDates, setAvailableDates] = useState<DeliveryDateType[]>([]);
@@ -45,7 +44,8 @@ export function Checkout() {
   const [campaignError, setCampaignError] = useState('');
   const [discountApplied, setDiscountApplied] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
-  const [paymentSuccess, setPaymentSuccess] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [paymentSuccess, _setPaymentSuccess] = useState(false);
   const [paymentError, setPaymentError] = useState<string | null>(null);
 
   // Swish deeplink + token + QR blob URL
@@ -53,8 +53,6 @@ export function Checkout() {
   const [swishToken, setSwishToken] = useState<string>('');
   const [showQrFallback, setShowQrFallback] = useState<boolean>(false);
   const [qrBlobUrl, setQrBlobUrl] = useState<string>('');
-
-  const navigate = useRouter();
 
   // Scroll listener
   useEffect(() => {
@@ -204,7 +202,7 @@ export function Checkout() {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-white p-6">
         <h1 className="text-xl font-bold mb-4">Skanna QR-koden med Swish</h1>
-        <img src={qrBlobUrl} alt="Swish QR-kod" className="w-64 h-64 mb-6" />
+        <Image src={qrBlobUrl} alt="Swish QR-kod" width={256} height={256} className="w-64 h-64 mb-6" />
         <p className="text-gray-600 text-sm text-center">
           Har du problem? Kopiera länken nedan och öppna i din Swish-app:
         </p>
@@ -272,9 +270,7 @@ export function Checkout() {
             />
             <PaymentMethod
               selectedPayment={selectedPayment}
-              onPaymentSelect={setSelectedPayment} swishPhone={''} onSwishPhoneChange={function (e: React.ChangeEvent<HTMLInputElement>): void {
-                throw new Error('Function not implemented.');
-              }} />
+              onPaymentSelect={setSelectedPayment} />
             {paymentError && (
               <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
                 {paymentError}

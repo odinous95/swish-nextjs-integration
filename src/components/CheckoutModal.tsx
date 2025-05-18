@@ -17,6 +17,7 @@ interface CheckoutForm {
   comment: string;
   doorCode?: string;
   floor?: string;
+  termsAccepted: boolean,
 }
 
 interface CartItem {
@@ -212,9 +213,11 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
     const shippingFee = mealItemCount >= 5 || hasBusinessPackage ? 0 : 19;
     const baseTotal = subtotal + shippingFee;
     const discount = discountApplied ? baseTotal * 0.2 : 0;
-    const total = baseTotal - discount;
+    // Example: 12% tax on subtotal (adjust as needed)
+    const tax = subtotal * 0.12;
+    const total = baseTotal - discount + tax;
 
-    return { subtotal, shippingFee, discount, total };
+    return { subtotal, shippingFee, tax, discount, total };
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -254,8 +257,9 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
             inputRefs={inputRefs}
             showPostalCodeError={showPostalCodeError}
             handlePostalCodeChange={handlePostalCodeChange}
-            handlePostalCodeBlur={handlePostalCodeBlur}
-          />
+            handlePostalCodeBlur={handlePostalCodeBlur} onTermsChange={function (e: React.ChangeEvent<HTMLInputElement>): void {
+              throw new Error('Function not implemented.');
+            }} />
 
           <DeliveryDate
             selectedDeliveryDate={selectedDeliveryDate}
@@ -279,8 +283,6 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
           <PaymentMethod
             selectedPayment={selectedPayment}
             onPaymentSelect={setSelectedPayment}
-            swishPhone={swishPhone}
-            onSwishPhoneChange={handleSwishPhoneChange}
           />
 
           <button
