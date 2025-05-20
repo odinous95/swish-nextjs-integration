@@ -9,6 +9,10 @@ export function Navbar() {
     setIsCartOpen,
     getTotalCartItems,
   } = useCartStore();
+  const [hasMounted, setHasMounted] = useState(false);
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
 
   const [isScrolled, setIsScrolled] = useState(false);
   useEffect(() => {
@@ -113,11 +117,12 @@ export function Navbar() {
               className="relative p-2 hover:scale-105 hover:cursor-pointer transition-transform duration-300"
             >
               <ShoppingCart className="w-6 h-6 text-white" />
-              {cartItemCount && cartItemCount > 0 && (
+              {hasMounted && cartItemCount > 0 && (
                 <span className="absolute -top-2 -right-2 bg-gradient-to-r from-[#FFD54F] to-[#FFB300] text-black text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
                   {cartItemCount}
                 </span>
               )}
+
             </button>
           </div>
         </div>

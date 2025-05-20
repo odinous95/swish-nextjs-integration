@@ -12,21 +12,49 @@ export interface SwishConfig {
 }
 
 export function getSwishConfig(): SwishConfig {
-  const cert = Buffer.from(process.env.SWISH_CERT_BASE64!, "base64");
-  const key = Buffer.from(process.env.SWISH_KEY_BASE64!, "base64");
-  const ca = Buffer.from(process.env.SWISH_CA_BASE64!, "base64");
+  let cert: Buffer;
+  let key: Buffer;
+  let ca: Buffer;
 
-  const agent = new https.Agent({
-    cert,
-    key,
-    ca,
-    passphrase: process.env.SWISH_PASSPHRASE,
-    // rejectUnauthorized: true,
-  });
+  if (process.env.NODE_ENV === "production") {
+    cert = Buffer.from(process.env.SWISH_CERT_BASE64!, "base64");
+    key = Buffer.from(process.env.SWISH_KEY_BASE64!, "base64");
+    ca = Buffer.from(process.env.SWISH_CA_BASE64!, "base64");
+  } else {
+    const certPath = path.resolve(process.cwd(), process.env.SWISH_CERT_PATH!);
+    const keyPath = path.resolve(process.cwd(), process.env.SWISH_KEY_PATH!);
+    const caPath = path.resolve(process.cwd(), process.env.SWISH_CA_PATH!);
+    cert = fs.readFileSync(certPath);
+    key = fs.readFileSync(keyPath);
+    ca = fs.readFileSync(caPath);
+  }
+
+  const agent =
+    process.env.NODE_ENV === "production"
+      ? new https.Agent({
+          cert,
+          key,
+          ca,
+          passphrase: process.env.SWISH_PASSPHRASE_PROD,
+          rejectUnauthorized: true, // must be true in production
+        })
+      : new https.Agent({
+          cert,
+          key,
+          ca,
+          passphrase: process.env.SWISH_PASSPHRASE_TEST,
+          rejectUnauthorized: false, // allow self-signed in test
+        });
 
   return {
-    payeeAlias: process.env.SWISH_PAYEE_ALIAS!,
-    host: process.env.SWISH_HOST!,
+    payeeAlias:
+      process.env.NODE_ENV === "production"
+        ? process.env.SWISH_PAYEE_ALIAS_PROD!
+        : process.env.SWISH_PAYEE_ALIAS_TEST!,
+    host:
+      process.env.NODE_ENV === "production"
+        ? process.env.SWISH_HOST_PROD!
+        : process.env.SWISH_HOST_TEST!,
     qrHost: process.env.SWISH_QR!,
     httpsAgent: agent,
   };

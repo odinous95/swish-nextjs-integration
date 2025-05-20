@@ -113,7 +113,7 @@ export async function PUT(req: NextRequest) {
   };
 
   // 4) Send the CREATE request (v2)
-  const createUrl = `${cfg.host}/api/v2/paymentrequests/${instructionUUID}`;
+  const createUrl = `https://cpc.getswish.net/swish-cpcapi/api/v2/paymentrequests/${instructionUUID}`;
   const { status, headers, data } = await swishRequest(
     "PUT",
     createUrl,
