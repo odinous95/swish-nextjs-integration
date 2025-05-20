@@ -104,7 +104,7 @@ export async function PUT(req: NextRequest) {
   const cfg = getSwishConfig();
   const payload = {
     payeePaymentReference: instructionUUID.slice(0, 10),
-    payeeAlias: cfg.payeeAlias,
+    payeeAlias: process.env.SWISH_PAYEE_ALIAS_PROD,
     amount,
     currency: "SEK" as const,
     message,
@@ -113,7 +113,7 @@ export async function PUT(req: NextRequest) {
   };
 
   // 4) Send the CREATE request (v2)
-  const createUrl = `https://cpc.getswish.net/swish-cpcapi/api/v2/paymentrequests/${instructionUUID}`;
+  const createUrl = `${cfg.host}/api/v2/paymentrequests/${instructionUUID}`;
   const { status, headers, data } = await swishRequest(
     "PUT",
     createUrl,
