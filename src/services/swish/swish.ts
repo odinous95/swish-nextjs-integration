@@ -47,14 +47,8 @@ export function getSwishConfig(): SwishConfig {
         });
 
   return {
-    payeeAlias:
-      process.env.NODE_ENV === "production"
-        ? process.env.SWISH_PAYEE_ALIAS_PROD!
-        : process.env.SWISH_PAYEE_ALIAS_TEST!,
-    host:
-      process.env.NODE_ENV === "production"
-        ? process.env.SWISH_HOST_PROD!
-        : process.env.SWISH_HOST_TEST!,
+    payeeAlias: process.env.SWISH_PAYEE_ALIAS_PROD!,
+    host: process.env.SWISH_HOST_PROD!,
     qrHost: process.env.SWISH_QR!,
     httpsAgent: agent,
   };

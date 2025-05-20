@@ -104,7 +104,7 @@ export async function PUT(req: NextRequest) {
   const cfg = getSwishConfig();
   const payload = {
     payeePaymentReference: instructionUUID.slice(0, 10),
-    payeeAlias: process.env.SWISH_PAYEE_ALIAS_PROD,
+    payeeAlias: process.env.SWISH_PAYEE_ALIAS_PROD!,
     amount,
     currency: "SEK" as const,
     message,
