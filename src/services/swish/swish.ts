@@ -30,9 +30,9 @@ const testConfig: SwishConfig = {
   payeeAlias: "1234679304",
   host: "https://mss.cpc.getswish.net/swish-cpcapi",
   qrHost: "https://mpc.getswish.net/qrg-swish",
-  cert: process.env.SWISH_CERT_TEST!,
-  key: process.env.SWISH_KEY_TEST!,
-  ca: process.env.SWISH_CA_TEST,
+  cert: fs.readFileSync(path.resolve(process.env.SWISH_CERT_TEST!)),
+  key: fs.readFileSync(path.resolve(process.env.SWISH_KEY_TEST!)),
+  ca: fs.readFileSync(path.resolve(process.env.SWISH_CA_TEST!)),
   passphrase: "swish",
 };
 
