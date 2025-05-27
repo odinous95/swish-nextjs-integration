@@ -7,6 +7,7 @@ export async function POST(req: NextRequest) {
 
     // Log the incoming payment callback
     console.log("✅ Swish Webhook Received:", body);
+    console.log("Payment Reference:", body);
 
     // You can do things like:
     // - validate paymentReference

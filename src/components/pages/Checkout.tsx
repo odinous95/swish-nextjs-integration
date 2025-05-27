@@ -18,6 +18,8 @@ type DeliveryDateType = {
   deliveryTime: string;
 };
 
+
+
 type SwishResponse = {
   deeplink: string;
   token?: string;
@@ -130,11 +132,7 @@ export function Checkout() {
     if (showQrFallback && swishToken) {
       (async () => {
         try {
-          const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/swish/swishqr`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ token: swishToken }),
-          });
+          const response = await fetch(`/api/swish/swishqr?token=${swishToken}`);
           if (!response.ok) throw new Error(`QR proxy failed ${response.status}`);
           const blob = await response.blob();
           setQrBlobUrl(URL.createObjectURL(blob));
@@ -144,6 +142,7 @@ export function Checkout() {
       })();
     }
   }, [showQrFallback, swishToken]);
+
 
 
   // Open deeplink & schedule fallback
@@ -157,48 +156,54 @@ export function Checkout() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (isProcessing) return;
+
     setPaymentError(null);
+
     if (!selectedPayment || !selectedDeliveryDate) {
       setPaymentError('Vänligen välj betalningsmetod och leveransdatum.');
       return;
     }
+
     if (selectedPayment === 'swish') {
       setIsProcessing(true);
       const { total } = calculateTotals();
-      const idDigits = Date.now().toString();
-      const message = `Order ${idDigits}`;
-      const amount = Math.round(total * 100).toString();
+      const amount = Math.round(total).toString(); // In SEK, no need to multiply by 100
+      const message = `Order ${Date.now()}`;
+
       try {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/swish/paymentrequests`,
-          {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ amount, message, returnUrl: `${process.env.NEXT_PUBLIC_API_URL}/receipt?order=${idDigits}` }),
-          }
-        );
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const { deeplink, token: tok }: SwishResponse = await res.json();
-        let t = tok;
-        if (!t) {
-          const u = new URL(deeplink);
-          t = u.searchParams.get('token') || '';
+        const res = await fetch('/api/swish/paymentrequests', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ amount, message }),
+        });
+
+        if (!res.ok) {
+          const errData = await res.json();
+          throw new Error(errData?.message || 'Unknown error');
         }
-        if (!deeplink || !t) throw new Error('Missing deeplink or token');
-        setSwishDeeplink(deeplink);
-        setSwishToken(t);
+
+        const { token, url, id } = await res.json();
+
+        if (!token) throw new Error('Swish token saknas');
+
+        setSwishToken(token);
+        setSwishDeeplink(`swish://paymentrequest?token=${token}`);
       } catch (err) {
-        console.error('Swish M-commerce error:', err);
-        setPaymentError('Det gick inte att genomföra betalningen.');
+        console.error('Swish error:', err);
+        setPaymentError('Ett fel uppstod vid betalning med Swish.');
         setIsProcessing(false);
       }
+
       return;
     }
-    onSubmit(e);
+
+    onSubmit(e); // fallback for other payment methods
   };
+
 
   // QR fallback view
   if (showQrFallback && qrBlobUrl) {
+
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-white p-6">
         <h1 className="text-xl font-bold mb-4">Skanna QR-koden med Swish</h1>
