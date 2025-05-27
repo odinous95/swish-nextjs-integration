@@ -8,7 +8,7 @@ export async function POST(req: NextRequest) {
 
     const swishBody = {
       payeePaymentReference: "0123456789",
-      callbackUrl: `${process.env.NEXT_PUBLIC_API_URL}/api/swish/webhook`,
+      callbackUrl: "https://healthy-eating-next.vercel.app/api/swish/webhook",
       payeeAlias: swishConfig.payeeAlias,
       payerAlias,
       amount,
@@ -43,10 +43,9 @@ export async function POST(req: NextRequest) {
     }
 
     const getResp = await swishRequest("GET", location);
-    const data = getResp.data as { id: string };
 
     return NextResponse.json({
-      id: data.id,
+      id: getResp.data.id,
       url: location,
       token: token as string,
     });

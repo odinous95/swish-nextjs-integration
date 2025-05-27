@@ -7,9 +7,9 @@ type SwishConfig = {
   payeeAlias: string;
   host: string;
   qrHost: string;
-  cert?: Buffer | string;
-  key?: Buffer | string;
-  ca?: Buffer | string;
+  cert: Buffer;
+  key: Buffer;
+  ca?: Buffer;
   passphrase?: string | null;
 };
 
@@ -18,22 +18,31 @@ const isProd = process.env.SWISH_ENV === "production";
 console.log(isProd);
 
 const prodConfig: SwishConfig = {
-  payeeAlias: process.env.SWISH_PAYEE_ALIAS_PROD!,
-  host:
-    process.env.SWISH_HOST_PROD || "https://mss.cpc.getswish.net/swish-cpcapi",
+  payeeAlias: "1232005668",
+  host: "https://cpc.getswish.net/swish-cpcapi",
   qrHost: "https://mpc.getswish.net/qrg-swish",
-  cert: process.env.SWISH_CERT_BASE64!,
-  key: process.env.SWISH_KEY_BASE64!,
-  passphrase: process.env.SWISH_PASSPHRASE_PROD || null,
+  cert: Buffer.from(process.env.SWISH_CERT_BASE64!, "base64"),
+  key: Buffer.from(process.env.SWISH_KEY_BASE64!, "base64"),
+  passphrase: null,
 };
 
 const testConfig: SwishConfig = {
   payeeAlias: "1234679304",
   host: "https://mss.cpc.getswish.net/swish-cpcapi",
   qrHost: "https://mpc.getswish.net/qrg-swish",
-  cert: process.env.SWISH_CERT_TEST,
-  key: process.env.SWISH_KEY_TEST,
-  ca: process.env.SWISH_CA_TEST,
+  cert: fs.readFileSync(
+    path.resolve(
+      process.cwd(),
+      "ssl/Swish_Merchant_TestCertificate_1234679304.pem"
+    )
+  ),
+  key: fs.readFileSync(
+    path.resolve(
+      process.cwd(),
+      "ssl/Swish_Merchant_TestCertificate_1234679304.key"
+    )
+  ),
+  ca: fs.readFileSync(path.resolve(process.cwd(), "ssl/Swish_TLS_RootCA.pem")),
   passphrase: "swish",
 };
 
