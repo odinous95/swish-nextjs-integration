@@ -7,9 +7,9 @@ type SwishConfig = {
   payeeAlias: string;
   host: string;
   qrHost: string;
-  cert: Buffer;
-  key: Buffer;
-  ca?: Buffer;
+  cert: Buffer | string;
+  key: Buffer | string;
+  ca?: Buffer | string | null;
   passphrase?: string | null;
 };
 
@@ -30,19 +30,9 @@ const testConfig: SwishConfig = {
   payeeAlias: "1234679304",
   host: "https://mss.cpc.getswish.net/swish-cpcapi",
   qrHost: "https://mpc.getswish.net/qrg-swish",
-  cert: fs.readFileSync(
-    path.resolve(
-      process.cwd(),
-      "ssl/Swish_Merchant_TestCertificate_1234679304.pem"
-    )
-  ),
-  key: fs.readFileSync(
-    path.resolve(
-      process.cwd(),
-      "ssl/Swish_Merchant_TestCertificate_1234679304.key"
-    )
-  ),
-  ca: fs.readFileSync(path.resolve(process.cwd(), "ssl/Swish_TLS_RootCA.pem")),
+  cert: process.env.SWISH_CERT_TEST!,
+  key: process.env.SWISH_KEY_TEST!,
+  ca: process.env.SWISH_CA_TEST,
   passphrase: "swish",
 };
 
@@ -54,7 +44,7 @@ export async function swishRequest<T>(
   const httpsAgent = new https.Agent({
     cert: swishConfig.cert,
     key: swishConfig.key,
-    ca: swishConfig.ca,
+    ca: swishConfig.ca ?? undefined,
     passphrase: swishConfig.passphrase || undefined,
     rejectUnauthorized: true,
     minVersion: "TLSv1.2",
