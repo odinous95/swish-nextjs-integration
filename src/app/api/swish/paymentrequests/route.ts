@@ -44,8 +44,10 @@ export async function POST(req: NextRequest) {
 
     const getResp = await swishRequest("GET", location);
 
+    // Assert the type of getResp.data to access id property
+    const paymentData = getResp.data as { id: string };
     return NextResponse.json({
-      id: getResp.data.id,
+      id: paymentData.id,
       url: location,
       token: token as string,
     });
