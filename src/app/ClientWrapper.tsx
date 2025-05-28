@@ -39,7 +39,7 @@ export default function ClientWrapper({ children }: { children: React.ReactNode 
                 onAddToCart={handleAddExtras}
             />
             <Navbar />
-            <main>{children}</main>
+            <main className="pt-[130px]">{children}</main> {/* 👈 ADDED this */}
             <Footer />
         </>
     );

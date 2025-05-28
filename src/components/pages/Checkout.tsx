@@ -5,7 +5,6 @@ import DeliveryForm from '../checkout/DeliveryForm';
 import DeliveryDate from '../checkout/DeliveryDate';
 import PaymentMethod from '../checkout/PaymentMethod';
 import OrderSummary from '../checkout/OrderSummary';
-import { Navbar } from '@/global-ui';
 import { useCheckoutForm } from '@/hooks/useCheckoutForm';
 import { useCartStore } from '@/store';
 import { COUPON_USAGE_KEY, MAX_COUPON_USES, validPostalCodes } from '@/data';
@@ -16,13 +15,6 @@ type DeliveryDateType = {
   date: string;
   fullDate: Date;
   deliveryTime: string;
-};
-
-
-
-type SwishResponse = {
-  deeplink: string;
-  token?: string;
 };
 export function Checkout() {
   const cartItems = useCartStore((state) => state.cartItems);
@@ -36,7 +28,7 @@ export function Checkout() {
     handleCheckoutSubmit: onSubmit,
   } = useCheckoutForm();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [_isScrolled, setIsScrolled] = useState(false);
+  // const [_isScrolled, setIsScrolled] = useState(false);
   const [selectedPayment, setSelectedPayment] = useState<string>('');
   const [selectedDeliveryDate, setSelectedDeliveryDate] = useState<string>('');
   const [availableDates, setAvailableDates] = useState<DeliveryDateType[]>([]);
@@ -49,19 +41,13 @@ export function Checkout() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [paymentSuccess, _setPaymentSuccess] = useState(false);
   const [paymentError, setPaymentError] = useState<string | null>(null);
-
   // Swish deeplink + token + QR blob URL
   const [swishDeeplink, setSwishDeeplink] = useState<string>('');
   const [swishToken, setSwishToken] = useState<string>('');
   const [showQrFallback, setShowQrFallback] = useState<boolean>(false);
   const [qrBlobUrl, setQrBlobUrl] = useState<string>('');
 
-  // Scroll listener
-  useEffect(() => {
-    const onScroll = () => setIsScrolled(window.scrollY > 20);
-    window.addEventListener('scroll', onScroll);
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
+
 
   // Init delivery dates
   useEffect(() => {
@@ -164,10 +150,23 @@ export function Checkout() {
       return;
     }
 
+    // Gather all form data
+    const submissionData = {
+      form,
+      selectedPayment,
+      selectedDeliveryDate,
+      cartItems,
+      totals: calculateTotals(),
+      campaignCode,
+      discountApplied,
+    };
+
+    console.log("Submitted checkout data:", submissionData);
+
     if (selectedPayment === 'swish') {
       setIsProcessing(true);
       const { total } = calculateTotals();
-      const amount = Math.round(total).toString(); // In SEK, no need to multiply by 100
+      const amount = Math.round(total).toString(); // In SEK
       const message = `Order ${Date.now()}`;
 
       try {
@@ -185,7 +184,6 @@ export function Checkout() {
         const { token, url, id } = await res.json();
 
         if (!token) throw new Error('Swish token saknas');
-
         setSwishToken(token);
         setSwishDeeplink(`swish://paymentrequest?token=${token}`);
       } catch (err) {
@@ -199,6 +197,7 @@ export function Checkout() {
 
     onSubmit(e); // fallback for other payment methods
   };
+
 
 
   // QR fallback view
@@ -235,10 +234,8 @@ export function Checkout() {
   // Main checkout form
   return (
     <div className="min-h-screen bg-gray-50">
-      <Navbar />
       <div className="pt-[110px] pb-16">
         <div id="checkout-container" className="max-w-2xl mx-auto px-4">
-          <h1 className="font-heading text-3xl font-bold mb-8 text-center">Kassan</h1>
           <form onSubmit={handleSubmit} className="space-y-8 bg-white rounded-xl p-6 shadow-lg">
             <DeliveryForm
               form={form}

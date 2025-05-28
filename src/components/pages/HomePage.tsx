@@ -8,7 +8,6 @@ import CalorieCalculator from '../Pricing';
 import About from '../About';
 import Testimonials from '../Testimonials';
 import { FAQ } from '../FAQ';
-import { Navbar } from '@/global-ui';
 import { useCartStore } from '@/store';
 
 
@@ -24,7 +23,6 @@ export function HomePage() {
 
   return (
     <div className="min-h-screen bg-black text-white font-sans">
-      <Navbar />
       <main>
         <Hero />
         <HowItWorks />
