@@ -1,11 +1,10 @@
 // components/checkout/CheckoutLayout.tsx
 "use client";
-
-import { useCheckoutLogic } from "@/hooks/useCheckoutLogic";
-import CheckoutForm from "./CheckoutForm";
-import QrFallbackView from "./QrFallbackView";
-import SuccessView from "./SuccessView";
 import { Navbar } from "@/global-ui";
+import { useCheckoutLogic } from "@/hooks/useCheckoutLogic";
+import SuccessView from "./SuccessView";
+import QrFallbackView from "./QrFallbackView";
+import CheckoutForm from "./CheckoutForm";
 
 export default function CheckoutLayout() {
     const { paymentSuccess, showQrFallback, qrBlobUrl } = useCheckoutLogic();
