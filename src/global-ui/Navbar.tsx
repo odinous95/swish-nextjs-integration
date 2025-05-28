@@ -80,7 +80,6 @@ export function Navbar() {
               <Menu className="w-6 h-6" />
             )}
           </button>
-
           <div
             className="w-[200px] flex items-center gap-3 cursor-pointer"
             onClick={handleLogoClick}

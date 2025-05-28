@@ -1,12 +1,8 @@
+"use client";
 import React, { useEffect, useState } from 'react';
 import { Truck, CreditCard, Home, Clock, AlertCircle, UserCheck, ScrollText, UserCog } from 'lucide-react';
 
-interface TermsProps {
-  cartItemCount: number;
-  onCartClick: () => void;
-}
-
-const Terms: React.FC<TermsProps> = () => {
+export default function Terms() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_isScrolled, setIsScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState<string | null>(null);
@@ -43,23 +39,6 @@ const Terms: React.FC<TermsProps> = () => {
       });
     }
   };
-
-  // const handleNavClick = (sectionId: string) => {
-  //   navigate.push('/');
-  //   setTimeout(() => {
-  //     const element = document.getElementById(sectionId);
-  //     if (element) {
-  //       const navbarHeight = 70;
-  //       const elementPosition = element.getBoundingClientRect().top;
-  //       const offsetPosition = elementPosition + window.pageYOffset - navbarHeight;
-
-  //       window.scrollTo({
-  //         top: offsetPosition,
-  //         behavior: 'smooth'
-  //       });
-  //     }
-  //   }, 100);
-  // };
 
   const sections = [
     { id: 'service', title: '1. Om tjänsten', icon: ScrollText },
@@ -196,5 +175,3 @@ const Terms: React.FC<TermsProps> = () => {
     </div>
   );
 };
-
-export default Terms;

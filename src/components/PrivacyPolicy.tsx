@@ -3,13 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Shield, Lock, UserCheck, Clock, Database, Cookie } from 'lucide-react';
 
 
-
-interface PrivacyPolicyProps {
-  cartItemCount: number;
-  onCartClick: () => void;
-}
-
-const PrivacyPolicy: React.FC<PrivacyPolicyProps> = () => {
+export default function PrivacyPolicy() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_isScrolled, setIsScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState<string | null>(null);
@@ -18,7 +12,6 @@ const PrivacyPolicy: React.FC<PrivacyPolicyProps> = () => {
 
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
-
       const sections = document.querySelectorAll('.policy-section');
       sections.forEach((section) => {
         const rect = section.getBoundingClientRect();
@@ -150,5 +143,3 @@ const PrivacyPolicy: React.FC<PrivacyPolicyProps> = () => {
     </div>
   );
 };
-
-export default PrivacyPolicy;
