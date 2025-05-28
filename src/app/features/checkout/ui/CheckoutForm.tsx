@@ -1,9 +1,4 @@
-// components/checkout/CheckoutForm.tsx
-import DeliveryForm from "./DeliveryForm";
-import DeliveryDate from "./DeliveryDate";
-import PaymentMethod from "./PaymentMethod";
-import OrderSummary from "./OrderSummary";
-import { useCheckoutLogic } from "@/hooks/useCheckoutLogic";
+import { useCheckoutLogic } from '@/hooks/useCheckoutLogic';
 
 export default function CheckoutForm() {
     const {

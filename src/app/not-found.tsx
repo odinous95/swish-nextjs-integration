@@ -8,7 +8,6 @@ export default function NotFound() {
 
   return (
     <div style={{ textAlign: "center", marginTop: "100px" }}>
-
       <Image
         src="/404.svg"
         alt="404"
@@ -16,7 +15,6 @@ export default function NotFound() {
         height={180}
         className="mx-auto rounded-none object-cover"
       />
-
       <h1 className="text-errorText font-extrabold text-8xl">404</h1>
       <p className="text-primary text-2xl font-semibold pt-4">
         Tyvärr kunde vi inte hitta sidan du letade efter.
