@@ -15,20 +15,14 @@ type SwishConfig = {
 
 const isProd = process.env.SWISH_ENV === "production";
 
-function assertEnv(varName: string): string {
-  const value = process.env[varName];
-  if (!value) {
-    throw new Error(`Missing required environment variable: ${varName}`);
-  }
-  return value;
-}
+console.log(isProd);
 
 const prodConfig: SwishConfig = {
   payeeAlias: "1232005668",
   host: "https://cpc.getswish.net/swish-cpcapi",
   qrHost: "https://mpc.getswish.net/qrg-swish",
-  cert: Buffer.from(assertEnv("SWISH_CERT_BASE64"), "base64"),
-  key: Buffer.from(assertEnv("SWISH_KEY_BASE64"), "base64"),
+  cert: Buffer.from(process.env.SWISH_CERT_BASE64!, "base64"),
+  key: Buffer.from(process.env.SWISH_KEY_BASE64!, "base64"),
   passphrase: null,
 };
 
@@ -36,9 +30,10 @@ const testConfig: SwishConfig = {
   payeeAlias: "1234679304",
   host: "https://mss.cpc.getswish.net/swish-cpcapi",
   qrHost: "https://mpc.getswish.net/qrg-swish",
-  cert: fs.readFileSync(path.resolve(assertEnv("SWISH_CERT_TEST"))),
-  key: fs.readFileSync(path.resolve(assertEnv("SWISH_KEY_TEST"))),
-  ca: fs.readFileSync(path.resolve(assertEnv("SWISH_CA_TEST"))),
+  cert: fs.readFileSync(path.resolve(process.env.SWISH_CERT_TEST || "")),
+  key: fs.readFileSync(path.resolve(process.env.SWISH_KEY_TEST || "")),
+  ca: fs.readFileSync(path.resolve(process.env.SWISH_CA_TEST || "")),
+
   passphrase: "swish",
 };
 
