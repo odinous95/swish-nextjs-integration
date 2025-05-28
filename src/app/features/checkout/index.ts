@@ -1,1 +1,0 @@
-export { checkoutFeature } from "./feature";
