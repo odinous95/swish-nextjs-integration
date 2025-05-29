@@ -61,11 +61,9 @@ export function createService(repository: Repository) {
         );
 
         if (!response.ok) throw new Error(`QR proxy failed ${response.status}`);
-
         const arrayBuffer = await response.arrayBuffer();
         const buffer = Buffer.from(arrayBuffer);
         const base64 = buffer.toString("base64");
-
         // Construct a data URL
         const qrCodeUrl = `data:image/png;base64,${base64}`;
         return {

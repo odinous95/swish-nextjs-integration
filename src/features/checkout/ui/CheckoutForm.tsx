@@ -49,6 +49,14 @@ export function CheckoutForm() {
         fetchPaymentStatus();
     }, [state]);
 
+    useEffect(() => {
+        if (state.success && deviceType === "mobile" && state.swishUrl) {
+            // Auto-open Swish app on mobile
+            window.location.href = state.swishUrl;
+        }
+    }, [state.success, state.swishUrl, deviceType]);
+
+
     const deliveryOptions = [
         { label: "Fredag 30/5 (08:00 – 13:00)", value: "Fredag 30/5 (08:00 – 13:00)" },
         { label: "Lördag 31/5 (16:00 – 20:00)", value: "Lördag 31/5 (16:00 – 20:00)" },
@@ -87,6 +95,7 @@ export function CheckoutForm() {
             <PaymentStatus requestId={state.swishId} qrCodeUrl={qrCodeUrl} status={paymentStatus} />
         );
     }
+
 
     return (
         <form
@@ -206,6 +215,11 @@ export function CheckoutForm() {
 
             {state.message && <AlertMessage state={state} />}
             <SubmitButton disabled={isPending} pending={isPending} title="Slutför och betala" />
+            {deviceType === "mobile" && state.swishUrl && (
+                <a href={state.swishUrl} className="block text-center mt-4 text-blue-600 underline">
+                    Klicka här om Swish inte öppnas automatiskt
+                </a>
+            )}
         </form>
     );
 }
