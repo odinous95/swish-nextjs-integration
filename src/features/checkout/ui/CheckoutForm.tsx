@@ -30,7 +30,7 @@ export function CheckoutForm() {
     const [campaignError, setCampaignError] = useState<string | null>(null);
     const [discountApplied, setDiscountApplied] = useState(false);
     const [qrCodeUrl, setQrCodeUrl] = useState<string | null>(null);
-    const [pymentStatus, setPaymentStatus] = useState<string | null>(null);
+    const [pymentStatus, setPaymentStatus] = useState();
 
 
     useEffect(() => {
