@@ -17,7 +17,6 @@ export type CheckoutState = {
   qrCodeUrl?: string;
   swishId?: string;
   swishUrl?: string;
-  payload?: FormData;
 };
 
 export type CHECKOUT_ERRORS = {

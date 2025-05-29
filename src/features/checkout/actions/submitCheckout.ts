@@ -26,7 +26,6 @@ export async function submitCheckoutFormAction(
       status: result?.status || 400,
       message: result?.message || "Failed to submit order",
       errors: result?.errors as CHECKOUT_ERRORS, // or map errors properly here
-      payload,
     };
   }
 
@@ -35,7 +34,6 @@ export async function submitCheckoutFormAction(
     status: 200,
     message: result.message || "Order submitted",
     errors: {} as CHECKOUT_ERRORS,
-    payload,
     qrCodeUrl: result.qrCodeUrl || undefined,
     swishId: result.swishId || null,
     swishUrl: result.swishUrl || undefined,
