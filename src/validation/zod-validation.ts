@@ -6,7 +6,7 @@ export const OrderSchema = z.object({
   address: z.string().min(1, "Adress är obligatoriskt"),
   postalCode: z
     .string()
-    .min(4, "Postnummer är obligatoriskt och måste i Öbero"),
+    .min(4, "Postnummer är obligatoriskt och måste i Örebro"),
   city: z.string().min(2, "Stad är obligatoriskt"),
   phone: z.string().min(6, "Telefonnummer är obligatoriskt"),
   email: z.string().email("Ogiltig e-postadress"),
