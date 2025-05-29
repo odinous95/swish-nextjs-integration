@@ -14,7 +14,10 @@ export type CheckoutState = {
   status: number | null;
   message: string | null;
   errors: CHECKOUT_ERRORS;
-  payload: FormData;
+  qrCodeUrl?: string;
+  swishId?: string;
+  swishUrl?: string;
+  payload?: FormData;
 };
 
 export type CHECKOUT_ERRORS = {

@@ -4,7 +4,7 @@ import { Repository } from "./repository";
 export function createService(repository: Repository) {
   async function submitOrder(payload: any) {
     console.log("Submitting Order with Payload:", payload);
-
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
     const validated = OrderSchema.safeParse(payload);
     if (!validated.success) {
       const fieldErrors = validated.error.flatten().fieldErrors;
@@ -35,7 +35,7 @@ export function createService(repository: Repository) {
       try {
         const amount = data?.totalPrice;
         const message = `Order ${Date.now()}`;
-        const res = await fetch("/api/swish/paymentrequests", {
+        const res = await fetch(`${baseUrl}/api/swish/paymentrequests`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ amount, message }),
@@ -46,6 +46,7 @@ export function createService(repository: Repository) {
         }
         const { token, url, id } = await res.json();
         if (!token) throw new Error("Swish token saknas");
+        // Check if the device is mobile
         if (data.deviceType === "mobile") {
           const swishUrl = `swish://paymentrequest?token=${token}`;
           return {
@@ -55,10 +56,19 @@ export function createService(repository: Repository) {
             swishUrl,
           };
         }
-        const response = await fetch(`/api/swish/swishqr?token=${token}`);
+        // For desktop, we need to fetch the QR code
+        const response = await fetch(
+          `${baseUrl}/api/swish/swishqr?token=${token}`
+        );
+
         if (!response.ok) throw new Error(`QR proxy failed ${response.status}`);
-        const blob = await response.blob();
-        const qrCodeUrl = URL.createObjectURL(blob);
+
+        const arrayBuffer = await response.arrayBuffer();
+        const buffer = Buffer.from(arrayBuffer);
+        const base64 = buffer.toString("base64");
+
+        // Construct a data URL
+        const qrCodeUrl = `data:image/png;base64,${base64}`;
         return {
           success: true,
           status: 200,
@@ -77,7 +87,6 @@ export function createService(repository: Repository) {
       }
     }
   }
-
   return {
     submitOrder,
   };

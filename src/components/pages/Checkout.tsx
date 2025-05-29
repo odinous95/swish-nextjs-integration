@@ -121,7 +121,9 @@ export function Checkout() {
           const response = await fetch(`/api/swish/swishqr?token=${swishToken}`);
           if (!response.ok) throw new Error(`QR proxy failed ${response.status}`);
           const blob = await response.blob();
+          console.log('Swish QR blob loaded:', blob);
           setQrBlobUrl(URL.createObjectURL(blob));
+          console.log(URL.createObjectURL(blob))
         } catch (err) {
           console.error('Failed to load Swish QR image', err);
         }

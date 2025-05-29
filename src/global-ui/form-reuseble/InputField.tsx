@@ -49,7 +49,5 @@ export function InputField({
                 </button>
             )}
         </div>
-
-
     )
 }

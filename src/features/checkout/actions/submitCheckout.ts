@@ -1,10 +1,12 @@
+"use server";
+
 import { checkoutFeature } from "../feature";
-import { CHECKOUT_ERRORS } from "../types";
+import { CHECKOUT_ERRORS, CheckoutState } from "../types";
 
 export async function submitCheckoutFormAction(
-  preState: any,
+  preState: CheckoutState,
   payload: FormData
-) {
+): Promise<CheckoutState> {
   const raw = Object.fromEntries(payload.entries());
   const checkoutPayLoad = {
     ...raw,
@@ -16,13 +18,27 @@ export async function submitCheckoutFormAction(
     deviceType: raw.deviceType === "mobile" ? "mobile" : "desktop",
   };
 
-  console.log("Checkout Payload:", checkoutPayLoad);
   const result = await checkoutFeature.service.submitOrder(checkoutPayLoad);
+  console.log("Checkout Result:", result);
+
+  if (!result?.success) {
+    return {
+      success: false,
+      status: 400,
+      message: "Ett fel inträffade. Försök igen.",
+      errors: {} as CHECKOUT_ERRORS, // or map errors properly here
+      payload,
+    };
+  }
+
   return {
-    success: result.success,
-    status: result.status,
-    message: result.message || "Ett fel inträffade. Försök igen.",
-    errors: result.errors as CHECKOUT_ERRORS,
+    success: true,
+    status: 200,
+    message: result.message || "Order submitted",
+    errors: {} as CHECKOUT_ERRORS,
     payload,
+    qrCodeUrl: result.qrCodeUrl || undefined,
+    swishId: result.swishId || null,
+    swishUrl: result.swishUrl || undefined,
   };
 }
