@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useCartStore } from "@/store";
 import { Loader } from "@/global-ui";
 import { FaCheckCircle } from "react-icons/fa";
 import Image from "next/image";
@@ -14,7 +15,7 @@ interface PaymentStatusProps {
 
 export function PaymentStatus({ requestId, qrCodeUrl, status }: PaymentStatusProps) {
     const [paymentStatus, setPaymentStatus] = useState(status);
-
+    const resetCart = useCartStore((state) => state.resetCart);
     useEffect(() => {
         let interval: NodeJS.Timeout;
 
@@ -24,7 +25,13 @@ export function PaymentStatus({ requestId, qrCodeUrl, status }: PaymentStatusPro
                 const data = await res.json();
 
                 if (data.status) {
-                    setPaymentStatus(data.status);
+                    setPaymentStatus((prevStatus) => {
+                        if (data.status === "PAID" && prevStatus !== "PAID") {
+                            // Clear the basket when payment is confirmed
+                            localStorage.removeItem("cart-storage");
+                        }
+                        return data.status;
+                    });
 
                     if (["PAID", "FAILED"].includes(data.status)) {
                         clearInterval(interval);
@@ -35,12 +42,19 @@ export function PaymentStatus({ requestId, qrCodeUrl, status }: PaymentStatusPro
             }
         };
 
-        // Start polling
         fetchStatus();
         interval = setInterval(fetchStatus, 3000);
 
         return () => clearInterval(interval);
     }, [requestId]);
+
+    // Also clear localStorage if status was "PAID" on first render
+    useEffect(() => {
+        if (paymentStatus === "PAID") {
+            resetCart();
+            localStorage.removeItem("cart-storage");
+        }
+    }, [paymentStatus]);
 
     // While loading
     if (paymentStatus === null) {

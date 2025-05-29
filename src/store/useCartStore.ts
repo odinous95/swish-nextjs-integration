@@ -11,15 +11,13 @@ interface CartState {
   buttonStates: { [key: string]: boolean };
   quantities: { [key: string]: number };
   showQuantity: { [key: string]: boolean };
-
+  resetCart: () => void;
   setIsCartOpen: (open: boolean) => void;
   setIsCheckoutOpen: (open: boolean) => void;
   setIsExtrasOpen: (open: boolean) => void;
   setPendingCartItem: (item: CartItem | null) => void;
-
   getTotalCartItems: () => number;
   getTotalPrice: () => number;
-
   removeFromCart: (itemId: string) => void;
   adjustQuantity: (buttonId: string, delta: number) => void;
   handleAddExtras: (extras: Extra[]) => void;
@@ -183,6 +181,18 @@ export const useCartStore = create<CartState>()(
             buttonStates: { ...state.buttonStates, [buttonId]: false },
           }));
         }, 150);
+      },
+      resetCart: () => {
+        set({
+          cartItems: [],
+          buttonStates: {},
+          quantities: {},
+          showQuantity: {},
+          isCartOpen: false,
+          isCheckoutOpen: false,
+          isExtrasOpen: false,
+          pendingCartItem: null,
+        });
       },
     }),
     {
