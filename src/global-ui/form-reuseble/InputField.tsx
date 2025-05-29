@@ -21,7 +21,7 @@ export function InputField({
     showToggleState?: boolean;
 }) {
     return (
-        <div className="w-full relative my-4">
+        <div className="w-full relative my-2">
             <input
                 id={id}
                 type={hasToggle && !showToggleState ? "password" : type}

@@ -100,7 +100,7 @@ export function CheckoutForm() {
     return (
         <form
             action={formAction}
-            className="bg-white p-4 rounded-xl shadow-md max-w-2xl mx-auto space-y-6"
+            className="bg-white p-2 rounded-xl shadow-md max-w-2xl mx-auto space-y-4"
         >
             <h2 className="text-xl font-semibold text-yellow-500">Leveransuppgifter</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
