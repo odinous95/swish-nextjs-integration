@@ -52,6 +52,8 @@ export function CheckoutForm() {
         fetchPaymentStatus();
     }, [state]);
 
+    console.log("CheckoutForm state:", state);
+
     const deliveryOptions = [
         { label: "Fredag 30/5 (08:00 – 13:00)", value: "Fredag 30/5 (08:00 – 13:00)" },
         { label: "Lördag 31/5 (16:00 – 20:00)", value: "Lördag 31/5 (16:00 – 20:00)" },
