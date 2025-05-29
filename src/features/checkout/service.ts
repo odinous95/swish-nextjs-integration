@@ -44,9 +44,8 @@ export function createService(repository: Repository) {
           const errData = await res.json();
           throw new Error(errData?.message || "Unknown error");
         }
-        const { token, url, id } = await res.json();
+        const { token, id } = await res.json();
         if (!token) throw new Error("Swish token saknas");
-        // Check if the device is mobile
         if (data.deviceType === "mobile") {
           const swishUrl = `swish://paymentrequest?token=${token}`;
           return {
@@ -87,7 +86,32 @@ export function createService(repository: Repository) {
       }
     }
   }
+
+  async function getPaymentStatus(swishId: string) {
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+    try {
+      const response = await fetch(
+        `${baseUrl}/api/swish/paymentrequests/${swishId}`
+      );
+      if (!response.ok) {
+        throw new Error(`Failed to fetch payment status: ${response.status}`);
+      }
+      const data = await response.json();
+      return {
+        success: true,
+        status: 200,
+        data,
+      };
+    } catch (error: any) {
+      return {
+        success: false,
+        status: 500,
+        message: `Error fetching payment status: ${error.message}`,
+      };
+    }
+  }
   return {
     submitOrder,
+    getPaymentStatus,
   };
 }

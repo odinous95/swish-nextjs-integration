@@ -5,9 +5,7 @@ export function Loader() {
         <div className="flex justify-center items-center">
             <div className="rounded-full bg-orange-200 w-6 h-6 relative flex justify-center items-center animate-spin">
                 <svg
-                    className="absolute top-0 left-0 text-orange-500"
-                    width={25}
-                    height={25}
+                    className="absolute inset-0 w-full h-full text-orange-500"
                     viewBox="0 0 32 32"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"

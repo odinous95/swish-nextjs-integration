@@ -46,6 +46,7 @@ export async function POST(req: NextRequest) {
 
     // Assert the type of getResp.data to access id property
     const paymentData = getResp.data as { id: string };
+    console.log("Payment Data:", paymentData);
     return NextResponse.json({
       id: paymentData.id,
       url: location,

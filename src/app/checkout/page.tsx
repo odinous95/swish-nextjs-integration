@@ -1,8 +1,12 @@
-import { Checkout } from "@/components/pages/Checkout";
-export default function CheckoutPage() {
+import { CheckoutForm } from "@/features/checkout/ui";
+import { Container } from "@/global-ui";
+import { FormContainer } from "@/global-ui/form-reuseble/FormContainer";
+export default function MyCheckoutPage() {
     return (
-        <>
-            <Checkout />
-        </>
+        <Container>
+            <FormContainer
+                formContent={<CheckoutForm />}
+            />
+        </Container>
     );
 }

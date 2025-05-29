@@ -1,5 +1,4 @@
 "use client";
-
 import { useActionState, useEffect, useState } from "react";
 import { submitCheckoutFormAction } from "../actions/index";
 import { InputField } from "@/global-ui/form-reuseble/InputField";
@@ -9,8 +8,9 @@ import { CheckoutState } from "../types";
 import { SelectField } from "@/global-ui/form-reuseble/SelectField";
 import { useCartStore } from '@/store';
 import Image from "next/image";
-
-import { ErrorText, OrderSummary, PaymentMethod } from ".";
+import { ErrorText, OrderSummary, PaymentMethod, PaymentStatus } from ".";
+import { checkoutFeature } from "../feature";
+import { Loader } from "@/global-ui";
 
 export function CheckoutForm() {
     const [state, formAction, isPending] = useActionState<CheckoutState, FormData>(
@@ -22,9 +22,6 @@ export function CheckoutForm() {
             errors: {},
         }
     );
-
-    console.log("Checkout Form State:", state);
-
     const [selectedPayment, setSelectedPayment] = useState("swish");
     const [deviceType, setDeviceType] = useState("desktop");
     const cartItems = useCartStore((state) => state.cartItems);
@@ -33,21 +30,27 @@ export function CheckoutForm() {
     const [campaignError, setCampaignError] = useState<string | null>(null);
     const [discountApplied, setDiscountApplied] = useState(false);
     const [qrCodeUrl, setQrCodeUrl] = useState<string | null>(null);
+    const [pymentStatus, setPaymentStatus] = useState<string | null>(null);
+
 
     useEffect(() => {
         const userAgent = typeof window !== "undefined" ? navigator.userAgent : "";
         const isMobile = /iPhone|iPad|iPod|Android/i.test(userAgent);
         setDeviceType(isMobile ? "mobile" : "desktop");
     }, []);
-    // Update qrCodeUrl whenever the server action state changes and is successful
-
 
     useEffect(() => {
-        if (state.success && state.qrCodeUrl) {
-            setQrCodeUrl(state.qrCodeUrl);
-        }
+        const fetchPaymentStatus = async () => {
+            if (state.success && state.qrCodeUrl && state.swishId) {
+                setQrCodeUrl(state.qrCodeUrl);
+            }
+            if (state.swishId) {
+                const paymentStatus = await checkoutFeature.service.getPaymentStatus(state.swishId);
+                setPaymentStatus(paymentStatus.data?.status || null)
+            }
+        };
+        fetchPaymentStatus();
     }, [state]);
-
 
     const deliveryOptions = [
         { label: "Fredag 30/5 (08:00 – 13:00)", value: "Fredag 30/5 (08:00 – 13:00)" },
@@ -81,6 +84,45 @@ export function CheckoutForm() {
         setCampaignCode(e.target.value);
         setCampaignError(null);
     };
+
+    if (qrCodeUrl) {
+        return (
+            <div
+                className={`min-h-screen flex flex-col items-center justify-center bg-white p-6 border-4 rounded-xl
+    ${pymentStatus === "PAID"
+                        ? "border-green-500"
+                        : pymentStatus === "CREATED"
+                            ? "border-gray-400"
+                            : "border-red-500"
+                    }
+  `}
+            >
+                <h1 className="text-xl font-bold mb-4 text-gray-500">Skanna QR-koden med Swish</h1>
+
+                <Image
+                    src={qrCodeUrl}
+                    alt="Swish QR-kod"
+                    width={256}
+                    height={256}
+                    className="w-64 h-64 mb-6"
+                />
+
+                {pymentStatus === "PAID" ? (
+                    <p className="text-green-600 font-semibold">Betalningen är slutförd!</p>
+                ) : pymentStatus === "CREATED" ? (
+                    <>
+                        <Loader />
+                        <p className="text-gray-500 font-semibold">Betalningen är under behandling.</p>
+                    </>
+                ) : (
+                    <p className="text-red-600 font-semibold">Betalningen misslyckades. Försök igen.</p>
+                )}
+            </div>
+
+        );
+    }
+
+    <PaymentStatus paymentStatus={pymentStatus} qrCodeUrl={qrCodeUrl} />
 
     return (
         <>
@@ -163,13 +205,11 @@ export function CheckoutForm() {
                     options={[{ label: "Välj leveransdatum...", value: "" }, ...deliveryOptions]}
                     disabled={isPending}
                 />
-
                 {/* Payment method selection */}
                 <PaymentMethod
                     selectedPayment={selectedPayment}
                     onPaymentSelect={setSelectedPayment}
                 />
-
                 <input type="hidden" name="paymentMethod" value={selectedPayment} />
                 <input type="hidden" name="campaignCode" value={campaignCode} />
                 <input type="hidden" name="discountApplied" value={discountApplied.toString()} />
@@ -178,7 +218,6 @@ export function CheckoutForm() {
                 <input type="hidden" name="discount" value={calculateTotals().discount.toFixed(2)} />
                 <input type="hidden" name="discountApplied" value={discountApplied.toString()} />
                 <input type="hidden" name="deviceType" value={deviceType} />
-
                 <div className="flex items-center mt-4">
                     <input
                         id="termsAccepted"
@@ -193,20 +232,10 @@ export function CheckoutForm() {
                     </label>
                 </div>
                 <ErrorText error={state.errors?.termsAccepted} />
-
                 {state.message && <AlertMessage state={state} />}
                 <SubmitButton disabled={isPending} pending={isPending} title="Slutför och betala" />
             </form>
-            {/* Show QR code if available */}
-            {qrCodeUrl && (
-                <div className="min-h-screen flex flex-col items-center justify-center bg-white p-6">
-                    <h1 className="text-xl font-bold mb-4">Skanna QR-koden med Swish</h1>
-                    <img src={qrCodeUrl} alt="Swish QR-kod" width={256} height={256} />
-                    <p className="text-gray-600 text-sm text-center">
-                        Har du problem? Kopiera länken nedan och öppna i din Swish-app:
-                    </p>
-                </div>
-            )}
+
         </>
     );
 }
