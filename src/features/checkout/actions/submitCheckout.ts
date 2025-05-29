@@ -22,10 +22,10 @@ export async function submitCheckoutFormAction(
 
   if (!result?.success) {
     return {
-      success: false,
-      status: 400,
-      message: "Ett fel inträffade. Försök igen.",
-      errors: {} as CHECKOUT_ERRORS, // or map errors properly here
+      success: result?.success || false,
+      status: result?.status || 400,
+      message: result?.message || "Failed to submit order",
+      errors: result?.errors as CHECKOUT_ERRORS, // or map errors properly here
       payload,
     };
   }
