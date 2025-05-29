@@ -41,9 +41,7 @@ export async function POST(req: NextRequest) {
         { status: 500 }
       );
     }
-
     const getResp = await swishRequest("GET", location);
-
     // Assert the type of getResp.data to access id property
     const paymentData = getResp.data as { id: string };
     console.log("Payment Data:", paymentData);
