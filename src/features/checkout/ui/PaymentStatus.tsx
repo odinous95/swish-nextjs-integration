@@ -9,10 +9,11 @@ import Link from "next/link";
 interface PaymentStatusProps {
     requestId: string | undefined;
     qrCodeUrl: string | null;
+    status: string | null;
 }
 
-export function PaymentStatus({ requestId, qrCodeUrl }: PaymentStatusProps) {
-    const [paymentStatus, setPaymentStatus] = useState<"PAID" | "CREATED" | "FAILED" | null>(null);
+export function PaymentStatus({ requestId, qrCodeUrl, status }: PaymentStatusProps) {
+    const [paymentStatus, setPaymentStatus] = useState(status);
 
     useEffect(() => {
         let interval: NodeJS.Timeout;

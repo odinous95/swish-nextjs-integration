@@ -84,7 +84,7 @@ export function CheckoutForm() {
 
     if (qrCodeUrl) {
         return (
-            <PaymentStatus requestId={state.swishId} qrCodeUrl={qrCodeUrl} />
+            <PaymentStatus requestId={state.swishId} qrCodeUrl={qrCodeUrl} status={paymentStatus} />
         );
     }
 
