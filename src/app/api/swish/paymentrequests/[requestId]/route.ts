@@ -43,10 +43,10 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { requestId: string } }
+  context: { params: { requestId: string } }
 ) {
   try {
-    const { requestId } = params;
+    const requestId = context.params.requestId;
 
     if (!requestId) {
       return NextResponse.json(
