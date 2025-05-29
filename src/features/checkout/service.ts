@@ -91,7 +91,7 @@ export function createService(repository: Repository) {
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
     try {
       const response = await fetch(
-        `${baseUrl}/api/swish/paymentrequests/${swishId}`
+        `${baseUrl}/api/swish/paymentstatus/${swishId}`
       );
       if (!response.ok) {
         throw new Error(`Failed to fetch payment status: ${response.status}`);
