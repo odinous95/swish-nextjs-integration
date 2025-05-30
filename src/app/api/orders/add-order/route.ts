@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { ordersFeature } from "@/features/orders";
+import { notificationFeature } from "@/features/notification";
 
 export async function POST(req: NextRequest) {
   try {
@@ -12,16 +13,27 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // Save the order
     const result = await ordersFeature.service.createOrder(order);
     console.log("Order created:", result);
+
     if (!result) {
       return NextResponse.json(
         { message: "Failed to save order to database" },
         { status: 500 }
       );
     }
+
+    // ✅ Send confirmation email to customer
+    await notificationFeature.service.sendOrderConfirmationEmail({
+      to: order.email,
+      name: order.firstName,
+      orderId: result.orderId || "N/A",
+      total: order.total,
+    });
+
     return NextResponse.json(
-      { message: "Order saved to database successfully" },
+      { message: "Order saved and email sent successfully" },
       { status: 200 }
     );
   } catch (error) {
