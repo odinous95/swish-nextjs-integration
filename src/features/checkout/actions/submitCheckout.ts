@@ -24,6 +24,7 @@ export async function submitCheckoutFormAction(
       status: result?.status || 400,
       message: result?.message || "Failed to submit order",
       errors: result?.errors as CHECKOUT_ERRORS, // or map errors properly here
+      values: Object.fromEntries(payload),
     };
   }
 

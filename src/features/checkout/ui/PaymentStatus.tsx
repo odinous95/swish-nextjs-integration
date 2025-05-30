@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useCartStore } from "@/store";
 import { Loader } from "@/global-ui";
 import { FaCheckCircle } from "react-icons/fa";
@@ -12,16 +12,19 @@ interface PaymentStatusProps {
     requestId: string | undefined;
     qrCodeUrl: string | null;
     status: string | null;
-    order: ORDER; // Use a proper Order type if you have one
+    order: ORDER;
 }
 
 export function PaymentStatus({ requestId, qrCodeUrl, status, order }: PaymentStatusProps) {
     const [paymentStatus, setPaymentStatus] = useState(status);
     const [orderCreated, setOrderCreated] = useState(false);
     const resetCart = useCartStore((state) => state.resetCart);
+    const hasCreatedOrder = useRef(false); // Prevent multiple order creations
 
+    // Poll for payment status
     useEffect(() => {
         let interval: NodeJS.Timeout;
+
         const fetchStatus = async () => {
             try {
                 const res = await fetch(`/api/swish/paymentstatus/?requestId=${requestId}`);
@@ -50,38 +53,42 @@ export function PaymentStatus({ requestId, qrCodeUrl, status, order }: PaymentSt
         return () => clearInterval(interval);
     }, [requestId]);
 
+    // Create order once when payment is successful
     useEffect(() => {
         const createOrder = async () => {
             try {
-                const res = await fetch("/api/orders", {
+                const res = await fetch("/api/orders/add-order", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
                     },
                     body: JSON.stringify({
                         ...order,
-                        paymentStatus, // 👈 Add payment status to the payload
+                        paymentStatus,
                     }),
                 });
+
                 if (!res.ok) {
                     const errorText = await res.text();
                     console.error("Order creation failed:", errorText);
                 } else {
                     setOrderCreated(true);
+                    hasCreatedOrder.current = true;
                 }
             } catch (error) {
                 console.error("Error creating order:", error);
             }
         };
 
-        if (paymentStatus === "PAID" && !orderCreated) {
+        if (paymentStatus === "PAID" && !hasCreatedOrder.current) {
             resetCart();
             localStorage.removeItem("cart-storage");
+            hasCreatedOrder.current = true; // Mark before async to avoid race condition
             createOrder();
         }
-    }, [paymentStatus, order, orderCreated, resetCart]);
+    }, [paymentStatus, order, resetCart]);
 
-
+    // Show loader while waiting for payment status
     if (paymentStatus === null) {
         return (
             <div className="min-h-screen flex flex-col items-center justify-center bg-white p-6">

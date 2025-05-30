@@ -16,7 +16,9 @@ export type ORDER = {
   campaignCode?: string;
   discount?: number;
   discountApplied?: boolean;
+  paymentMethod?: string; // e.g. "CARD", "SWISH", etc.
   deliveryTimeWindow?: string; // e.g. "Fredag 30/5 (08:00 – 13:00)"
+  termsAccepted?: boolean; // true if the user has accepted terms and conditions
 };
 
 export interface CartItem {

@@ -12,8 +12,14 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    await ordersFeature.service.createOrder(order);
-
+    const result = await ordersFeature.service.createOrder(order);
+    console.log("Order created:", result);
+    if (!result) {
+      return NextResponse.json(
+        { message: "Failed to save order to database" },
+        { status: 500 }
+      );
+    }
     return NextResponse.json(
       { message: "Order saved to database successfully" },
       { status: 200 }

@@ -13,7 +13,9 @@ export type CheckoutState = {
   success: boolean;
   status: number | null;
   message: string | null;
+  intialSate?: any;
   errors: CHECKOUT_ERRORS;
+  payload?: any;
   qrCodeUrl?: string;
   swishId?: string | null;
   swishUrl?: string;
