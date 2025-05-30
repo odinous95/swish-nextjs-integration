@@ -32,8 +32,22 @@ export function createRepository() {
       throw new Error("Failed to create order.");
     }
   }
+  async function getAllOrdersDb() {
+    try {
+      const orders = await sql`
+        SELECT * FROM orders
+        ORDER BY created_at DESC
+      `;
+      console.log("Orders fetched successfully:", orders);
+      return orders;
+    } catch (error) {
+      console.error("Error fetching orders:", error);
+      throw new Error("Failed to fetch orders.");
+    }
+  }
   return {
     createOrderDb,
+    getAllOrdersDb,
   };
 }
 
