@@ -141,7 +141,6 @@ export function PaymentStatus({ requestId, qrCodeUrl, status, order }: PaymentSt
             ) : paymentStatus === "CREATED" ? (
                 <>
                     <Loader />
-                    <p className="text-gray-500 font-semibold">Betalningen är under behandling.</p>
                 </>
             ) : paymentStatus === "FAILED" ? (
                 <p className="text-red-600 font-semibold">Betalningen misslyckades. Försök igen.</p>

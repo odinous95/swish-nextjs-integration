@@ -1,6 +1,7 @@
+"use client";
 import React, { useEffect, useState } from 'react';
 
-const About: React.FC = () => {
+export function About() {
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
@@ -67,5 +68,3 @@ const About: React.FC = () => {
     </div>
   );
 };
-
-export default About;

@@ -2,15 +2,20 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   images: {
-    domains: ["i.ibb.co", "mpc.getswish.net"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "i.ibb.co",
+        // optionally specify pathname if needed, e.g. '/**'
+        // pathname: '/**',
+      },
+      {
+        protocol: "https",
+        hostname: "mpc.getswish.net",
+        // pathname: '/**',
+      },
+    ],
   },
-  remotePatterns: [
-    {
-      protocol: "https",
-      hostname: "i.ibb.co",
-    },
-  ],
-  /* config options here */
   eslint: {
     ignoreDuringBuilds: true,
   },
