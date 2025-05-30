@@ -16,10 +16,8 @@ export async function submitCheckoutFormAction(
     termsAccepted: raw.termsAccepted === "on",
     deviceType: raw.deviceType === "mobile" ? "mobile" : "desktop",
   };
-
-  const result = await checkoutFeature.service.submitOrder(checkoutPayLoad);
+  const result = await checkoutFeature.service.intializeOrder(checkoutPayLoad);
   console.log("Checkout Result:", result);
-
   if (!result?.success) {
     return {
       success: result?.success || false,
@@ -37,5 +35,6 @@ export async function submitCheckoutFormAction(
     qrCodeUrl: result.qrCodeUrl || undefined,
     swishId: result.swishId || null,
     swishUrl: result.swishUrl || undefined,
+    values: checkoutPayLoad, // 👈 Add this
   };
 }

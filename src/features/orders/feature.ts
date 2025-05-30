@@ -9,4 +9,4 @@ function craeteFeature() {
   };
 }
 
-export const checkoutFeature = craeteFeature();
+export const ordersFeature = craeteFeature();

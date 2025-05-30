@@ -1,6 +1,6 @@
 {
-  "id": "32365247-d585-46d3-b43c-923fe46483c0",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "e25143a2-3705-45ee-b44e-a64295e82c3d",
+  "prevId": "32365247-d585-46d3-b43c-923fe46483c0",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -12,7 +12,18 @@
           "name": "id",
           "type": "integer",
           "primaryKey": true,
-          "notNull": true
+          "notNull": true,
+          "identity": {
+            "type": "always",
+            "name": "orders_id_seq",
+            "schema": "public",
+            "increment": "1",
+            "startWith": "1",
+            "minValue": "1",
+            "maxValue": "2147483647",
+            "cache": "1",
+            "cycle": false
+          }
         },
         "first_name": {
           "name": "first_name",

@@ -1,8 +1,9 @@
 import { OrderSchema } from "@/validation/zod-validation";
 import { Repository } from "./repository";
+import { ORDER } from "./types";
 
 export function createService(repository: Repository) {
-  async function submitOrder(payload: any) {
+  async function intializeOrder(payload: any) {
     console.log("Submitting Order with Payload:", payload);
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
     const validated = OrderSchema.safeParse(payload);
@@ -59,7 +60,6 @@ export function createService(repository: Repository) {
         const response = await fetch(
           `${baseUrl}/api/swish/swishqr?token=${token}`
         );
-
         if (!response.ok) throw new Error(`QR proxy failed ${response.status}`);
         const arrayBuffer = await response.arrayBuffer();
         const buffer = Buffer.from(arrayBuffer);
@@ -84,32 +84,18 @@ export function createService(repository: Repository) {
       }
     }
   }
-
-  async function getPaymentStatus(swishId: string) {
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+  async function createOrder(order: ORDER) {
     try {
-      const response = await fetch(
-        `${baseUrl}/api/swish/paymentstatus/?requestId=${swishId}`
-      );
-      if (!response.ok) {
-        throw new Error(`Failed to fetch payment status: ${response.status}`);
-      }
-      const data = await response.json();
-      return {
-        success: true,
-        status: 200,
-        data,
-      };
-    } catch (error: any) {
-      return {
-        success: false,
-        status: 500,
-        message: `Error fetching payment status: ${error.message}`,
-      };
+      await repository.createOrderDb(order);
+      return { success: true };
+    } catch (error) {
+      console.error("Error creating order:", error);
+      return { success: false, error: "Failed to create order." };
     }
   }
+
   return {
-    submitOrder,
-    getPaymentStatus,
+    intializeOrder,
+    createOrder,
   };
 }

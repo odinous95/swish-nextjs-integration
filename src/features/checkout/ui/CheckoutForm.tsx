@@ -8,7 +8,6 @@ import { CheckoutState } from "../types";
 import { SelectField } from "@/global-ui/form-reuseble/SelectField";
 import { useCartStore } from '@/store';
 import { ErrorText, OrderSummary, PaymentMethod, PaymentStatus } from ".";
-import { checkoutFeature } from "../feature";
 
 export function CheckoutForm() {
     const [state, formAction, isPending] = useActionState<CheckoutState, FormData>(
@@ -35,19 +34,26 @@ export function CheckoutForm() {
         const isMobile = /iPhone|iPad|iPod|Android/i.test(userAgent);
         setDeviceType(isMobile ? "mobile" : "desktop");
     }, []);
-
     useEffect(() => {
         const fetchPaymentStatus = async () => {
             if (state.success && state.qrCodeUrl && state.swishId) {
                 setQrCodeUrl(state.qrCodeUrl);
             }
+
             if (state.swishId) {
-                const paymentStatus = await checkoutFeature.service.getPaymentStatus(state.swishId);
-                setPaymentStatus(paymentStatus.data?.status || null);
+                try {
+                    const res = await fetch(`/api/swish/paymentstatus?requestId=${state.swishId}`);
+                    const data = await res.json();
+                    setPaymentStatus(data.status || null);
+                } catch (error) {
+                    console.error("Failed to fetch payment status:", error);
+                }
             }
         };
+
         fetchPaymentStatus();
     }, [state]);
+
 
     useEffect(() => {
         if (state.success && deviceType === "mobile" && state.swishUrl) {
@@ -55,6 +61,8 @@ export function CheckoutForm() {
             window.location.href = state.swishUrl;
         }
     }, [state.success, state.swishUrl, deviceType]);
+
+    console.log("CheckoutForm state:", state);
 
 
     const deliveryOptions = [
@@ -90,12 +98,36 @@ export function CheckoutForm() {
         setCampaignError(null);
     };
 
-    if (qrCodeUrl) {
+    if (qrCodeUrl && state.swishId && state.values) {
+        const order = {
+            firstName: state.values.firstName,
+            lastName: state.values.lastName,
+            email: state.values.email,
+            phone: state.values.phone,
+            address: state.values.address,
+            postalCode: state.values.postalCode,
+            city: state.values.city,
+            comment: state.values.comment || "",
+            floor: state.values.floor || "",
+            doorCode: state.values.doorCode || "",
+            deliveryDate: state.values.deliveryDate,
+            cartItems, // From store
+            total: calculateTotals().total,
+            deviceType: state.values.deviceType,
+            campaignCode: state.values.campaignCode || "",
+            discount: state.values.discount || 0,
+            discountApplied: state.values.discountApplied || false,
+        };
+
         return (
-            <PaymentStatus requestId={state.swishId} qrCodeUrl={qrCodeUrl} status={paymentStatus} />
+            <PaymentStatus
+                requestId={state.swishId}
+                qrCodeUrl={qrCodeUrl}
+                status={paymentStatus}
+                order={order} // 👈 Now we can pass it cleanly
+            />
         );
     }
-
 
     return (
         <form

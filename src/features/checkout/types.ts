@@ -15,8 +15,9 @@ export type CheckoutState = {
   message: string | null;
   errors: CHECKOUT_ERRORS;
   qrCodeUrl?: string;
-  swishId?: string;
+  swishId?: string | null;
   swishUrl?: string;
+  values?: any;
 };
 
 export type CHECKOUT_ERRORS = {
@@ -45,3 +46,5 @@ export type CheckoutFormData = {
   floor?: string;
   termsAccepted: boolean;
 };
+
+export type SERVICE_METHODS = {};

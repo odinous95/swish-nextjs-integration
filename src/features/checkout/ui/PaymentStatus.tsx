@@ -6,19 +6,22 @@ import { Loader } from "@/global-ui";
 import { FaCheckCircle } from "react-icons/fa";
 import Image from "next/image";
 import Link from "next/link";
+import { ORDER } from "@/features/orders/types";
 
 interface PaymentStatusProps {
     requestId: string | undefined;
     qrCodeUrl: string | null;
     status: string | null;
+    order: ORDER; // Use a proper Order type if you have one
 }
 
-export function PaymentStatus({ requestId, qrCodeUrl, status }: PaymentStatusProps) {
+export function PaymentStatus({ requestId, qrCodeUrl, status, order }: PaymentStatusProps) {
     const [paymentStatus, setPaymentStatus] = useState(status);
+    const [orderCreated, setOrderCreated] = useState(false);
     const resetCart = useCartStore((state) => state.resetCart);
+
     useEffect(() => {
         let interval: NodeJS.Timeout;
-
         const fetchStatus = async () => {
             try {
                 const res = await fetch(`/api/swish/paymentstatus/?requestId=${requestId}`);
@@ -27,7 +30,6 @@ export function PaymentStatus({ requestId, qrCodeUrl, status }: PaymentStatusPro
                 if (data.status) {
                     setPaymentStatus((prevStatus) => {
                         if (data.status === "PAID" && prevStatus !== "PAID") {
-                            // Clear the basket when payment is confirmed
                             localStorage.removeItem("cart-storage");
                         }
                         return data.status;
@@ -48,15 +50,38 @@ export function PaymentStatus({ requestId, qrCodeUrl, status }: PaymentStatusPro
         return () => clearInterval(interval);
     }, [requestId]);
 
-    // Also clear localStorage if status was "PAID" on first render
     useEffect(() => {
-        if (paymentStatus === "PAID") {
+        const createOrder = async () => {
+            try {
+                const res = await fetch("/api/orders", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        ...order,
+                        paymentStatus, // 👈 Add payment status to the payload
+                    }),
+                });
+                if (!res.ok) {
+                    const errorText = await res.text();
+                    console.error("Order creation failed:", errorText);
+                } else {
+                    setOrderCreated(true);
+                }
+            } catch (error) {
+                console.error("Error creating order:", error);
+            }
+        };
+
+        if (paymentStatus === "PAID" && !orderCreated) {
             resetCart();
             localStorage.removeItem("cart-storage");
+            createOrder();
         }
-    }, [paymentStatus]);
+    }, [paymentStatus, order, orderCreated, resetCart]);
 
-    // While loading
+
     if (paymentStatus === null) {
         return (
             <div className="min-h-screen flex flex-col items-center justify-center bg-white p-6">
