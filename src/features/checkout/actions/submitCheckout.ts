@@ -17,7 +17,7 @@ export async function submitCheckoutFormAction(
     deviceType: raw.deviceType === "mobile" ? "mobile" : "desktop",
   };
   const result = await checkoutFeature.service.intializeOrder(checkoutPayLoad);
-  console.log("Checkout Result:", result);
+  // console.log("Checkout Result:", result);
   if (!result?.success) {
     return {
       success: result?.success || false,

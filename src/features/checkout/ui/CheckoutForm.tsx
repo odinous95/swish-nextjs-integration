@@ -43,7 +43,7 @@ export function CheckoutForm() {
         }
     );
 
-    console.log("CheckoutForm state:", state);
+    // console.log("CheckoutForm state:", state);
     const [selectedPayment, setSelectedPayment] = useState("swish");
     const [deviceType, setDeviceType] = useState("desktop");
     const cartItems = useCartStore((state) => state.cartItems);
@@ -86,7 +86,7 @@ export function CheckoutForm() {
         }
     }, [state.success, state.swishUrl, deviceType]);
 
-    console.log("CheckoutForm state:", state);
+
 
 
     const deliveryOptions = [

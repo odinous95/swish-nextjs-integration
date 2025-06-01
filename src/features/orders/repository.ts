@@ -38,7 +38,7 @@ export function createRepository() {
         SELECT * FROM orders
         ORDER BY created_at DESC
       `;
-      console.log("Orders fetched successfully:", orders);
+      // console.log("Orders fetched successfully:", orders);
       return orders;
     } catch (error) {
       console.error("Error fetching orders:", error);

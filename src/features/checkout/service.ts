@@ -90,10 +90,10 @@ export function createService(repository: Repository) {
       console.error("checkSwishPaymentStatus: requestId is missing or invalid");
       return null;
     }
-
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
     try {
       const response = await fetch(
-        `/api/swish/paymentstatus?requestId=${requestId}`
+        `${baseUrl}/api/swish/paymentstatus?requestId=${requestId}`
       );
       if (!response.ok) {
         console.error("Internal API returned error status", response.status);

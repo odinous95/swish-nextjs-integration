@@ -5,7 +5,7 @@ export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
     const requestId = searchParams.get("requestId");
-    console.log("Fetching payment status for requestId:", requestId);
+    // console.log("Fetching payment status for requestId:", requestId);
     if (!requestId) {
       return NextResponse.json(
         { error: "Missing requestId in query parameters" },

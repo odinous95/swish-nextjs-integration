@@ -5,7 +5,7 @@ export function createService(repository: Repository) {
   async function createOrder(order: ORDER) {
     try {
       const orderId = await repository.createOrderDb(order);
-      console.log("Order created successfully:", orderId);
+      // console.log("Order created successfully:", orderId);
       return { success: true, orderId };
     } catch (error) {
       console.error("Error creating order:", error);
@@ -15,7 +15,7 @@ export function createService(repository: Repository) {
   async function getAllOrders() {
     try {
       const orders = await repository.getAllOrdersDb();
-      console.log("Orders fetched successfully:", orders);
+      // console.log("Orders fetched successfully:", orders);
       return { success: true, orders };
     } catch (error) {
       console.error("Error fetching orders:", error);

@@ -16,7 +16,7 @@ interface PaymentStatusProps {
 
 export function PaymentStatus({ qrCodeUrl, status, order }: PaymentStatusProps) {
 
-    console.log(order, "order in PaymentStatus");
+    // console.log(order, "order in PaymentStatus");
     const [paymentStatus, setPaymentStatus] = useState(status);
     const [orderCreated, setOrderCreated] = useState(false);
     const resetCart = useCartStore((state) => state.resetCart);
