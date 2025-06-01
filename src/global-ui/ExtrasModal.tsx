@@ -81,7 +81,7 @@ export function ExtrasModal({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center px-4">
+    <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center px-4">
       <div className="bg-white rounded-xl p-6 max-w-sm w-full mx-auto my-4 max-h-[90vh] flex flex-col animate-fade-in">
         <div className="flex justify-between items-center mb-4">
           <h3 className="font-heading text-lg font-bold text-black">Tillval</h3>

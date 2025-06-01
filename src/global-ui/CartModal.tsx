@@ -83,7 +83,7 @@ export function CartModal({
   const displayItems = cartItems.filter(item => !item.id.startsWith('sauce_'));
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-start justify-center pt-10 md:pt-20 px-2 md:px-4">
+    <div className="fixed inset-0 bg-black/80 z-50 flex items-start justify-center pt-10 md:pt-20 px-2 md:px-4">
       <div className="bg-white rounded-xl p-6 w-full max-w-lg mx-2 md:mx-4 max-h-[90vh] overflow-y-auto">
         <div className="flex justify-between items-center mb-6">
           <h3 className="font-heading text-xl font-bold text-black">Din varukorg</h3>

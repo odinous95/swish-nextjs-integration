@@ -234,7 +234,7 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-start justify-center pt-20 px-4">
+    <div className="fixed inset-0 bg-black/30 z-50 flex items-start justify-center pt-20 px-4">
       <div className="bg-white rounded-xl p-6 max-w-md w-full mx-4 max-h-[80vh] overflow-y-auto">
         <div className="flex justify-between items-center mb-8">
           <h3 className="font-heading text-xl font-bold text-black">Kassan</h3>
