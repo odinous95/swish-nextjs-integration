@@ -8,12 +8,12 @@ interface NavigationArrowsProps {
   isMobile?: boolean;
 }
 
-const NavigationArrows: React.FC<NavigationArrowsProps> = ({
+export function NavigationArrows({
   showLeftArrow,
   showRightArrow,
   onScroll,
   isMobile = false
-}) => {
+}: NavigationArrowsProps) {
   if (isMobile) {
     return (
       <>
@@ -56,5 +56,3 @@ const NavigationArrows: React.FC<NavigationArrowsProps> = ({
     </>
   );
 };
-
-export default NavigationArrows;

@@ -1,4 +1,5 @@
-import OrdersTable from "@/features/orders/ui/OrderTable";
+
+import { OrdersTable } from "@/features/orders/ui";
 import React from "react";
 
 type Order = {

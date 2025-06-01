@@ -1,3 +1,4 @@
+"use client";
 import React from 'react';
 import { X, Plus, Minus, Trash2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -62,14 +63,14 @@ const formatPrice = (price: number) => {
   return `${formattedPrice} kr`;
 };
 
-const CartModal: React.FC<CartModalProps> = ({
+export function CartModal({
   isOpen,
   onClose,
   cartItems,
   removeFromCart,
   getTotalPrice,
   adjustQuantity,
-}) => {
+}: CartModalProps) {
   const navigate = useRouter();
   if (!isOpen) return null;
 
@@ -104,7 +105,7 @@ const CartModal: React.FC<CartModalProps> = ({
                 return (
                   <div key={item.id} className="flex items-center justify-between bg-gray-50 p-4 rounded-lg">
                     <div className="flex items-center gap-4">
-                        {itemImage && (
+                      {itemImage && (
                         <Image
                           src={itemImage}
                           alt={item.name}
@@ -112,7 +113,7 @@ const CartModal: React.FC<CartModalProps> = ({
                           height={64}
                           className={`w-16 h-16 ${item.isExtra ? 'object-contain p-2' : 'object-cover'} rounded-lg`}
                         />
-                        )}
+                      )}
                       <div>
                         <h4 className="font-medium text-black text-sm md:text-base">{item.name}</h4>
                         <div className="flex items-center gap-3 mt-2">
@@ -167,5 +168,3 @@ const CartModal: React.FC<CartModalProps> = ({
     </div>
   );
 };
-
-export default CartModal;

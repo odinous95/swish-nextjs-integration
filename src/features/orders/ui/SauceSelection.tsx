@@ -8,12 +8,12 @@ interface SauceSelectionProps {
   mealId: string;
 }
 
-export const SauceSelection: React.FC<SauceSelectionProps> = ({
+export function SauceSelection({
   selectedSauce,
   onSauceSelect,
   needsSauceSelection,
   mealId
-}) => {
+}: SauceSelectionProps) {
   if (!needsSauceSelection || mealId === 'pasta') return null;
 
   const handleSauceSelect = (sauce: string) => {
@@ -83,5 +83,3 @@ export const SauceSelection: React.FC<SauceSelectionProps> = ({
     </div>
   );
 };
-
-export default SauceSelection;

@@ -1,7 +1,7 @@
 import React from 'react';
 import { X } from 'lucide-react';
-import { OrderButton } from '../OrderButton';
 import Image from 'next/image';
+import { OrderButton } from '..';
 
 interface MealModalProps {
   meal: {
@@ -21,7 +21,7 @@ interface MealModalProps {
   adjustQuantity: (id: string, delta: number) => void;
 }
 
-const MealModal: React.FC<MealModalProps> = ({
+export function MealModal({
   meal,
   onClose,
   showQuantity,
@@ -29,7 +29,7 @@ const MealModal: React.FC<MealModalProps> = ({
   buttonStates,
   handleButtonClick,
   adjustQuantity
-}) => {
+}: MealModalProps) {
   if (!meal) return null;
 
   const formatPrice = (price: number) => {
@@ -86,5 +86,3 @@ const MealModal: React.FC<MealModalProps> = ({
     </div>
   );
 };
-
-export default MealModal;

@@ -83,8 +83,37 @@ export function createService(repository: Repository) {
       }
     }
   }
+  async function checkSwishPaymentStatus(
+    requestId: string
+  ): Promise<string | null> {
+    if (!requestId) {
+      console.error("checkSwishPaymentStatus: requestId is missing or invalid");
+      return null;
+    }
+
+    try {
+      const response = await fetch(
+        `/api/swish/paymentstatus?requestId=${requestId}`
+      );
+      if (!response.ok) {
+        console.error("Internal API returned error status", response.status);
+        return null;
+      }
+      const data = await response.json();
+      const validStatuses = ["PAID", "DECLINED", "ERROR", "CREATED"];
+      const status = data.status?.toUpperCase() ?? null;
+      if (status && validStatuses.includes(status)) {
+        return status;
+      }
+      return null;
+    } catch (error) {
+      console.error("Error calling internal Swish API route:", error);
+      return null;
+    }
+  }
 
   return {
     intializeOrder,
+    checkSwishPaymentStatus,
   };
 }

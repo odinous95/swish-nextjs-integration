@@ -20,10 +20,10 @@ interface MealCardProps {
   onMealClick: (id: string) => void;
 }
 
-const MealCard: React.FC<MealCardProps> = ({
+export function MealCard({
   meal,
   onMealClick
-}) => {
+}: MealCardProps) {
   const formatPrice = (price: number) => {
     return price.toFixed(2).replace('.', ',');
   };
@@ -57,4 +57,3 @@ const MealCard: React.FC<MealCardProps> = ({
   );
 };
 
-export default MealCard;

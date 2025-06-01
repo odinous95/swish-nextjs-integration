@@ -1,6 +1,6 @@
 import React from 'react';
-import BusinessCard from './business/BusinessCard';
-import BusinessInfo from './business/BusinessInfo';
+import { BusinessCard, BusinessInfo } from '.';
+
 
 interface BusinessPackageProps {
   showQuantity: { [key: string]: boolean };
@@ -10,13 +10,13 @@ interface BusinessPackageProps {
   adjustQuantity: (id: string, delta: number) => void;
 }
 
-const BusinessPackage: React.FC<BusinessPackageProps> = ({
+export function BusinessPackage({
   showQuantity,
   quantities,
   buttonStates,
   handleButtonClick,
   adjustQuantity
-}) => {
+}: BusinessPackageProps) {
   return (
     <div className="py-12 px-4 bg-white text-black">
       <div className="max-w-6xl mx-auto">
@@ -44,5 +44,3 @@ const BusinessPackage: React.FC<BusinessPackageProps> = ({
     </div>
   );
 };
-
-export default BusinessPackage;

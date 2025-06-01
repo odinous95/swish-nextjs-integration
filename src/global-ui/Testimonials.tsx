@@ -1,8 +1,8 @@
 "use client";
 import React, { useRef } from 'react';
-import TestimonialCard from '../components/testimonials/TestimonialCard';
-import NavigationArrows from '../components/testimonials/NavigationArrows';
-import { testimonials } from '../components/testimonials/TestimonialData';
+import TestimonialCard from './testimonials/TestimonialCard';
+import NavigationArrows from './testimonials/NavigationArrows';
+import { testimonials } from './testimonials/TestimonialData';
 
 export function Testimonials() {
   const scrollContainerRef = useRef<HTMLDivElement>(null);

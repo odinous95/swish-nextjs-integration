@@ -1,8 +1,8 @@
 "use client";
 import React, { useState, useEffect, useRef } from 'react';
-import { OrderButton } from '../OrderButton';
-import NutritionInfo from '../NutritionInfo';
 import Image from 'next/image';
+import { NutritionInfo, OrderButton } from '..';
+
 
 interface DesktopMealCardProps {
   meal: {
@@ -21,14 +21,14 @@ interface DesktopMealCardProps {
   adjustQuantity: (id: string, delta: number) => void;
 }
 
-const DesktopMealCard: React.FC<DesktopMealCardProps> = ({
+export function DesktopMealCard({
   meal,
   showQuantity,
   quantities,
   buttonStates,
   handleButtonClick,
   adjustQuantity,
-}) => {
+}: DesktopMealCardProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
 
@@ -127,4 +127,3 @@ const DesktopMealCard: React.FC<DesktopMealCardProps> = ({
   );
 };
 
-export default DesktopMealCard;

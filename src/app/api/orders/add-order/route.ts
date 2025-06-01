@@ -1,34 +1,34 @@
 import { NextRequest, NextResponse } from "next/server";
 import { ordersFeature } from "@/features/orders";
 import { notificationFeature } from "@/features/notification";
+import { checkoutFeature } from "@/features/checkout";
 
 export async function POST(req: NextRequest) {
   try {
     const order = await req.json();
-
-    if (!order || order.paymentStatus !== "PAID") {
+    const swishStatus = await checkoutFeature.service.checkSwishPaymentStatus(
+      order.requestId
+    );
+    if (!order || swishStatus !== "PAID") {
       return NextResponse.json(
         { message: "Invalid or unpaid order" },
         { status: 400 }
       );
     }
-
     // Save the order
     const result = await ordersFeature.service.createOrder(order);
-    console.log("Order created:", result);
-
     if (!result) {
       return NextResponse.json(
         { message: "Failed to save order to database" },
         { status: 500 }
       );
     }
-
     // ✅ Send confirmation email to customer
     await notificationFeature.service.sendOrderConfirmationEmail({
       to: order.email,
       name: order.firstName,
       orderId: result.orderId || "N/A",
+      order: order,
       total: order.total,
     });
 

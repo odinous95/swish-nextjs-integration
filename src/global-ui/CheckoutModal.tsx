@@ -1,10 +1,8 @@
 "use client"
 import React, { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
-import DeliveryForm from './checkout/DeliveryForm';
-import DeliveryDate from './checkout/DeliveryDate';
-import PaymentMethod from './checkout/PaymentMethod';
-import OrderSummary from './checkout/OrderSummary';
+import { DeliveryDate, DeliveryForm, OrderSummary, PaymentMethod } from '@/features/checkout/ui';
+
 
 interface CheckoutForm {
   firstName: string;

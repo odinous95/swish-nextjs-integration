@@ -6,7 +6,7 @@ interface QuantityControlsProps {
   onAdjust: (delta: number) => void;
 }
 
-export const QuantityControls: React.FC<QuantityControlsProps> = ({ quantity, onAdjust }) => {
+export function QuantityControls({ quantity, onAdjust }: QuantityControlsProps) {
   return (
     <div className="flex items-center justify-center space-x-4 mb-2">
       <button

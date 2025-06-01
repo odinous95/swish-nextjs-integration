@@ -17,11 +17,11 @@ interface ExtrasModalProps {
   onAddToCart: (extras: Extra[]) => void;
 }
 
-const ExtrasModal: React.FC<ExtrasModalProps> = ({
+export function ExtrasModal({
   isOpen,
   onClose,
   onAddToCart,
-}) => {
+}: ExtrasModalProps) {
   const [extras, setExtras] = useState<Extra[]>([
     {
       id: 'extra-ayran',
@@ -141,5 +141,3 @@ const ExtrasModal: React.FC<ExtrasModalProps> = ({
     </div>
   );
 };
-
-export default ExtrasModal;

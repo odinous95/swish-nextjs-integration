@@ -10,7 +10,7 @@ export function ReklamBanner({ isScrolled }: ReklamBanner) {
   const location = usePathname();
   const excludedPaths = ['/cart'];
 
-  if (excludedPaths.includes(location)) {
+  if (location && excludedPaths.includes(location)) {
     return null;
   }
 

@@ -5,7 +5,7 @@ interface NutritionInfoProps {
   protein: number;
 }
 
-const NutritionInfo: React.FC<NutritionInfoProps> = ({ calories, protein }) => {
+export function NutritionInfo({ calories, protein }: NutritionInfoProps) {
   return (
     <div className="absolute top-4 right-4">
       <div className="bg-white/90 rounded-full w-16 h-16 flex flex-col items-center justify-center text-black shadow-lg p-1">
@@ -17,5 +17,3 @@ const NutritionInfo: React.FC<NutritionInfoProps> = ({ calories, protein }) => {
     </div>
   );
 };
-
-export default NutritionInfo;

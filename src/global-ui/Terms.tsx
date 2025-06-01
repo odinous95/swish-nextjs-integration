@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { Truck, CreditCard, Home, Clock, AlertCircle, UserCheck, ScrollText, UserCog } from 'lucide-react';
 
-export default function Terms() {
+export function Terms() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_isScrolled, setIsScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState<string | null>(null);

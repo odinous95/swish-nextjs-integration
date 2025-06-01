@@ -11,13 +11,13 @@ interface BusinessCardProps {
   adjustQuantity: (id: string, delta: number) => void;
 }
 
-const BusinessCard: React.FC<BusinessCardProps> = ({
+export function BusinessCard({
   showQuantity,
   quantities,
   buttonStates,
   handleButtonClick,
   adjustQuantity
-}) => {
+}: BusinessCardProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
 
@@ -104,5 +104,3 @@ const BusinessCard: React.FC<BusinessCardProps> = ({
     </div>
   );
 };
-
-export default BusinessCard;

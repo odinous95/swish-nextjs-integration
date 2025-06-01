@@ -12,7 +12,7 @@ interface ExtraOptionsProps {
   showLemonOption: boolean;
 }
 
-export const ExtraOptions: React.FC<ExtraOptionsProps> = ({
+export function ExtraOptions({
   selectedDrink,
   selectedLemon,
   ayranQuantity,
@@ -20,7 +20,7 @@ export const ExtraOptions: React.FC<ExtraOptionsProps> = ({
   onLemonToggle,
   onAyranQuantityAdjust,
   showLemonOption
-}) => {
+}: ExtraOptionsProps) {
   return (
     <div className="mb-4">
       <p className="text-sm font-medium text-gray-700 mb-2">Tillval:</p>
@@ -84,5 +84,3 @@ export const ExtraOptions: React.FC<ExtraOptionsProps> = ({
     </div>
   );
 };
-
-export default ExtraOptions;

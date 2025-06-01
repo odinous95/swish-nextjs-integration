@@ -1,9 +1,9 @@
 // components/checkout/CheckoutLayout.tsx
 "use client";
 import { useCheckoutLogic } from "@/hooks/useCheckoutLogic";
-import SuccessView from "./SuccessView";
-import QrFallbackView from "./QrFallbackView";
 import { CheckoutForm } from "./CheckoutForm";
+import { SuccessView } from "./SuccessView";
+import { QrFallbackView } from "./QrFallbackView";
 
 
 export default function CheckoutLayout() {
@@ -11,7 +11,6 @@ export default function CheckoutLayout() {
 
     return (
         <div className="min-h-screen bg-gray-50">
-
             {paymentSuccess ? (
                 <SuccessView />
             ) : showQrFallback && qrBlobUrl ? (

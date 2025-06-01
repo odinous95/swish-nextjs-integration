@@ -1,10 +1,10 @@
+import { OrderButtonProps } from '@/features/orders/types';
 import React from 'react';
-import { OrderButtonProps } from './OrderButtonTypes';
 
 export const HeroButton: React.FC<Pick<OrderButtonProps, 'small' | 'className' | 'scrollToSection'>> = ({
   small = false,
   className = '',
-  scrollToSection = () => {}
+  scrollToSection = () => { }
 }) => {
   return (
     <button

@@ -1,12 +1,13 @@
+"use client";
 import React, { useState } from 'react';
 import { Check } from 'lucide-react';
-import { OrderButtonProps } from './order/OrderButtonTypes';
-import { HeroButton } from './order/HeroButton';
-import { QuantityControls } from './order/QuantityControls';
-import { SauceSelection } from './order/SauceSelection';
+import { HeroButton } from './HeroButton';
+import { QuantityControls } from '../features/orders/ui/QuantityControls';
+import { SauceSelection } from '../features/orders/ui/SauceSelection';
 import Image from 'next/image';
+import { OrderButtonProps } from '@/features/orders/types';
 
-export const OrderButton: React.FC<OrderButtonProps> = ({
+export function OrderButton({
   id,
   name = '',
   price = 0,
@@ -19,7 +20,7 @@ export const OrderButton: React.FC<OrderButtonProps> = ({
   handleButtonClick = () => { },
   adjustQuantity = () => { },
   scrollToSection = () => { },
-}) => {
+}: OrderButtonProps) {
   const [selectedSauce, setSelectedSauce] = useState<string>('');
   const [selectedLemon, setSelectedLemon] = useState<boolean>(false);
 
@@ -137,5 +138,3 @@ export const OrderButton: React.FC<OrderButtonProps> = ({
     </div>
   );
 };
-
-export default OrderButton;

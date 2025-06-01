@@ -27,7 +27,7 @@ interface DeliveryFormProps {
   onTermsChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const DeliveryForm: React.FC<DeliveryFormProps> = ({
+export function DeliveryForm({
   form,
   onChange,
   onInputFocus,
@@ -37,7 +37,7 @@ const DeliveryForm: React.FC<DeliveryFormProps> = ({
   handlePostalCodeChange,
   handlePostalCodeBlur,
   onTermsChange
-}) => {
+}: DeliveryFormProps) {
   return (
     <div className="space-y-6">
       <h4 className="font-heading text-2xl font-bold text-transparent bg-gradient-to-r bg-clip-text pb-2 border-b-2 border-gradient-to-r from-[#FFD54F] to-[#FFB300]">
@@ -246,4 +246,3 @@ const DeliveryForm: React.FC<DeliveryFormProps> = ({
   );
 };
 
-export default DeliveryForm;

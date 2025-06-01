@@ -1,7 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
 
-const BusinessInfo: React.FC = () => {
+export function BusinessInfo() {
   return (
     <div className="relative h-full overflow-hidden rounded-xl" style={{ minHeight: '264px' }}>
       <Image
@@ -27,5 +27,3 @@ const BusinessInfo: React.FC = () => {
     </div>
   );
 };
-
-export default BusinessInfo;

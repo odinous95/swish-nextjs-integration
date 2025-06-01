@@ -1,9 +1,7 @@
 "use client";
 
 import React from "react";
-import { Footer, Navbar } from "@/global-ui";
-import CartModal from "@/components/CartModal";
-import ExtrasModal from "@/components/ExtrasModal";
+import { CartModal, ExtrasModal, Footer, Navbar } from "@/global-ui";
 import { useCartStore } from "@/store";
 
 export default function ClientWrapper({ children }: { children: React.ReactNode }) {

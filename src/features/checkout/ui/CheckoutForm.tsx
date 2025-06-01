@@ -75,7 +75,6 @@ export function CheckoutForm() {
                 }
             }
         };
-
         fetchPaymentStatus();
     }, [state]);
 
@@ -149,14 +148,14 @@ export function CheckoutForm() {
             deliveryTimeWindow,
             termsAccepted: state.values.termsAccepted || false,
             discountApplied: state.values.discountApplied || false,
+            requestId: state.swishId,
         };
 
         return (
             <PaymentStatus
-                requestId={state.swishId}
                 qrCodeUrl={qrCodeUrl}
                 status={paymentStatus}
-                order={order} // 👈 Now we can pass it cleanly
+                order={order}
             />
         );
     }

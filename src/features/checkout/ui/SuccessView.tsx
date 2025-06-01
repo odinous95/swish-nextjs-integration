@@ -1,5 +1,5 @@
 // components/checkout/SuccessView.tsx
-export default function SuccessView() {
+export function SuccessView() {
     return (
         <div className="min-h-screen flex items-center justify-center bg-white">
             <div className="text-center">

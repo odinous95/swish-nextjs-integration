@@ -38,7 +38,7 @@ type Props = {
 
 const ORDERS_PER_PAGE = 20;
 
-export default function OrdersTable({ initialOrders, allOrders }: Props) {
+export function OrdersTable({ initialOrders, allOrders }: Props) {
     const [visibleCount, setVisibleCount] = useState(initialOrders.length);
 
     const showMore = () => {

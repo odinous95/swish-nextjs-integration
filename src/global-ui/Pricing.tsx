@@ -1,3 +1,4 @@
+"use client";
 import React, { useState } from 'react';
 import { ArrowLeft, Sparkles, Zap, Trophy } from 'lucide-react';
 import { calculateDailyCalories } from '../utils/calculateDailyCalories';
@@ -10,7 +11,7 @@ interface Question {
   icon?: string;
 }
 
-const CalorieCalculator: React.FC = () => {
+export function CalorieCalculator() {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<{ [key: string]: string | number }>({});
   const [showResult, setShowResult] = useState(false);
@@ -311,5 +312,3 @@ const CalorieCalculator: React.FC = () => {
     </div>
   );
 };
-
-export default CalorieCalculator;

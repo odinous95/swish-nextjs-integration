@@ -9,27 +9,25 @@ import Link from "next/link";
 import { ORDER } from "@/features/orders/types";
 
 interface PaymentStatusProps {
-    requestId: string | undefined;
     qrCodeUrl: string | null;
     status: string | null;
     order: ORDER;
 }
 
-export function PaymentStatus({ requestId, qrCodeUrl, status, order }: PaymentStatusProps) {
+export function PaymentStatus({ qrCodeUrl, status, order }: PaymentStatusProps) {
+
+    console.log(order, "order in PaymentStatus");
     const [paymentStatus, setPaymentStatus] = useState(status);
     const [orderCreated, setOrderCreated] = useState(false);
     const resetCart = useCartStore((state) => state.resetCart);
     const hasCreatedOrder = useRef(false); // Prevent multiple order creations
-
     // Poll for payment status
     useEffect(() => {
         let interval: NodeJS.Timeout;
-
         const fetchStatus = async () => {
             try {
-                const res = await fetch(`/api/swish/paymentstatus/?requestId=${requestId}`);
+                const res = await fetch(`/api/swish/paymentstatus/?requestId=${order.requestId}`);
                 const data = await res.json();
-
                 if (data.status) {
                     setPaymentStatus((prevStatus) => {
                         if (data.status === "PAID" && prevStatus !== "PAID") {
@@ -37,7 +35,6 @@ export function PaymentStatus({ requestId, qrCodeUrl, status, order }: PaymentSt
                         }
                         return data.status;
                     });
-
                     if (["PAID", "FAILED"].includes(data.status)) {
                         clearInterval(interval);
                     }
@@ -49,9 +46,8 @@ export function PaymentStatus({ requestId, qrCodeUrl, status, order }: PaymentSt
 
         fetchStatus();
         interval = setInterval(fetchStatus, 3000);
-
         return () => clearInterval(interval);
-    }, [requestId]);
+    }, [order.requestId]);
 
     // Create order once when payment is successful
     useEffect(() => {

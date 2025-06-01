@@ -1,9 +1,7 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import MealCard from '../components/meals/MealCard';
-import MealModal from '../components/meals/MealModal';
-import DesktopMealCard from '../components/meals/DesktopMealCard';
-import { meals } from '../components/meals/MealData';
+import { meals } from './meals/MealData';
+import { DesktopMealCard, MealCard, MealModal } from '.';
 
 interface MealsProps {
   showQuantity: { [key: string]: boolean };
