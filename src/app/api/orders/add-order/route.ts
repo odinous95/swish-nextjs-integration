@@ -5,7 +5,6 @@ import { checkoutFeature } from "@/features/checkout";
 
 export async function POST(req: NextRequest) {
   try {
-    //fsadf
     const order = await req.json();
     const swishStatus = await checkoutFeature.service.checkSwishPaymentStatus(
       order.requestId

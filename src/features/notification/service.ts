@@ -60,7 +60,7 @@ export function createService(repository: Repository, resend: Resend) {
       // 2️⃣ Email to Admin
       await resend.emails.send({
         from: "support@healthyeating.se",
-        to: "support@healthyeating.se", // Can be changed to a separate admin address
+        to: "healthyeating774@gmail.com", // Can be changed to a separate admin address
         subject: `Ny beställning lagd (#${orderId})`,
         html: `
           <p><strong>Ny beställning mottagen</strong></p>
