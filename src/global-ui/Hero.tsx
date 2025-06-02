@@ -5,6 +5,7 @@ import Image from "next/image";
 
 export function Hero() {
   const [isMobile, setIsMobile] = useState(false);
+
   useEffect(() => {
     const checkIsMobile = () => setIsMobile(window.innerWidth < 768);
     checkIsMobile();
@@ -27,12 +28,18 @@ export function Hero() {
     }
   };
 
+  // Samma bakgrundsbilder som i din Bolt-version
+  const mobileBg =
+    "https://i.ibb.co/cXVVK92r/IMAGE-2025-04-12-13-21-03.jpg";
+  const desktopBg =
+    "https://i.ibb.co/qYyd9PDt/IMAGE-2025-04-10-21-40-37.jpg";
+
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Background Image */}
+      {/* Bakgrundsbild */}
       <div className="absolute inset-0 -z-10">
         <Image
-          src={isMobile ? "/Assets/herosection.png" : "/Assets/herosection.png"}
+          src={isMobile ? mobileBg : desktopBg}
           alt="Hero background"
           fill
           style={{ objectFit: "cover" }}
@@ -41,25 +48,37 @@ export function Hero() {
         />
       </div>
 
-      {/* Overlays are commented out temporarily — remove comments to restore */}
+      {/* Mörk overlay för bättre kontrast */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/30 to-black/20" />
 
-      <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/40 to-black/70" />
-      <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-black/50 via-transparent to-black/80" />
-
-      {/* Content */}
-      <div className="relative z-10 max-w-4xl text-center px-6">
-        <h1 className="text-white text-4xl font-bold mb-6">
-          Ät smart. Spara tid. Må bra. <br />- Örebro
+      {/* Innehåll (rubrik, beskrivning, knapp) */}
+      <div className="absolute inset-0 flex flex-col justify-center items-center text-center px-4">
+        <h1 className="font-heading font-extrabold text-4xl md:text-5xl lg:text-6xl mb-6 max-w-4xl text-white">
+          <span className="md:hidden block leading-tight">
+            Hälsosamma<br />
+            Matlådor - Örebro
+          </span>
+          <span className="hidden md:inline block leading-tight">
+            Hälsosamma Matlådor<br />
+            Örebro
+          </span>
         </h1>
+        <p className="text-white text-lg md:text-xl lg:text-2xl mb-8 max-w-2xl">
+          Smidiga och näringsrika matlådor – klara att avnjutas.
+        </p>
         <button
           onClick={scrollToMeals}
-          className="relative inline-block mt-2 bg-gradient-to-r from-yellow-400 to-yellow-600 text-black font-semibold rounded-3xl px-10 py-4 shadow-lg hover:scale-105 hover:shadow-2xl transition-transform duration-300 overflow-hidden group"
+          className="relative bg-gradient-to-r from-[#FFD54F] to-[#FFB300] text-black rounded-xl font-semibold px-8 py-3 hover:from-[#FFE082] hover:to-[#FFB300] transition-all duration-300 shadow-[0_8px_30px_rgb(255,213,79,0.15)] hover:scale-105 hover:shadow-[0_8px_30px_rgb(255,213,79,0.25)] overflow-hidden group"
           aria-label="Beställ nu"
         >
-          <span className="relative z-10">BESTÄLL NU!</span>
-          <span className="absolute inset-0 rounded-3xl bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+          <span className="relative z-10 transition-opacity duration-300">
+            BESTÄLL NU!
+          </span>
+          <span className="absolute inset-0 pointer-events-none group-active:animate-ripple bg-white/25 rounded-full scale-0" />
         </button>
       </div>
     </section>
   );
 }
+
+export default Hero;
