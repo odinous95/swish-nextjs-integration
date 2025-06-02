@@ -48,7 +48,7 @@ export function BusinessCard({
     >
       <div className="relative h-40 overflow-hidden">
         <Image
-          src="https://i.ibb.co/p6jzhSjR/IMAGE-2025-04-17-21-58-08.jpg"
+          src="https://i.ibb.co/LXcyVTnn/972fe2ac-84a5-4bbe-b42d-84ef36554ed7.png"
           alt="50st Matlådor"
           fill
           className="object-cover scale-100 transform hover:scale-110 transition-transform duration-300"
