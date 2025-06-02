@@ -32,7 +32,7 @@ export function Hero() {
       {/* Background Image */}
       <div className="absolute inset-0 -z-10">
         <Image
-          src={isMobile ? "/Assets/HElogo-removebg-preview.png" : "/Assets/hero.png"}
+          src={isMobile ? "/Assets/herosection.png" : "/Assets/herosection.png"}
           alt="Hero background"
           fill
           style={{ objectFit: "cover" }}
