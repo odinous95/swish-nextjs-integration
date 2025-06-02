@@ -28,12 +28,12 @@ export function Hero() {
     }
   };
 
-  // Uppdaterade lokala bildvägar
+  // Lokala bildvägar
   const mobileBg = "https://i.ibb.co/KzXrSCy6/heromobil.png";
   const desktopBg = "https://i.ibb.co/5W262T46/herosection.png";
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section className="relative -mt-[70px] h-[calc(100vh+70px)] flex items-center justify-center overflow-hidden">
       {/* Bakgrundsbild */}
       <div className="absolute inset-0 -z-10">
         <Image
