@@ -28,11 +28,9 @@ export function Hero() {
     }
   };
 
-  // Samma bakgrundsbilder som i din Bolt-version
-  const mobileBg =
-    "https://i.ibb.co/cXVVK92r/IMAGE-2025-04-12-13-21-03.jpg";
-  const desktopBg =
-    "https://i.ibb.co/qYyd9PDt/IMAGE-2025-04-10-21-40-37.jpg";
+  // Uppdaterade lokala bildvägar
+  const mobileBg = "https://i.ibb.co/KzXrSCy6/heromobil.png";
+  const desktopBg = "https://i.ibb.co/5W262T46/herosection.png";
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
