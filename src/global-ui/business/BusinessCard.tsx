@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { useState, useRef, useEffect } from 'react';
 import { OrderButton } from '../OrderButton';
 import Image from 'next/image';
@@ -27,7 +27,6 @@ export function BusinessCard({
         setIsExpanded(false);
       }
     };
-
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
@@ -44,7 +43,7 @@ export function BusinessCard({
   return (
     <div
       ref={cardRef}
-      className="bg-white rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.1)] overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_8px_30px_rgb(0,0,0,0.2)] hover:scale-103"
+      className="relative bg-white rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.1)] overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_8px_30px_rgb(0,0,0,0.2)] hover:scale-103"
     >
       <div className="relative h-40 overflow-hidden">
         <Image
@@ -84,7 +83,8 @@ export function BusinessCard({
         )}
       </div>
 
-      {/* Expanded Options Dropdown */}
+      {/* Denna dropdown kommer nu bara sträcka sig över kortets bredd,
+          inte hela rader som BusinessInfo täcker */}
       {isExpanded && (
         <div className="absolute left-0 right-0 bg-white shadow-lg rounded-b-xl overflow-hidden z-20 animate-fade-in">
           <div className="p-6 border-t border-gray-100">
@@ -103,4 +103,6 @@ export function BusinessCard({
       )}
     </div>
   );
-};
+}
+
+export default BusinessCard;
