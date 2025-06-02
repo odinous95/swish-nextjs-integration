@@ -60,14 +60,14 @@ export function BusinessCard({
         <h3 className="font-heading text-lg font-bold mb-1">50st Matlådor</h3>
         <p className="text-gray-500 text-sm mb-2">50st Mix Matlådor + 50st Mix Såser</p>
         <div className="text-transparent bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-xl font-bold mb-3">
-          2799,99 kr
+          2999,99 kr
         </div>
 
         {isExpanded ? (
           <OrderButton
             id="business-50"
             name="50st Mix Matlådor + 50st Mix Såser"
-            price={2799.99}
+            price={2999.99}
             showQuantity={showQuantity}
             quantities={quantities}
             buttonStates={buttonStates}
@@ -91,7 +91,7 @@ export function BusinessCard({
             <OrderButton
               id="business-50"
               name="50st Mix Matlådor + 50st Mix Såser"
-              price={2799.99}
+              price={2999.99}
               showQuantity={showQuantity}
               quantities={quantities}
               buttonStates={buttonStates}
