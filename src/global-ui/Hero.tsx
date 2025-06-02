@@ -46,12 +46,14 @@ export function Hero() {
       <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/40 to-black/70" />
       <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-black/50 via-transparent to-black/80" />
 
-
       {/* Content */}
       <div className="relative z-10 max-w-4xl text-center px-6">
+        <h1 className="text-white text-4xl font-bold mb-6">
+          Ät smart. Spara tid. Må bra. <br />- Örebro
+        </h1>
         <button
           onClick={scrollToMeals}
-          className="relative inline-block bg-gradient-to-r from-yellow-400 to-yellow-600 text-black font-semibold rounded-3xl px-10 py-4 shadow-lg hover:scale-105 hover:shadow-2xl transition-transform duration-300 overflow-hidden group"
+          className="relative inline-block mt-2 bg-gradient-to-r from-yellow-400 to-yellow-600 text-black font-semibold rounded-3xl px-10 py-4 shadow-lg hover:scale-105 hover:shadow-2xl transition-transform duration-300 overflow-hidden group"
           aria-label="Beställ nu"
         >
           <span className="relative z-10">BESTÄLL NU!</span>
