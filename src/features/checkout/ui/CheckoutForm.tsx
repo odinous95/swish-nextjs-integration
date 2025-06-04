@@ -51,7 +51,7 @@ export function CheckoutForm() {
     const [discountApplied, setDiscountApplied] = useState(false);
     const [qrCodeUrl, setQrCodeUrl] = useState<string | null>(null);
     const [paymentStatus, setPaymentStatus] = useState<string | null>(null);
-
+    const [he59Available, setHe59Available] = useState<boolean>(true);
     useEffect(() => {
         const userAgent = typeof window !== "undefined" ? navigator.userAgent : "";
         const isMobile = /iPhone|iPad|iPod|Android/i.test(userAgent);
@@ -100,33 +100,62 @@ export function CheckoutForm() {
     ];
 
 
+    // Track if HE59 is still available (simulate with localStorage for demo)
+    // Check HE59 usage count on mount
+    useEffect(() => {
+        const usedCount = Number(localStorage.getItem("he59_used_count") || "0");
+        setHe59Available(usedCount < 10);
+    }, []);
+
+    // Helper to count non-extra items (matlådor)
+    const getNonExtraQuantity = () =>
+        cartItems.filter(item => !item.isExtra).reduce((acc, item) => acc + item.quantity, 0);
+
     const calculateTotals = () => {
         const subtotal = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
-        const discount = discountApplied ? subtotal * 0.1 : 0;
+        const nonExtraQuantity = getNonExtraQuantity();
+        let discount = 0;
 
-        // Only count quantity of non-extra items
-        const nonExtraQuantity = cartItems
-            .filter(item => !item.isExtra)
-            .reduce((acc, item) => acc + item.quantity, 0);
+        // Only apply HE59 if available, code entered, and <= 5 matlådor
+        if (
+            discountApplied &&
+            campaignCode.toLowerCase() === "he59" &&
+            he59Available &&
+            nonExtraQuantity > 0 &&
+            nonExtraQuantity <= 5
+        ) {
+            discount = subtotal * 0.2;
+        }
 
         // Free shipping if non-extra quantity > 5
         const shippingFee = nonExtraQuantity >= 5 ? 0 : 19;
-
         const tax = subtotal * 0.12;
         const total = subtotal + shippingFee + tax - discount;
 
         return { subtotal, shippingFee, tax, discount, total };
     };
 
+    // Enhanced coupon validation
     const validateCoupon = () => {
-        if (campaignCode.toLowerCase() === "HE59") {
-            setDiscountApplied(true);
-            setCampaignError(null);
+        const nonExtraQuantity = getNonExtraQuantity();
+        const usedCount = Number(localStorage.getItem("he59_used_count") || "0");
+
+        if (campaignCode.toLowerCase() === "he59") {
+            if (usedCount >= 10 || nonExtraQuantity > 5) {
+                setDiscountApplied(false);
+                setCampaignError("Koden har löpt ut");
+            } else {
+                setDiscountApplied(true);
+                setCampaignError(null);
+                // Mark code as used only if form is submitted successfully elsewhere
+            }
         } else {
             setDiscountApplied(false);
             setCampaignError("Ogiltig kampanjkod");
         }
     };
+
+
 
     const handleCampaignCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setCampaignCode(e.target.value);
