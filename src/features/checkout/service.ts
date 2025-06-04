@@ -53,6 +53,7 @@ export function createService(repository: Repository) {
             status: 200,
             message: "Swish payment request created successfully.",
             swishUrl,
+            swishId: id,
           };
         }
         // For desktop, we need to fetch the QR code

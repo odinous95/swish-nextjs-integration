@@ -21,7 +21,6 @@ const intialPayload = {
     doorCode: "",
     floor: "",
     deliveryDate: "",
-    extraComment: "",
     termsAccepted: false,
     deviceType: "desktop",
     campaignCode: "",
@@ -87,8 +86,6 @@ export function CheckoutForm() {
     }, [state.success, state.swishUrl, deviceType]);
 
 
-
-
     const deliveryOptions = [
         { label: "Fredag 30/5 (08:00 – 13:00)", value: "2025-05-30|08:00 – 13:00" },
         { label: "Lördag 31/5 (16:00 – 20:00)", value: "2025-05-31|16:00 – 20:00" },
@@ -102,8 +99,8 @@ export function CheckoutForm() {
     const calculateTotals = () => {
         const subtotal = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
         const discount = discountApplied ? subtotal * 0.1 : 0;
-        const shippingFee = 0;
-        const tax = 0;
+        const shippingFee = 19;
+        const tax = subtotal * 0.12; // Assuming 12% tax rate
         const total = subtotal + shippingFee + tax - discount;
         return { subtotal, shippingFee, tax, discount, total };
     };
@@ -139,7 +136,7 @@ export function CheckoutForm() {
             floor: state.values.floor || "",
             doorCode: state.values.doorCode || "",
             deliveryDate,
-            cartItems, // From store
+            cartItems,
             total: calculateTotals().total,
             deviceType: state.values.deviceType,
             campaignCode: state.values.campaignCode || "",
@@ -203,7 +200,7 @@ export function CheckoutForm() {
                 </div>
             </div>
 
-            <InputField id="comment" name="comment" label="Kommentar" type="text" disabled={isPending} defaultValue={state.values?.comment} />
+            {/* <InputField id="comment" name="comment" label="Kommentar" type="text" disabled={isPending} defaultValue={state.values?.comment} /> */}
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
@@ -215,13 +212,13 @@ export function CheckoutForm() {
             </div>
 
             <textarea
-                id="extraComment"
-                name="extraComment"
+                id="comment"
+                name="comment"
                 rows={3}
                 className="mt-1 block w-full rounded-md border border-gray-300 text-black shadow-sm focus:border-yellow-500 focus:ring-yellow-500 sm:text-sm placeholder-gray-500 px-4 py-2"
                 placeholder="Dina kommentarer..."
                 disabled={isPending}
-                defaultValue={state.values?.extraComment}
+                defaultValue={state.values?.comment}
             />
 
             <OrderSummary

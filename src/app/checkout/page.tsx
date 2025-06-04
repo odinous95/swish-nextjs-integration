@@ -3,10 +3,13 @@ import { Container } from "@/global-ui";
 import { FormContainer } from "@/global-ui/form-reuseble/FormContainer";
 export default function MyCheckoutPage() {
     return (
-        <Container>
-            <FormContainer
-                formContent={<CheckoutForm />}
-            />
-        </Container>
+        <div className="bg-white">
+            <Container>
+                <FormContainer
+                    formContent={<CheckoutForm />}
+                />
+            </Container>
+        </div>
+
     );
 }
