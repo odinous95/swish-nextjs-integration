@@ -1,21 +1,18 @@
 "use client";
-
 import { useEffect, useState, useRef } from "react";
 import { useCartStore } from "@/store";
 import { Loader } from "@/global-ui";
 import { FaCheckCircle } from "react-icons/fa";
-import Image from "next/image";
 import Link from "next/link";
 import { ORDER } from "@/features/orders/types";
 
 interface PaymentStatusProps {
-    qrCodeUrl: string | null;
+    swishUrlMobile: string | null;
     status: string | null;
     order: ORDER;
 }
 
-export function PaymentStatus({ qrCodeUrl, status, order }: PaymentStatusProps) {
-
+export function MobilePaymentStatus({ swishUrlMobile, status, order }: PaymentStatusProps) {
     // console.log(order, "order in PaymentStatus");
     const [paymentStatus, setPaymentStatus] = useState(status);
     const [orderCreated, setOrderCreated] = useState(false);
@@ -43,6 +40,7 @@ export function PaymentStatus({ qrCodeUrl, status, order }: PaymentStatusProps) 
                 console.error("Failed to fetch payment status", error);
             }
         };
+
 
         fetchStatus();
         interval = setInterval(fetchStatus, 3000);
@@ -84,15 +82,19 @@ export function PaymentStatus({ qrCodeUrl, status, order }: PaymentStatusProps) 
         }
     }, [paymentStatus, order, resetCart]);
 
+
+
     // Show loader while waiting for payment status
     if (paymentStatus === null) {
         return (
             <div className="min-h-screen flex flex-col items-center justify-center bg-white p-6">
                 <Loader />
                 <p className="text-gray-500 font-semibold mt-4">Hämtar betalningsstatus...</p>
+
             </div>
         );
     }
+
 
     const borderColor =
         paymentStatus === "PAID"
@@ -107,22 +109,6 @@ export function PaymentStatus({ qrCodeUrl, status, order }: PaymentStatusProps) 
         <div
             className={`min-h-screen flex flex-col items-center justify-center bg-white p-6 border-4 rounded-xl ${borderColor}`}
         >
-            <h1 className="text-xl font-bold mb-4 text-gray-500">Skanna QR-koden med Swish</h1>
-
-            {qrCodeUrl ? (
-                <Image
-                    src={qrCodeUrl}
-                    alt="Swish QR-kod"
-                    width={256}
-                    height={256}
-                    className="w-64 h-64 mb-6"
-                />
-            ) : (
-                <div className="w-64 h-64 mb-6 bg-gray-100 flex items-center justify-center rounded">
-                    <Loader />
-                </div>
-            )}
-
             {paymentStatus === "PAID" ? (
                 <>
                     <p className="text-green-600 font-semibold">Betalningen är slutförd!</p>
@@ -143,6 +129,13 @@ export function PaymentStatus({ qrCodeUrl, status, order }: PaymentStatusProps) 
             ) : (
                 <p className="text-yellow-600 font-semibold">Okänd betalningsstatus. Vänta eller försök igen.</p>
             )}
+            {
+                order.deviceType === "mobile" && swishUrlMobile && (
+                    <a href={swishUrlMobile} className="block text-center mt-4 text-blue-600 underline">
+                        Klicka här om Swish inte öppnas automatiskt
+                    </a>
+                )
+            }
         </div>
     );
 }

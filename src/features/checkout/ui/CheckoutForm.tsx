@@ -7,10 +7,10 @@ import { SubmitButton } from "@/global-ui/form-reuseble/SubmitButton";
 import { CheckoutState } from "../types";
 import { SelectField } from "@/global-ui/form-reuseble/SelectField";
 import { useCartStore } from '@/store';
-import { ErrorText, OrderSummary, PaymentStatus } from ".";
+import { DesktopPaymentStatus, ErrorText, MobilePaymentStatus, OrderSummary } from ".";
 import { Note } from "@/global-ui";
-import { format, addDays, isAfter } from "date-fns";
-import Image from "next/image";
+import { generateDeliveryOptions } from "@/utils/calculateDate";
+
 const intialPayload = {
     firstName: "",
     lastName: "",
@@ -24,7 +24,7 @@ const intialPayload = {
     floor: "",
     deliveryDate: "",
     termsAccepted: false,
-    deviceType: "desktop",
+    deviceType: "",
     campaignCode: "",
     discountApplied: false,
     paymentMethod: "",
@@ -43,22 +43,26 @@ export function CheckoutForm() {
             errors: {},
         }
     );
-
     // console.log("CheckoutForm state:", state);
-    const [deviceType, setDeviceType] = useState("desktop");
+    const [deviceType, setDeviceType] = useState("");
     const cartItems = useCartStore((state) => state.cartItems);
     const [showCampaignCode, setShowCampaignCode] = useState(false);
     const [campaignCode, setCampaignCode] = useState("");
     const [campaignError, setCampaignError] = useState<string | null>(null);
     const [discountApplied, setDiscountApplied] = useState(false);
     const [qrCodeUrl, setQrCodeUrl] = useState<string | null>(null);
+    const [swishUrlMobile, setSwishUrlMobile] = useState<string | null>(null);
     const [paymentStatus, setPaymentStatus] = useState<string | null>(null);
     const [he59Available, setHe59Available] = useState<boolean>(true);
+
+
+    // Set device type based on user agent
     useEffect(() => {
         const userAgent = typeof window !== "undefined" ? navigator.userAgent : "";
         const isMobile = /iPhone|iPad|iPod|Android/i.test(userAgent);
         setDeviceType(isMobile ? "mobile" : "desktop");
     }, []);
+
     useEffect(() => {
         const fetchPaymentStatus = async () => {
             if (state.success && state.qrCodeUrl && state.swishId) {
@@ -81,46 +85,10 @@ export function CheckoutForm() {
 
     useEffect(() => {
         if (state.success && deviceType === "mobile" && state.swishUrl) {
-            // Auto-open Swish app on mobile
+            setSwishUrlMobile(state.swishUrl); // ✅ Add this line
             window.location.href = state.swishUrl;
         }
     }, [state.success, state.swishUrl, deviceType]);
-
-
-    // Number of future days to consider for delivery
-    const DELIVERY_WINDOW_DAYS = 14;
-
-    // Determine the first valid delivery date
-    const now = new Date();
-    const cutoffToday = new Date(`${format(now, "yyyy-MM-dd")}T20:00`);
-    const startDate = isAfter(now, cutoffToday) ? addDays(now, 2) : addDays(now, 1);
-
-    // Helper to check if date is Mon–Fri
-    const isWeekday = (date: Date) => {
-        const day = date.getDay(); // 0=Sun, 6=Sat
-        return day >= 1 && day <= 5;
-    };
-
-    // Generate dynamic options
-    const generateDeliveryOptions = () => {
-        const options = [];
-
-        for (let i = 0; i < DELIVERY_WINDOW_DAYS; i++) {
-            const date = addDays(startDate, i);
-
-            if (isWeekday(date)) {
-                const dateStr = format(date, "yyyy-MM-dd");
-                const labelDate = format(date, "EEEE d/M"); // You can use sv locale if needed
-
-                options.push({
-                    label: `${labelDate} (18:00 – 22:00)`,
-                    value: `${dateStr}|18:00 – 22:00`,
-                });
-            }
-        }
-
-        return options;
-    };
 
     const formattedDeliveryOptions = generateDeliveryOptions();
     const Betalningsmetod = [
@@ -193,7 +161,7 @@ export function CheckoutForm() {
 
 
 
-    if (qrCodeUrl && state.swishId && state.values) {
+    if (qrCodeUrl && state?.values && state?.values?.deviceType === "desktop" && state.swishId) {
         const [deliveryDate, deliveryTimeWindow] = (state.values.deliveryDate ?? "").split("|");
         const order = {
             firstName: state.values.firstName,
@@ -220,8 +188,44 @@ export function CheckoutForm() {
         };
 
         return (
-            <PaymentStatus
+            <DesktopPaymentStatus
                 qrCodeUrl={qrCodeUrl}
+                status={paymentStatus}
+                order={order}
+            />
+        );
+    }
+
+
+    if (swishUrlMobile && state?.values?.deviceType === "mobile" && state.swishId) {
+        const [deliveryDate, deliveryTimeWindow] = (state.values.deliveryDate ?? "").split("|");
+        const order = {
+            firstName: state.values.firstName,
+            lastName: state.values.lastName,
+            email: state.values.email,
+            phone: state.values.phone,
+            address: state.values.address,
+            postalCode: state.values.postalCode,
+            city: state.values.city,
+            extra_comment: state.values.extra_comment || "",
+            floor: state.values.floor || "",
+            doorCode: state.values.doorCode || "",
+            deliveryDate,
+            cartItems,
+            total: calculateTotals().total,
+            deviceType: state.values.deviceType,
+            campaignCode: state.values.campaignCode || "",
+            discount: state.values.discount || 0,
+            paymentMethod: state.values.paymentMethod,
+            deliveryTimeWindow,
+            termsAccepted: state.values.termsAccepted || false,
+            discountApplied: state.values.discountApplied || false,
+            requestId: state.swishId,
+        };
+
+        return (
+            <MobilePaymentStatus
+                swishUrlMobile={swishUrlMobile}
                 status={paymentStatus}
                 order={order}
             />
@@ -361,12 +365,6 @@ export function CheckoutForm() {
                 <p className="text-red-600 font-semibold">
                     Din varukorg är tom. Lägg till produkter innan du slutför beställningen.
                 </p>
-            )}
-
-            {deviceType === "mobile" && state.swishUrl && (
-                <a href={state.swishUrl} className="block text-center mt-4 text-blue-600 underline">
-                    Klicka här om Swish inte öppnas automatiskt
-                </a>
             )}
         </form>
 
