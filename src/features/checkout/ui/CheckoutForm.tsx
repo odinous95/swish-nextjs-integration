@@ -10,6 +10,7 @@ import { useCartStore } from '@/store';
 import { ErrorText, OrderSummary, PaymentStatus } from ".";
 import { Note } from "@/global-ui";
 import { format, addDays, isAfter } from "date-fns";
+import Image from "next/image";
 const intialPayload = {
     firstName: "",
     lastName: "",
@@ -123,9 +124,8 @@ export function CheckoutForm() {
 
     const formattedDeliveryOptions = generateDeliveryOptions();
     const Betalningsmetod = [
-        { label: "Swish", value: "swish" },
-        { label: "Klarna", value: "klarna" },
-
+        { label: "Swish", value: "swish", },
+        { label: "Klarna", value: "klarna", },
     ];
 
 
@@ -317,7 +317,6 @@ export function CheckoutForm() {
                 defaultValue={state.values?.deliveryDate}
             />
             <ErrorText error={state.errors?.deliveryDate} />
-
             <SelectField
                 id="paymentMethod"
                 name="paymentMethod"

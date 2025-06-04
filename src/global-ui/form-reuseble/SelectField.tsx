@@ -42,8 +42,7 @@ export function SelectField({
     "
 
                     onChange={(e) => {
-                        // Handle change event
-                        console.log(e.target.value);
+
                     }}
                 >
                     {options.map((option) => (
