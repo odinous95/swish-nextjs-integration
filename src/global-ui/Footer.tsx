@@ -78,6 +78,13 @@ export function Footer() {
             height={32}
             className="mx-auto mb-4"
           />
+          <Image
+            src="/Assets/klarna.png"
+            alt="Swish"
+            width={120}
+            height={32}
+            className="mx-auto mb-4"
+          />
           <p className="text-gray-400 text-sm">© 2025 HEALTHY EATING. Alla rättigheter förbehållna.</p>
         </div>
       </div>
