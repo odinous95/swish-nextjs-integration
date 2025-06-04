@@ -6,7 +6,7 @@ export type ORDER = {
   address: string;
   postalCode: string;
   city: string;
-  comment?: string;
+  extra_comment?: string;
   floor?: string;
   doorCode?: string;
   deliveryDate: Date;

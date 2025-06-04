@@ -17,7 +17,7 @@ const intialPayload = {
     city: "",
     phone: "",
     email: "",
-    comment: "",
+    extra_comment: "",
     doorCode: "",
     floor: "",
     deliveryDate: "",
@@ -42,7 +42,7 @@ export function CheckoutForm() {
         }
     );
 
-    // console.log("CheckoutForm state:", state);
+    console.log("CheckoutForm state:", state);
     const [selectedPayment, setSelectedPayment] = useState("swish");
     const [deviceType, setDeviceType] = useState("desktop");
     const cartItems = useCartStore((state) => state.cartItems);
@@ -132,7 +132,7 @@ export function CheckoutForm() {
             address: state.values.address,
             postalCode: state.values.postalCode,
             city: state.values.city,
-            comment: state.values.comment || "",
+            extra_comment: state.values.extra_comment || "",
             floor: state.values.floor || "",
             doorCode: state.values.doorCode || "",
             deliveryDate,
@@ -200,7 +200,7 @@ export function CheckoutForm() {
                 </div>
             </div>
 
-            {/* <InputField id="comment" name="comment" label="Kommentar" type="text" disabled={isPending} defaultValue={state.values?.comment} /> */}
+            {/* <InputField id="extra_comment" name="extra_comment" label="Kommentar" type="text" disabled={isPending} defaultValue={state.values?.extra_comment} /> */}
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
@@ -212,13 +212,13 @@ export function CheckoutForm() {
             </div>
 
             <textarea
-                id="comment"
-                name="comment"
+                id="extra_comment"
+                name="extra_comment"
                 rows={3}
                 className="mt-1 block w-full rounded-md border border-gray-300 text-black shadow-sm focus:border-yellow-500 focus:ring-yellow-500 sm:text-sm placeholder-gray-500 px-4 py-2"
                 placeholder="Dina kommentarer..."
                 disabled={isPending}
-                defaultValue={state.values?.comment}
+                defaultValue={state.values?.extra_comment}
             />
 
             <OrderSummary

@@ -35,7 +35,7 @@ export function createService(repository: Repository, resend: Resend) {
         }
         ${order.floor ? `<p><strong>Våning:</strong> ${order.floor}</p>` : ""}
         ${order.doorCode ? `<p><strong>Portkod:</strong> ${order.doorCode}</p>` : ""}
-        ${order.comment ? `<p><strong>Kommentar:</strong> ${order.comment}</p>` : ""}
+        ${order.extra_comment ? `<p><strong>Kommentar:</strong> ${order.extra_comment}</p>` : ""}
       `;
 
       // 1️⃣ Email to Customer
