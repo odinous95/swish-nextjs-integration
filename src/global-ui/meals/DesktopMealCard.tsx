@@ -60,12 +60,13 @@ export function DesktopMealCard({
         }`}
     >
       {/* Image Section */}
-      <div className="relative h-44">
+      <div className="relative w-full aspect-[4/3]">
         <Image
           src={meal.image}
           alt={meal.name}
           fill
-          className="object-cover transition-transform duration-300 hover:scale-110"
+          style={{ objectFit: 'cover', width: '100%', height: '100%' }}
+          className="transition-transform duration-300 hover:scale-110 bg-white"
           sizes="100vw"
           priority
         />
