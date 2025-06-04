@@ -25,3 +25,4 @@ export * from "./BusinessPackage";
 export * from "./ExtrasModal";
 export * from "./Pricing";
 export * from "./Terms";
+export * from "./Note";
