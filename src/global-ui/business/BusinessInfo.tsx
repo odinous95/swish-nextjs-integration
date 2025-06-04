@@ -5,7 +5,7 @@ export function BusinessInfo() {
   return (
     <div className="relative h-full overflow-hidden rounded-xl" style={{ minHeight: '264px' }}>
       <Image
-        src="https://i.ibb.co/zVC9N7j4/jjj.jpg"
+        src="https://i.ibb.co/VY0MyktJ/Chat-GPT-Image-2-juni-2025-21-44-56.png"
         alt="Business Catering"
         fill
         className="object-cover"
@@ -20,7 +20,7 @@ export function BusinessInfo() {
             Catering för företag
           </h3>
           <p className="text-white/90 text-lg drop-shadow-lg">
-            Vi erbjuder skräddarsydda matlösningar för företag. Perfekt för konferenser, möten och events.
+          Bjud dina anställda på hälsosamma och välsmakande matlådor – anpassade efter företagets behov! Perfekt för konferenser, möten och företagsevents.
           </p>
         </div>
       </div>

@@ -40,7 +40,7 @@ const getItemImage = (itemId: string, itemName: string): string | null => {
     pasta: 'https://i.ibb.co/Cp5n3GNZ/IMAGE-2025-04-19-22-36-22.jpg',
     lax: 'https://i.ibb.co/CpD0tsms/IMAGE-2025-04-19-22-36-26.jpg',
     teriyaki: 'https://i.ibb.co/GBR9NdL/IMAGE-2025-04-20-22-32-47.jpg',
-    'business-50': 'https://i.ibb.co/1GBZ1Rsx/IMAGE-2025-04-14-14-25-23.jpg'
+    'business-50': 'https://i.ibb.co/LXcyVTnn/972fe2ac-84a5-4bbe-b42d-84ef36554ed7.png'
   };
 
   const baseId = itemId.split('-')[0];
