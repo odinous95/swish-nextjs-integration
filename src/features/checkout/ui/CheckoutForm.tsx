@@ -119,7 +119,7 @@ export function CheckoutForm() {
     };
 
     const validateCoupon = () => {
-        if (campaignCode.toLowerCase() === "rabatt10") {
+        if (campaignCode.toLowerCase() === "HE59") {
             setDiscountApplied(true);
             setCampaignError(null);
         } else {
