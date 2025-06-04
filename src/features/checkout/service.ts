@@ -3,7 +3,7 @@ import { Repository } from "./repository";
 
 export function createService(repository: Repository) {
   async function intializeOrder(payload: any) {
-    console.log("Submitting Order with Payload:", payload);
+    // console.log("Submitting Order with Payload:", payload);
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
     const validated = OrderSchema.safeParse(payload);
     if (!validated.success) {

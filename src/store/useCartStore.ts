@@ -45,7 +45,6 @@ export const useCartStore = create<CartState>()(
       setIsCheckoutOpen: (open) => set({ isCheckoutOpen: open }),
       setIsExtrasOpen: (open) => set({ isExtrasOpen: open }),
       setPendingCartItem: (item) => set({ pendingCartItem: item }),
-
       getTotalCartItems: () =>
         get().cartItems.reduce((total, item) => total + item.quantity, 0),
 

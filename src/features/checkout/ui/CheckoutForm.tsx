@@ -42,8 +42,7 @@ export function CheckoutForm() {
         }
     );
 
-    console.log("CheckoutForm state:", state);
-    const [selectedPayment, setSelectedPayment] = useState("swish");
+    // console.log("CheckoutForm state:", state);
     const [deviceType, setDeviceType] = useState("desktop");
     const cartItems = useCartStore((state) => state.cartItems);
     const [showCampaignCode, setShowCampaignCode] = useState(false);
@@ -94,14 +93,28 @@ export function CheckoutForm() {
         { label: "Tisdag 3/6 (08:00 – 13:00)", value: "2025-06-03|08:00 – 13:00" },
         { label: "Onsdag 4/6 (08:00 – 13:00)", value: "2025-06-04|08:00 – 13:00" },
     ];
+    const Betalningsmetod = [
+        { label: "Swish", value: "swish" },
+        { label: "Klarna", value: "klarna" },
+
+    ];
 
 
     const calculateTotals = () => {
         const subtotal = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
         const discount = discountApplied ? subtotal * 0.1 : 0;
-        const shippingFee = 19;
-        const tax = subtotal * 0.12; // Assuming 12% tax rate
+
+        // Only count quantity of non-extra items
+        const nonExtraQuantity = cartItems
+            .filter(item => !item.isExtra)
+            .reduce((acc, item) => acc + item.quantity, 0);
+
+        // Free shipping if non-extra quantity > 5
+        const shippingFee = nonExtraQuantity >= 5 ? 0 : 19;
+
+        const tax = subtotal * 0.12;
         const total = subtotal + shippingFee + tax - discount;
+
         return { subtotal, shippingFee, tax, discount, total };
     };
 
@@ -141,7 +154,7 @@ export function CheckoutForm() {
             deviceType: state.values.deviceType,
             campaignCode: state.values.campaignCode || "",
             discount: state.values.discount || 0,
-            paymentMethod: state.values.paymentMethod || selectedPayment,
+            paymentMethod: state.values.paymentMethod,
             deliveryTimeWindow,
             termsAccepted: state.values.termsAccepted || false,
             discountApplied: state.values.discountApplied || false,
@@ -200,8 +213,6 @@ export function CheckoutForm() {
                 </div>
             </div>
 
-            {/* <InputField id="extra_comment" name="extra_comment" label="Kommentar" type="text" disabled={isPending} defaultValue={state.values?.extra_comment} /> */}
-
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                     <InputField id="doorCode" name="doorCode" label="Portkod" type="text" disabled={isPending} defaultValue={state.values?.doorCode} />
@@ -216,7 +227,7 @@ export function CheckoutForm() {
                 name="extra_comment"
                 rows={3}
                 className="mt-1 block w-full rounded-md border border-gray-300 text-black shadow-sm focus:border-yellow-500 focus:ring-yellow-500 sm:text-sm placeholder-gray-500 px-4 py-2"
-                placeholder="Dina kommentarer..."
+                placeholder="Dina kommentarer, till exempel allergier, speciella önskemål eller andra instruktioner."
                 disabled={isPending}
                 defaultValue={state.values?.extra_comment}
             />
@@ -247,13 +258,19 @@ export function CheckoutForm() {
                 disabled={isPending}
                 defaultValue={state.values?.deliveryDate}
             />
+            <ErrorText error={state.errors?.deliveryDate} />
 
-            <PaymentMethod
-                selectedPayment={selectedPayment}
-                onPaymentSelect={setSelectedPayment}
+            <SelectField
+                id="paymentMethod"
+                name="paymentMethod"
+                label="Betalningsmetod"
+                options={[{ label: "Välj Betalningsmetod...", value: "" }, ...Betalningsmetod]}
+                disabled={isPending}
+                defaultValue={state.values?.paymentMethod}
             />
+            <ErrorText error={state.errors?.paymentMethod} />
 
-            <input type="hidden" name="paymentMethod" value={selectedPayment} />
+
             <input type="hidden" name="campaignCode" value={campaignCode} />
             <input type="hidden" name="discountApplied" value={discountApplied.toString()} />
             <input type="hidden" name="totalPrice" value={calculateTotals().total.toFixed(2)} />

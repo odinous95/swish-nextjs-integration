@@ -33,6 +33,23 @@ export function PaymentMethod({
           height={20}
         />
       </button>
+      <button
+        type="button"
+        onClick={() => onPaymentSelect('klarna')}
+        className={`w-full px-4 py-3 border rounded-lg text-left transition-all duration-200 flex items-center justify-between ${selectedPayment === 'swish'
+          ? 'border-[#FFD54F] bg-yellow-50'
+          : 'border-gray-300 hover:border-[#FFD54F]'
+          }`}
+      >
+        <span className="text-black font-medium">klarna</span>
+        <Image
+          src="https://i.ibb.co/jPtZxwTR/Swish-Logo-Secondary-Light-BG.png"
+          alt="Swish"
+          className="h-5 w-auto"
+          width={60}
+          height={20}
+        />
+      </button>
     </div>
   );
 };

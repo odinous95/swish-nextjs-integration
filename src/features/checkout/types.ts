@@ -33,6 +33,11 @@ export type CHECKOUT_ERRORS = {
   comment?: string;
   doorCode?: string;
   floor?: string;
+  deliveryDate?: string;
+  paymentMethod?: string;
+  campaignCode?: string;
+  extraComment?: string;
+
   termsAccepted?: string;
 };
 export type CheckoutFormData = {
