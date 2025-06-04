@@ -7,8 +7,9 @@ import { SubmitButton } from "@/global-ui/form-reuseble/SubmitButton";
 import { CheckoutState } from "../types";
 import { SelectField } from "@/global-ui/form-reuseble/SelectField";
 import { useCartStore } from '@/store';
-import { ErrorText, OrderSummary, PaymentMethod, PaymentStatus } from ".";
-
+import { ErrorText, OrderSummary, PaymentStatus } from ".";
+import { Note } from "@/global-ui";
+import { format, addDays, isAfter } from "date-fns";
 const intialPayload = {
     firstName: "",
     lastName: "",
@@ -25,7 +26,7 @@ const intialPayload = {
     deviceType: "desktop",
     campaignCode: "",
     discountApplied: false,
-    paymentMethod: "swish",
+    paymentMethod: "",
     totalPrice: 0,
     deliveryFee: 0,
 }
@@ -85,14 +86,42 @@ export function CheckoutForm() {
     }, [state.success, state.swishUrl, deviceType]);
 
 
-    const deliveryOptions = [
-        { label: "Fredag 30/5 (08:00 – 13:00)", value: "2025-05-30|08:00 – 13:00" },
-        { label: "Lördag 31/5 (16:00 – 20:00)", value: "2025-05-31|16:00 – 20:00" },
-        { label: "Söndag 1/6 (16:00 – 20:00)", value: "2025-06-01|16:00 – 20:00" },
-        { label: "Måndag 2/6 (08:00 – 13:00)", value: "2025-06-02|08:00 – 13:00" },
-        { label: "Tisdag 3/6 (08:00 – 13:00)", value: "2025-06-03|08:00 – 13:00" },
-        { label: "Onsdag 4/6 (08:00 – 13:00)", value: "2025-06-04|08:00 – 13:00" },
-    ];
+    // Number of future days to consider for delivery
+    const DELIVERY_WINDOW_DAYS = 14;
+
+    // Determine the first valid delivery date
+    const now = new Date();
+    const cutoffToday = new Date(`${format(now, "yyyy-MM-dd")}T20:00`);
+    const startDate = isAfter(now, cutoffToday) ? addDays(now, 2) : addDays(now, 1);
+
+    // Helper to check if date is Mon–Fri
+    const isWeekday = (date: Date) => {
+        const day = date.getDay(); // 0=Sun, 6=Sat
+        return day >= 1 && day <= 5;
+    };
+
+    // Generate dynamic options
+    const generateDeliveryOptions = () => {
+        const options = [];
+
+        for (let i = 0; i < DELIVERY_WINDOW_DAYS; i++) {
+            const date = addDays(startDate, i);
+
+            if (isWeekday(date)) {
+                const dateStr = format(date, "yyyy-MM-dd");
+                const labelDate = format(date, "EEEE d/M"); // You can use sv locale if needed
+
+                options.push({
+                    label: `${labelDate} (18:00 – 22:00)`,
+                    value: `${dateStr}|18:00 – 22:00`,
+                });
+            }
+        }
+
+        return options;
+    };
+
+    const formattedDeliveryOptions = generateDeliveryOptions();
     const Betalningsmetod = [
         { label: "Swish", value: "swish" },
         { label: "Klarna", value: "klarna" },
@@ -278,12 +307,12 @@ export function CheckoutForm() {
                 }}
                 getTotalPrice={calculateTotals}
             />
-
+            <Note text={"Om du lägger din beställning efter kl. 20.00, kommer nästa tillgängliga leveransdag att vara från och med dagen efter i morgon. För att få leverans redan nästa dag, behöver beställningen läggas senast kl. 20.00 dagen innan."} />
             <SelectField
                 id="deliveryDate"
                 name="deliveryDate"
                 label="Leveransdatum"
-                options={[{ label: "Välj leveransdatum...", value: "" }, ...deliveryOptions]}
+                options={[{ label: "Välj leveransdatum...", value: "" }, ...formattedDeliveryOptions]}
                 disabled={isPending}
                 defaultValue={state.values?.deliveryDate}
             />
