@@ -10,6 +10,7 @@ import { useCartStore } from '@/store';
 import { DesktopPaymentStatus, ErrorText, MobilePaymentStatus, OrderSummary } from ".";
 import { Note } from "@/global-ui";
 import { generateDeliveryOptions } from "@/utils/calculateDate";
+import Image from "next/image";
 
 const intialPayload = {
     firstName: "",
@@ -55,7 +56,6 @@ export function CheckoutForm() {
     const [paymentStatus, setPaymentStatus] = useState<string | null>(null);
     const [he59Available, setHe59Available] = useState<boolean>(true);
 
-
     // Set device type based on user agent
     useEffect(() => {
         const userAgent = typeof window !== "undefined" ? navigator.userAgent : "";
@@ -64,46 +64,28 @@ export function CheckoutForm() {
     }, []);
 
     useEffect(() => {
-        const fetchPaymentStatus = async () => {
-            if (state.success && state.qrCodeUrl && state.swishId) {
-                setQrCodeUrl(state.qrCodeUrl);
-            }
-
-            if (state.swishId) {
-                try {
-                    const res = await fetch(`/api/swish/paymentstatus?requestId=${state.swishId}`);
-                    const data = await res.json();
-                    setPaymentStatus(data.status || null);
-                } catch (error) {
-                    console.error("Failed to fetch payment status:", error);
-                }
-            }
-        };
-        fetchPaymentStatus();
-    }, [state]);
-
+        if (state.success && deviceType === "desktop" && state.qrCodeUrl && state.swishId) {
+            setQrCodeUrl(state.qrCodeUrl);
+        }
+    }, [state.success, state.qrCodeUrl, state.swishId, deviceType]);
 
     useEffect(() => {
         if (state.success && deviceType === "mobile" && state.swishUrl) {
-            setSwishUrlMobile(state.swishUrl); // ✅ Add this line
+            setSwishUrlMobile(state.swishUrl);
             window.location.href = state.swishUrl;
         }
-    }, [state.success, state.swishUrl, deviceType]);
+    }, [state.success, state.swishUrl, state.swishId, deviceType]);
+
+    useEffect(() => {
+        const usedCount = Number(localStorage.getItem("he59_used_count") || "0");
+        setHe59Available(usedCount < 10);
+    }, []);
 
     const formattedDeliveryOptions = generateDeliveryOptions();
     const Betalningsmetod = [
         { label: "Swish", value: "swish", },
         { label: "Klarna", value: "klarna", },
     ];
-
-
-    // Track if HE59 is still available (simulate with localStorage for demo)
-    // Check HE59 usage count on mount
-    useEffect(() => {
-        const usedCount = Number(localStorage.getItem("he59_used_count") || "0");
-        setHe59Available(usedCount < 10);
-    }, []);
-
     // Helper to count non-extra items (matlådor)
     const getNonExtraQuantity = () =>
         cartItems.filter(item => !item.isExtra).reduce((acc, item) => acc + item.quantity, 0);
@@ -112,7 +94,6 @@ export function CheckoutForm() {
         const subtotal = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
         const nonExtraQuantity = getNonExtraQuantity();
         let discount = 0;
-
         // Only apply HE59 if available, code entered, and <= 5 matlådor
         if (
             discountApplied &&
@@ -123,20 +104,16 @@ export function CheckoutForm() {
         ) {
             discount = subtotal * 0.2;
         }
-
         // Free shipping if non-extra quantity > 5
         const shippingFee = nonExtraQuantity >= 5 ? 0 : 19;
         const tax = subtotal * 0.12;
         const total = subtotal + shippingFee + tax - discount;
-
         return { subtotal, shippingFee, tax, discount, total };
     };
-
     // Enhanced coupon validation
     const validateCoupon = () => {
         const nonExtraQuantity = getNonExtraQuantity();
         const usedCount = Number(localStorage.getItem("he59_used_count") || "0");
-
         if (campaignCode.toLowerCase() === "he59") {
             if (usedCount >= 10 || nonExtraQuantity > 5) {
                 setDiscountApplied(false);
@@ -144,7 +121,6 @@ export function CheckoutForm() {
             } else {
                 setDiscountApplied(true);
                 setCampaignError(null);
-                // Mark code as used only if form is submitted successfully elsewhere
             }
         } else {
             setDiscountApplied(false);
@@ -152,84 +128,44 @@ export function CheckoutForm() {
         }
     };
 
-
-
     const handleCampaignCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setCampaignCode(e.target.value);
         setCampaignError(null);
     };
 
-
-
-    if (qrCodeUrl && state?.values && state?.values?.deviceType === "desktop" && state.swishId) {
-        const [deliveryDate, deliveryTimeWindow] = (state.values.deliveryDate ?? "").split("|");
-        const order = {
-            firstName: state.values.firstName,
-            lastName: state.values.lastName,
-            email: state.values.email,
-            phone: state.values.phone,
-            address: state.values.address,
-            postalCode: state.values.postalCode,
-            city: state.values.city,
-            extra_comment: state.values.extra_comment || "",
-            floor: state.values.floor || "",
-            doorCode: state.values.doorCode || "",
+    const getOrderObject = () => {
+        const [deliveryDate, deliveryTimeWindow] = (state.values?.deliveryDate ?? "").split("|");
+        return {
+            firstName: state.values?.firstName,
+            lastName: state.values?.lastName,
+            email: state.values?.email,
+            phone: state.values?.phone,
+            address: state.values?.address,
+            postalCode: state.values?.postalCode,
+            city: state.values?.city,
+            extra_comment: state.values?.extra_comment || "",
+            floor: state.values?.floor || "",
+            doorCode: state.values?.doorCode || "",
             deliveryDate,
+            deliveryTimeWindow,
             cartItems,
             total: calculateTotals().total,
-            deviceType: state.values.deviceType,
-            campaignCode: state.values.campaignCode || "",
+            deviceType: deviceType,
+            campaignCode,
             discount: state.values.discount || 0,
-            paymentMethod: state.values.paymentMethod,
-            deliveryTimeWindow,
-            termsAccepted: state.values.termsAccepted || false,
-            discountApplied: state.values.discountApplied || false,
-            requestId: state.swishId,
+            paymentMethod: state.values?.paymentMethod,
+            termsAccepted: state.values?.termsAccepted ?? false,
+            discountApplied,
+            requestId: state.swishId ?? undefined,
         };
+    };
 
-        return (
-            <DesktopPaymentStatus
-                qrCodeUrl={qrCodeUrl}
-                status={paymentStatus}
-                order={order}
-            />
-        );
+
+    if (qrCodeUrl && state.values?.deviceType === "desktop" && state.swishId) {
+        return <DesktopPaymentStatus qrCodeUrl={qrCodeUrl} status={paymentStatus} order={getOrderObject()} />;
     }
-
-
-    if (swishUrlMobile && state?.values?.deviceType === "mobile" && state.swishId) {
-        const [deliveryDate, deliveryTimeWindow] = (state.values.deliveryDate ?? "").split("|");
-        const order = {
-            firstName: state.values.firstName,
-            lastName: state.values.lastName,
-            email: state.values.email,
-            phone: state.values.phone,
-            address: state.values.address,
-            postalCode: state.values.postalCode,
-            city: state.values.city,
-            extra_comment: state.values.extra_comment || "",
-            floor: state.values.floor || "",
-            doorCode: state.values.doorCode || "",
-            deliveryDate,
-            cartItems,
-            total: calculateTotals().total,
-            deviceType: state.values.deviceType,
-            campaignCode: state.values.campaignCode || "",
-            discount: state.values.discount || 0,
-            paymentMethod: state.values.paymentMethod,
-            deliveryTimeWindow,
-            termsAccepted: state.values.termsAccepted || false,
-            discountApplied: state.values.discountApplied || false,
-            requestId: state.swishId,
-        };
-
-        return (
-            <MobilePaymentStatus
-                swishUrlMobile={swishUrlMobile}
-                status={paymentStatus}
-                order={order}
-            />
-        );
+    if (swishUrlMobile && state.values?.deviceType === "mobile" && state.swishId) {
+        return <MobilePaymentStatus swishUrlMobile={swishUrlMobile} status={paymentStatus} order={getOrderObject()} />;
     }
 
     return (
@@ -288,7 +224,8 @@ export function CheckoutForm() {
                 id="extra_comment"
                 name="extra_comment"
                 rows={3}
-                className="mt-1 block w-full rounded-md border border-gray-300 text-black shadow-sm focus:border-yellow-500 focus:ring-yellow-500 sm:text-sm placeholder-gray-500 px-4 py-2"
+                className="peer relative z-1 w-full pt-4 pb-2 pl-4 font-light bg-transparent border border-gray-100 dark:border-gray-600 rounded-md outline-none transition disabled:opacity-70 disabled:cursor-not-allowed text-black 
+            focus:border-orange-500 focus:ring-1 focus:ring-orange-200"
                 placeholder="Dina kommentarer, till exempel allergier, speciella önskemål eller andra instruktioner."
                 disabled={isPending}
                 defaultValue={state.values?.extra_comment}
@@ -321,6 +258,21 @@ export function CheckoutForm() {
                 defaultValue={state.values?.deliveryDate}
             />
             <ErrorText error={state.errors?.deliveryDate} />
+
+            <div className="px-2 flex flex-row gap-x-2 items-center">
+                <Image
+                    src="/Assets/swish.png"
+                    alt="Swish"
+                    width={20}
+                    height={20}
+                />
+                <Image
+                    src="/Assets/klarna.png"
+                    alt="Swish"
+                    width={60}
+                    height={60}
+                />
+            </div>
             <SelectField
                 id="paymentMethod"
                 name="paymentMethod"
@@ -330,7 +282,6 @@ export function CheckoutForm() {
                 defaultValue={state.values?.paymentMethod}
             />
             <ErrorText error={state.errors?.paymentMethod} />
-
 
             <input type="hidden" name="campaignCode" value={campaignCode} />
             <input type="hidden" name="discountApplied" value={discountApplied.toString()} />

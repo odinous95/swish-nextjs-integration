@@ -9,10 +9,8 @@ export function Terms() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
-
       const sections = document.querySelectorAll('.terms-section');
       sections.forEach((section) => {
         const rect = section.getBoundingClientRect();
