@@ -41,7 +41,7 @@ export function Footer() {
           <h3 className="font-heading text-transparent bg-gradient-to-r from-[#FFD54F] to-[#FFB300] bg-clip-text text-xl font-bold mb-4">FÖLJ OSS!</h3>
           <div className="flex space-x-4">
             <a
-              href="https://www.tiktok.com/@healthyeating_10"
+              href="https://www.tiktok.com/@healthyeating.se?_t=ZN-8wxM7Oslslr&_r=1"
               target="_blank"
               rel="noopener noreferrer"
               className="text-gray-300 hover:text-white transition-colors duration-300"
@@ -54,7 +54,7 @@ export function Footer() {
               />
             </a>
             <a
-              href="https://www.instagram.com/healthyeating1__/"
+              href="https://www.instagram.com/1healthyeating.se?igsh=bGtnbHgzc2VvNWgy"
               target="_blank"
               rel="noopener noreferrer"
               className="text-gray-300 hover:text-white transition-colors duration-300"
