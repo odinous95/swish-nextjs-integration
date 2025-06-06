@@ -10,9 +10,9 @@ export function Footer() {
         <div className="flex flex-col items-center md:items-start">
           <h3 className="font-heading text-transparent bg-gradient-to-r from-[#FFD54F] to-[#FFB300] bg-clip-text text-xl font-bold mb-4">HEALTHY EATING</h3>
           <p className="text-gray-300 text-sm text-center md:text-left">
-            Enskild firma - Healthy Eating<br />
+            Enskild firma - HEALTHY EATING Örebro<br />
             Juridiskt namn - Jawad Abbas<br />
-            Org. Nummer - 050703-3595<br /><br />
+            Org. Nummer - 0507033595<br /><br />
             HEALTHY EATING är dedikerade till att erbjuda färska, näringsrika och utsökta matlådelösningar som förenklar din vardag. Vi tror att hälsosam kost ska vara smidig, god och tillgänglig för alla.
           </p>
         </div>
