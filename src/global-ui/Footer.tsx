@@ -8,29 +8,53 @@ export function Footer() {
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
         {/* Left Column */}
         <div className="flex flex-col items-center md:items-start">
-          <h3 className="font-heading text-transparent bg-gradient-to-r from-[#FFD54F] to-[#FFB300] bg-clip-text text-xl font-bold mb-4">HEALTHY EATING</h3>
+          <h3 className="font-heading text-transparent bg-gradient-to-r from-[#FFD54F] to-[#FFB300] bg-clip-text text-xl font-bold mb-4">
+            HEALTHY EATING
+          </h3>
           <p className="text-gray-300 text-sm text-center md:text-left">
-            Enskild firma - HEALTHY EATING Örebro<br />
-            Juridiskt namn - Jawad Abbas<br />
-            Org. Nummer - 0507033595<br /><br />
+            Enskild firma - HEALTHY EATING Örebro
+            <br />
+            Juridiskt namn - Jawad Abbas
+            <br />
+            Org. Nummer - 0507033595
+            <br />
+            <br />
             HEALTHY EATING är dedikerade till att erbjuda färska, näringsrika och utsökta matlådelösningar som förenklar din vardag. Vi tror att hälsosam kost ska vara smidig, god och tillgänglig för alla.
           </p>
         </div>
 
         {/* Middle Column */}
-        <div className="flex flex-col items-center">
-          <h3 className="font-heading text-transparent bg-gradient-to-r from-[#FFD54F] to-[#FFB300] bg-clip-text text-xl font-bold mb-4">INFORMATION</h3>
-          <div className="flex flex-col space-y-2">
-            <Link href="/privacy-policy" className="text-gray-300 hover:text-white transition-colors duration-300">Integritetspolicy</Link>
-            <Link href="/terms" className="text-gray-300 hover:text-white transition-colors duration-300">Allmänna villkor</Link>
+        <div className="flex flex-col items-center md:items-start">
+          <h3 className="font-heading text-transparent bg-gradient-to-r from-[#FFD54F] to-[#FFB300] bg-clip-text text-xl font-bold mb-4">
+            INFORMATION
+          </h3>
+          <div className="flex flex-col space-y-2 text-center md:text-left">
+            <Link
+              href="/privacy-policy"
+              className="text-gray-300 hover:text-white transition-colors duration-300"
+            >
+              Integritetspolicy
+            </Link>
+            <Link
+              href="/terms"
+              className="text-gray-300 hover:text-white transition-colors duration-300"
+            >
+              Allmänna villkor
+            </Link>
           </div>
         </div>
 
         {/* Contact Column */}
         <div className="flex flex-col items-center md:items-start pl-0 md:pl-8">
-          <h3 className="font-heading text-transparent bg-gradient-to-r from-[#FFD54F] to-[#FFB300] bg-clip-text text-xl font-bold mb-4">KONTAKTA OSS</h3>
-          <div className="text-gray-300 text-sm">
-            <p>Björkrisvägen 6A<br />702 34 Örebro</p>
+          <h3 className="font-heading text-transparent bg-gradient-to-r from-[#FFD54F] to-[#FFB300] bg-clip-text text-xl font-bold mb-4">
+            KONTAKTA OSS
+          </h3>
+          <div className="text-gray-300 text-sm text-center md:text-left">
+            <p>
+              Björkrisvägen 6A
+              <br />
+              702 34 Örebro
+            </p>
             <p className="my-2">0736333867</p>
             <p>support@healthyeating.se</p>
           </div>
@@ -38,7 +62,9 @@ export function Footer() {
 
         {/* Social Media Column */}
         <div className="flex flex-col items-center md:items-start">
-          <h3 className="font-heading text-transparent bg-gradient-to-r from-[#FFD54F] to-[#FFB300] bg-clip-text text-xl font-bold mb-4">FÖLJ OSS!</h3>
+          <h3 className="font-heading text-transparent bg-gradient-to-r from-[#FFD54F] to-[#FFB300] bg-clip-text text-xl font-bold mb-4">
+            FÖLJ OSS!
+          </h3>
           <div className="flex space-x-4">
             <a
               href="https://www.tiktok.com/@healthyeating.se?_t=ZN-8wxM7Oslslr&_r=1"
@@ -80,14 +106,17 @@ export function Footer() {
           />
           <Image
             src="/Assets/klarna.png"
-            alt="Swish"
+            alt="Klarna"
             width={120}
             height={32}
             className="mx-auto mb-4"
           />
-          <p className="text-gray-400 text-sm">© 2025 HEALTHY EATING. Alla rättigheter förbehållna.</p>
+          <p className="text-gray-400 text-sm">
+            © 2025 HEALTHY EATING. Alla rättigheter förbehållna.
+          </p>
         </div>
       </div>
     </footer>
   );
 }
+
