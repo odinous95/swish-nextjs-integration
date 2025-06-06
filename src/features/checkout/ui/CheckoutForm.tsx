@@ -372,7 +372,7 @@ export function CheckoutForm() {
       {/* Notis om leveranstider */}
       <Note
         text={
-          "Om du lägger din beställning efter kl. 20.00, kommer nästa tillgängliga leveransdag att vara från och med dagen efter i morgon. För att få leverans redan nästa dag, behöver beställningen läggas senast kl. 20.00 dagen innan."
+          "Beställ före kl. 20.00 för leverans nästa dag. Beställningar efter kl. 20.00 levereras tidigast övermorgon. Leverans sker inom det valda tidsintervallet (t.ex. 18:00–22:00), så du behöver vara hemma under denna tid."
         }
       />
 
