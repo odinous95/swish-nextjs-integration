@@ -407,4 +407,39 @@ export function CheckoutForm() {
       <input type="hidden" name="campaignCode" value={campaignCode} />
       <input type="hidden" name="discountApplied" value={discountApplied.toString()} />
       <input type="hidden" name="totalPrice" value={calculateTotals().total.toFixed(2)} />
-      <input type="hidden" nam
+      <input type="hidden" name="deliveryFee" value={calculateTotals().shippingFee.toFixed(2)} />
+      <input type="hidden" name="discount" value={calculateTotals().discount.toFixed(2)} />
+      <input type="hidden" name="deviceType" value={deviceType} />
+
+      {/* Villkor-checkbox */}
+      <div className="flex items-center mt-4">
+        <input
+          id="termsAccepted"
+          name="termsAccepted"
+          type="checkbox"
+          required
+          className="h-4 w-4 text-yellow-500 border-gray-300 rounded"
+          disabled={isPending}
+          defaultChecked={state.values?.termsAccepted}
+        />
+        <label htmlFor="termsAccepted" className="ml-2 block text-sm text-gray-700">
+          Jag godkänner villkoren
+        </label>
+      </div>
+      <ErrorText error={state.errors?.termsAccepted} />
+
+      {state.message && <AlertMessage state={state} />}
+
+      <SubmitButton
+        disabled={isPending || cartItems.length === 0}
+        pending={isPending}
+        title="Slutför och betala"
+      />
+      {cartItems.length === 0 && (
+        <p className="text-red-600 font-semibold">
+          Din varukorg är tom. Lägg till produkter innan du slutför beställningen.
+        </p>
+      )}
+    </form>
+  );
+}
