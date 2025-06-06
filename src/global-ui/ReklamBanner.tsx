@@ -26,7 +26,7 @@ export function ReklamBanner({ isScrolled }: ReklamBanner) {
     >
       <div className="max-w-6xl mx-auto px-4 h-full">
         <div className="h-full flex flex-col md:flex-row items-center justify-center text-[10px] md:text-sm font-medium leading-tight md:leading-normal">
-          <span className="whitespace-nowrap">Leveranstider: Måndag - Fredag 08:00 - 13:00, Lördag - Söndag 16:00 - 20:00</span>
+          <span className="whitespace-nowrap">Leveranstider: Måndag - Fredag 18:00 - 22:00, Lördag - Söndag 16:00 - 20:00</span>
           <span className="hidden md:inline mx-2">|</span>
           <span className="whitespace-nowrap">Fri leverans vid köp av minst 5 matlådor</span>
         </div>
