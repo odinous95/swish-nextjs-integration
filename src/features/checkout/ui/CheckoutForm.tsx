@@ -345,7 +345,7 @@ export function CheckoutForm() {
           focus:ring-1
           focus:ring-orange-200
         "
-        placeholder="Dina kommentarer, till exempel allergier, speciella önskemål eller andra instruktioner."
+        placeholder="Kommentarer gällande allergier eller andra önskemål"
         disabled={isPending}
         defaultValue={state.values?.extra_comment}
       />
