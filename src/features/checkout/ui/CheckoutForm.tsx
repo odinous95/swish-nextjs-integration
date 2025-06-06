@@ -23,7 +23,7 @@ const intialPayload = {
   extra_comment: "",
   doorCode: "",
   floor: "",
-  deliveryDate: "",
+  deliveryDate: "",      // Här kommer nu bara "yyyy-MM-dd"
   termsAccepted: false,
   deviceType: "",
   campaignCode: "",
@@ -96,7 +96,6 @@ export function CheckoutForm() {
     { label: "Klarna", value: "klarna" },
   ];
 
-  // Räkna icke-extra artiklar
   const getNonExtraQuantity = () =>
     cartItems.filter((item) => !item.isExtra).reduce((acc, item) => acc + item.quantity, 0);
 
@@ -141,8 +140,9 @@ export function CheckoutForm() {
     setCampaignError(null);
   };
 
+  // Ändrat: Hämta bara datumsträngen (ingen split på "|")
   const getOrderObject = () => {
-    const [deliveryDate, deliveryTimeWindow] = (state.values?.deliveryDate ?? "").split("|");
+    const deliveryDate = state.values?.deliveryDate; // t.ex. "2025-06-09"
     return {
       firstName: state.values?.firstName,
       lastName: state.values?.lastName,
@@ -154,8 +154,7 @@ export function CheckoutForm() {
       extra_comment: state.values?.extra_comment || "",
       floor: state.values?.floor || "",
       doorCode: state.values?.doorCode || "",
-      deliveryDate,
-      deliveryTimeWindow,
+      deliveryDate,       // bara datumet
       cartItems,
       total: calculateTotals().total,
       deviceType: deviceType,
@@ -200,11 +199,9 @@ export function CheckoutForm() {
       action={formAction}
       className="bg-white p-2 rounded-xl shadow-md max-w-2xl mx-auto space-y-4"
     >
-      <h2 className="text-xl font-semibold text-yellow-500">
-        Leveransuppgifter
-      </h2>
+      <h2 className="text-xl font-semibold text-yellow-500">Leveransuppgifter</h2>
 
-      {/* Förnamn & Efternamn – två fasta kolumner */}
+      {/* Förnamn & Efternamn */}
       <div className="grid grid-cols-2 gap-4">
         <div>
           <InputField
@@ -241,7 +238,7 @@ export function CheckoutForm() {
       />
       <ErrorText error={state.errors?.address} />
 
-      {/* Postnummer & Ort – två fasta kolumner */}
+      {/* Postnummer & Ort */}
       <div className="grid grid-cols-2 gap-4">
         <div>
           <InputField
@@ -267,7 +264,7 @@ export function CheckoutForm() {
         </div>
       </div>
 
-      {/* Telefonnummer & E-post – två fasta kolumner */}
+      {/* Telefonnummer & E-post */}
       <div className="grid grid-cols-2 gap-4">
         <div>
           <InputField
@@ -293,7 +290,7 @@ export function CheckoutForm() {
         </div>
       </div>
 
-      {/* Portkod & Våningsplan – två fasta kolumner */}
+      {/* Portkod & Våningsplan */}
       <div className="grid grid-cols-2 gap-4">
         <div>
           <InputField
@@ -345,7 +342,7 @@ export function CheckoutForm() {
           focus:ring-1
           focus:ring-orange-200
         "
-        placeholder="Kommentarer gällande allergier eller andra önskemål"
+        placeholder="Dina kommentarer, till exempel allergier, speciella önskemål eller andra instruktioner."
         disabled={isPending}
         defaultValue={state.values?.extra_comment}
       />
@@ -369,14 +366,13 @@ export function CheckoutForm() {
         getTotalPrice={calculateTotals}
       />
 
-      {/* Notis om leveranstider */}
       <Note
         text={
-          "Beställ före kl. 20.00 för leverans nästa dag. Beställningar efter kl. 20.00 levereras tidigast övermorgon. Leverans sker inom det valda tidsintervallet (t.ex. 18:00–22:00), så du behöver vara hemma under denna tid."
+          "Om du lägger din beställning efter kl. 20.00, kommer nästa tillgängliga leveransdag att vara från och med dagen efter i morgon. För att få leverans redan nästa dag, behöver beställningen läggas senast kl. 20.00 dagen innan."
         }
       />
 
-      {/* Leveransdatum */}
+      {/* Leveransdatum (endast veckodag & datum) */}
       <SelectField
         id="deliveryDate"
         name="deliveryDate"
@@ -411,39 +407,4 @@ export function CheckoutForm() {
       <input type="hidden" name="campaignCode" value={campaignCode} />
       <input type="hidden" name="discountApplied" value={discountApplied.toString()} />
       <input type="hidden" name="totalPrice" value={calculateTotals().total.toFixed(2)} />
-      <input type="hidden" name="deliveryFee" value={calculateTotals().shippingFee.toFixed(2)} />
-      <input type="hidden" name="discount" value={calculateTotals().discount.toFixed(2)} />
-      <input type="hidden" name="deviceType" value={deviceType} />
-
-      {/* Villkor-checkbox */}
-      <div className="flex items-center mt-4">
-        <input
-          id="termsAccepted"
-          name="termsAccepted"
-          type="checkbox"
-          required
-          className="h-4 w-4 text-yellow-500 border-gray-300 rounded"
-          disabled={isPending}
-          defaultChecked={state.values?.termsAccepted}
-        />
-        <label htmlFor="termsAccepted" className="ml-2 block text-sm text-gray-700">
-          Jag godkänner villkoren
-        </label>
-      </div>
-      <ErrorText error={state.errors?.termsAccepted} />
-
-      {state.message && <AlertMessage state={state} />}
-
-      <SubmitButton
-        disabled={isPending || cartItems.length === 0}
-        pending={isPending}
-        title="Slutför och betala"
-      />
-      {cartItems.length === 0 && (
-        <p className="text-red-600 font-semibold">
-          Din varukorg är tom. Lägg till produkter innan du slutför beställningen.
-        </p>
-      )}
-    </form>
-  );
-}
+      <input type="hidden" nam
