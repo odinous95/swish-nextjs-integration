@@ -3,14 +3,11 @@ import React, { useState } from 'react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import { faqItems } from '@/data';
 
-
 export function FAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const toggleQuestion = (index: number) => {
     setOpenIndex(openIndex === index ? null : index);
   };
-
-
 
   return (
     <div className="py-16 px-4 bg-white">
@@ -18,10 +15,8 @@ export function FAQ() {
         <h2 className="font-heading font-bold text-3xl md:text-4xl text-center mb-4 animate-letter-spacing text-transparent bg-gradient-to-r from-[#FFD54F] to-[#FFB300] bg-clip-text">
           Vanliga Frågor
         </h2>
-        <p className="text-center text-gray-600 mb-12">
-          Har du fler frågor? Kontakta oss på <strong>support@healthyeating.se</strong>
-        </p>
-        <div className="space-y-4">
+
+        <div className="space-y-4 mb-8">
           {faqItems.map((item, index) => (
             <div
               key={index}
@@ -41,15 +36,23 @@ export function FAQ() {
                 )}
               </button>
               <div
-                className={`px-6 transition-all duration-300 overflow-hidden ${openIndex === index ? 'py-4' : 'max-h-0'
-                  }`}
+                className={`px-6 transition-all duration-300 overflow-hidden ${
+                  openIndex === index ? 'py-4' : 'max-h-0'
+                }`}
               >
-                <p className="text-gray-600 whitespace-pre-line" dangerouslySetInnerHTML={{ __html: item.answer }} />
+                <p
+                  className="text-gray-600 whitespace-pre-line"
+                  dangerouslySetInnerHTML={{ __html: item.answer }}
+                />
               </div>
             </div>
           ))}
         </div>
+
+        <p className="text-center text-gray-600">
+          Har du fler frågor? Kontakta oss på <strong>support@healthyeating.se</strong>
+        </p>
       </div>
     </div>
   );
-};
+}
