@@ -98,7 +98,7 @@ export function Terms() {
                   {[
                     'Välj önskade matlådor och eventuella tillbehör',
                     'Lägg produkterna i varukorgen',
-                    'Gå till kassan, fyll i dina uppgifter och genomför betalningen via Swish',
+                    'Gå till kassan, fyll i dina uppgifter och genomför betalningen via Swish eller Klarna',
                     'En bokningsbekräftelse skickas automatiskt till din e-postadress efter genomförd betalning'
                   ].map((item) => (
                     <li key={item} className="flex items-center gap-2 text-gray-600">
@@ -112,7 +112,7 @@ export function Terms() {
               <section id="payment" className="terms-section bg-white rounded-xl p-8 transform hover:scale-[1.02] transition-all duration-300 shadow-lg">
                 <h2 className="text-2xl font-bold mb-6 text-transparent bg-gradient-to-r from-[#FFD54F] to-[#FFB300] bg-clip-text">3. Betalning</h2>
                 <p className="text-gray-700">
-                  Betalning sker i samband med beställningen via Swish. Alla priser anges i svenska kronor (SEK) och moms läggs till i kassan (3 kr).
+                  Betalning sker i samband med beställningen via Swish eller Klarna. Alla priser anges i svenska kronor (SEK) och moms tillkommer enligt gällande skattesats för catering (12 %).
                 </p>
               </section>
 
@@ -120,7 +120,7 @@ export function Terms() {
                 <h2 className="text-2xl font-bold mb-6 text-transparent bg-gradient-to-r from-[#FFD54F] to-[#FFB300] bg-clip-text">4. Leverans</h2>
                 <p className="text-gray-700">
                   Leverans sker endast inom Örebro kommun, på det datum och den tid som anges vid beställning. Leveransen sker till dörren på den adress du angivit i kassan.<br /><br />
-                  Om du inte är hemma vid leverans ringer budet dig. Om vi inte får svar, lämnas maten utanför dörren, förutsatt att det inte angivits något annat i kassan eller under samtalet. Observera att ingen återbetalning sker efter att leveransen har genomförts.
+                  Om du inte är hemma vid leverans ringer budet dig. Om vi inte får svar, lämnas maten utanför dörren, förutsatt att det inte angivits något annat i kassan eller under samtalet. <span className="font-bold">Observera att ingen återbetalning sker efter att leveransen har genomförts.</span>
                 </p>
               </section>
 
@@ -163,7 +163,7 @@ export function Terms() {
                   ))}
                 </ul>
                 <p className="text-gray-700 mt-4">
-                  Healthy Eating ansvarar inte för eventuella konsekvenser som uppstår på grund av felaktigt angivna uppgifter eller otillgänglighet vid leverans.
+                  HEALTHY EATING ansvarar inte för eventuella konsekvenser som uppstår på grund av felaktigt angivna uppgifter eller otillgänglighet vid leverans.
                 </p>
               </section>
             </div>
