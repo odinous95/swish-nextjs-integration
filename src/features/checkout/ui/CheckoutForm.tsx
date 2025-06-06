@@ -177,36 +177,36 @@ export function CheckoutForm() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                    <InputField id="firstName" name="firstName" label="Förnamn" type="text" disabled={isPending} defaultValue={state.values?.firstName} />
+                    <InputField id="firstName" name="firstName" label="Förnamn*" type="text" disabled={isPending} defaultValue={state.values?.firstName} />
                     <ErrorText error={state.errors?.firstName} />
                 </div>
                 <div>
-                    <InputField id="lastName" name="lastName" label="Efternamn" type="text" disabled={isPending} defaultValue={state.values?.lastName} />
+                    <InputField id="lastName" name="lastName" label="Efternamn*" type="text" disabled={isPending} defaultValue={state.values?.lastName} />
                     <ErrorText error={state.errors?.lastName} />
                 </div>
             </div>
 
-            <InputField id="address" name="address" label="Hem Adress" type="text" disabled={isPending} defaultValue={state.values?.address} />
+            <InputField id="address" name="address" label="Adress*" type="text" disabled={isPending} defaultValue={state.values?.address} />
             <ErrorText error={state.errors?.address} />
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                    <InputField id="postalCode" name="postalCode" label="Postnummer" type="text" disabled={isPending} defaultValue={state.values?.postalCode} />
+                    <InputField id="postalCode" name="postalCode" label="Postnummer*" type="text" disabled={isPending} defaultValue={state.values?.postalCode} />
                     <ErrorText error={state.errors?.postalCode} />
                 </div>
                 <div>
-                    <InputField id="city" name="city" label="Ort" type="text" disabled={isPending} defaultValue={state.values?.city} />
+                    <InputField id="city" name="city" label="Ort*" type="text" disabled={isPending} defaultValue={state.values?.city} />
                     <ErrorText error={state.errors?.city} />
                 </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                    <InputField id="phone" name="phone" label="Telefonnummer" type="tel" disabled={isPending} defaultValue={state.values?.phone} />
+                    <InputField id="phone" name="phone" label="Telefonnummer*" type="tel" disabled={isPending} defaultValue={state.values?.phone} />
                     <ErrorText error={state.errors?.phone} />
                 </div>
                 <div>
-                    <InputField id="email" name="email" label="E-post" type="email" disabled={isPending} defaultValue={state.values?.email} />
+                    <InputField id="email" name="email" label="E-post*" type="email" disabled={isPending} defaultValue={state.values?.email} />
                     <ErrorText error={state.errors?.email} />
                 </div>
             </div>
