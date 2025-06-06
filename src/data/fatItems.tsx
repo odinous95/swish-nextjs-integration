@@ -15,7 +15,7 @@ export const faqItems: FAQItem[] = [
     },
     {
         question: "Vilka betalningsmetoder accepterar ni?",
-        answer: "Vi accepterar endast Swish. Betalning sker i samband med beställning."
+        answer: "Vi accepterar Swish och Klarna. Betalning sker i samband med beställning."
     },
     {
         question: "Vad gör jag om jag inte är hemma när leveransen är schemalagd?",
