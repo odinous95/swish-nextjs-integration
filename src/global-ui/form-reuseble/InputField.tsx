@@ -40,7 +40,7 @@ export function InputField({
           relative
           z-1
           w-full
-          pb-2
+          py-2       {/* ändrat från pb-2 till py-2 */}
           pl-4
           font-light
           bg-transparent
