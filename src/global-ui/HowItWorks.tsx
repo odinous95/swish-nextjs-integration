@@ -2,9 +2,9 @@ import React from "react";
 
 export function HowItWorks() {
   return (
-    <section id="how-it-works" className="py-20 px-6 bg-white text-black">
-      <div className="max-w-7xl mx-auto">
-        <h2 className="font-heading font-extrabold text-4xl md:text-5xl text-center mb-20 tracking-tight">
+    <section id="how-it-works" className="py-16 px-4 bg-white text-black">
+      <div className="max-w-6xl mx-auto">
+        <h2 className="font-heading font-bold text-3xl md:text-4xl text-center mb-12 tracking-tight">
           Hälsosam Mat – På Ett Enkelt Sätt
         </h2>
 
@@ -69,3 +69,4 @@ export function HowItWorks() {
 }
 
 export default HowItWorks;
+
