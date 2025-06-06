@@ -1,15 +1,14 @@
-"use client"
+"use client";
 import React, { useEffect, useState } from 'react';
 import { ShoppingCart, Menu, X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { Logo, ReklamBanner } from '.';
 import { useCartStore } from '@/store';
+
 export function Navbar() {
-  const {
-    setIsCartOpen,
-    getTotalCartItems,
-  } = useCartStore();
+  const { setIsCartOpen, getTotalCartItems } = useCartStore();
   const [hasMounted, setHasMounted] = useState(false);
+
   useEffect(() => {
     setHasMounted(true);
   }, []);
@@ -19,7 +18,6 @@ export function Navbar() {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
     };
-
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -30,21 +28,16 @@ export function Navbar() {
       const navbarHeight = 70;
       const elementPosition = element.getBoundingClientRect().top;
       const offsetPosition = elementPosition + window.pageYOffset - navbarHeight;
-
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: 'smooth'
-      });
+      window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
     }
   };
+
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const navigate = useRouter();
 
   const handleMobileMenuClick = (sectionId: string) => {
     navigate.push('/');
-    setTimeout(() => {
-      scrollToSection(sectionId);
-    }, 100);
+    setTimeout(() => scrollToSection(sectionId), 100);
     setIsMobileMenuOpen(false);
   };
 
@@ -57,9 +50,7 @@ export function Navbar() {
       scrollToSection(sectionId);
     } else {
       navigate.push('/');
-      setTimeout(() => {
-        scrollToSection(sectionId);
-      }, 100);
+      setTimeout(() => scrollToSection(sectionId), 100);
     }
   };
 
@@ -68,49 +59,45 @@ export function Navbar() {
   return (
     <div className="fixed w-full z-40">
       <ReklamBanner isScrolled={isScrolled} />
-      <div className={`bg-black backdrop-blur-sm shadow-lg h-[70px] ${isScrolled ? 'mt-0' : 'mt-[40px]'} transition-all duration-300`}>
-        <div className="max-w-6xl mx-auto px-4 h-full flex items-center">
-          <button
-            className="md:hidden mr-4 text-white hover:text-[#FFD54F] transition-colors"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          >
-            {isMobileMenuOpen ? (
-              <X className="w-6 h-6" />
-            ) : (
-              <Menu className="w-6 h-6" />
-            )}
-          </button>
-          <div
-            className="w-[200px] flex items-center gap-3 cursor-pointer"
-            onClick={handleLogoClick}
-          >
-            <Logo />
-            <h3 className="font-heading text-transparent bg-gradient-to-r from-[#FFD54F] to-[#FFB300] bg-clip-text text-xl font-bold whitespace-nowrap">HEALTHY EATING</h3>
-          </div>
+      <div
+        className={`bg-black backdrop-blur-sm shadow-lg h-[70px] ${
+          isScrolled ? 'mt-0' : 'mt-[40px]'
+        } transition-all duration-300 relative`}
+      >
+        {/* Centered links */}
+        <div className="hidden md:flex absolute left-1/2 top-0 transform -translate-x-1/2 h-full items-center space-x-8">
+          {[
+            { text: 'MENY', onClick: () => handleNavClick('meals-section') },
+            { text: 'HUR DET FUNKAR', onClick: () => handleNavClick('how-it-works') },
+            { text: 'OMDÖMEN', onClick: () => handleNavClick('testimonials') },
+            { text: 'KONTAKTA OSS', onClick: () => handleNavClick('footer') },
+          ].map((item) => (
+            <button
+              key={item.text}
+              onClick={item.onClick}
+              className="relative group cursor-pointer"
+            >
+              <span className="text-white hover:text-transparent hover:bg-gradient-to-r hover:from-[#FFD54F] hover:to-[#FFB300] hover:bg-clip-text transition-all duration-300 font-medium">
+                {item.text}
+              </span>
+              <span className="nav-link-underline"></span>
+            </button>
+          ))}
+        </div>
 
-          <div className="flex-1 flex justify-center">
-            <div className="hidden md:flex items-center justify-center space-x-8">
-              {[
-                { text: 'MENY', onClick: () => handleNavClick('meals-section') },
-                { text: 'HUR DET FUNKAR', onClick: () => handleNavClick('how-it-works') },
-                { text: 'OMDÖMEN', onClick: () => handleNavClick('testimonials') },
-                { text: 'KONTAKTA OSS', onClick: () => handleNavClick('footer') }
-              ].map((item) => (
-                <button
-                  key={item.text}
-                  onClick={item.onClick}
-                  className="relative group cursor-pointer"
-                >
-                  <span className="text-white hover:text-transparent hover:bg-gradient-to-r hover:from-[#FFD54F] hover:to-[#FFB300] hover:bg-clip-text transition-all duration-300 font-medium">
-                    {item.text}
-                  </span>
-                  <span className="nav-link-underline"></span>
-                </button>
-              ))}
+        <div className="max-w-6xl mx-auto px-4 h-full flex items-center justify-between">
+          {/* Left: Logo + Title */}
+          <div className="flex items-center cursor-pointer" onClick={handleLogoClick}>
+            <div className="w-12 h-12 relative">
+              <Logo />
             </div>
+            <h3 className="ml-2 font-heading text-transparent bg-gradient-to-r from-[#FFD54F] to-[#FFB300] bg-clip-text text-2xl font-bold whitespace-nowrap">
+              HEALTHY EATING
+            </h3>
           </div>
 
-          <div className="w-[200px] flex justify-end">
+          <div className="flex items-center">
+            {/* Cart icon (unchanged position) */}
             <button
               onClick={() => setIsCartOpen(true)}
               className="relative p-2 hover:scale-105 hover:cursor-pointer transition-transform duration-300"
@@ -121,17 +108,29 @@ export function Navbar() {
                   {cartItemCount}
                 </span>
               )}
+            </button>
 
+            {/* Mobile menu button */}
+            <button
+              className="md:hidden ml-4 text-white hover:text-[#FFD54F] transition-colors"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            >
+              {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
           </div>
         </div>
 
-        <div className={`md:hidden absolute w-full bg-black transition-all duration-300 ${isMobileMenuOpen ? 'max-h-64 border-t border-gray-800' : 'max-h-0 overflow-hidden'}`}>
+        {/* Mobile slide-out menu */}
+        <div
+          className={`md:hidden absolute w-full bg-black transition-all duration-300 ${
+            isMobileMenuOpen ? 'max-h-64 border-t border-gray-800' : 'max-h-0 overflow-hidden'
+          }`}
+        >
           {[
             { text: 'MENY', id: 'meals-section' },
             { text: 'HUR DET FUNKAR', id: 'how-it-works' },
             { text: 'OMDÖMEN', id: 'testimonials' },
-            { text: 'KONTAKTA OSS', id: 'footer' }
+            { text: 'KONTAKTA OSS', id: 'footer' },
           ].map((item) => (
             <button
               key={item.text}
@@ -143,6 +142,6 @@ export function Navbar() {
           ))}
         </div>
       </div>
-    </div >
+    </div>
   );
-};
+}
