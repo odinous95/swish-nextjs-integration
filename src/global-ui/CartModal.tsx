@@ -91,7 +91,8 @@ export function CartModal({
             onClick={onClose}
             className="text-gray-500 hover:text-gray-700 transition-colors"
           >
-            <X className="w-6 h-6" />
+            {/* Ändrad till röd färg och hover-effekt */}
+            <X className="w-6 h-6 text-red-500 hover:text-red-600" />
           </button>
         </div>
 
@@ -103,7 +104,10 @@ export function CartModal({
               {displayItems.map((item) => {
                 const itemImage = getItemImage(item.id, item.name);
                 return (
-                  <div key={item.id} className="flex items-center justify-between bg-gray-50 p-4 rounded-lg">
+                  <div
+                    key={item.id}
+                    className="flex items-center justify-between bg-gray-50 p-4 rounded-lg"
+                  >
                     <div className="flex items-center gap-4">
                       {itemImage && (
                         <Image
@@ -167,4 +171,4 @@ export function CartModal({
       </div>
     </div>
   );
-};
+}
