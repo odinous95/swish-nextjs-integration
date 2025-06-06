@@ -105,9 +105,9 @@ export default function PrivacyPolicy() {
 
               <section id="sharing" className="policy-section bg-white rounded-xl p-8 transform hover:scale-[1.02] transition-all duration-300 shadow-lg">
                 <h2 className="text-2xl font-bold mb-6 text-transparent bg-gradient-to-r from-[#FFD54F] to-[#FFB300] bg-clip-text">3. Delning av information</h2>
-                <p className="text-gray-700 mb-4">Vi delar endast din information med Swish, och då endast:</p>
+                <p className="text-gray-700 mb-4">Vi delar endast din information med Swish och Klarna, och då endast:</p>
                 <ul className="list-none space-y-3">
-                  {['Telefonnummer', 'Belopp för beställningen'].map((item) => (
+                  {['Belopp för beställningen'].map((item) => (
                     <li key={item} className="flex items-center gap-2 text-gray-600">
                       <span className="w-2 h-2 bg-gradient-to-r from-[#FFD54F] to-[#FFB300] rounded-full" />
                       {item}
