@@ -23,7 +23,6 @@ export function createRepository() {
       )
       RETURNING id
     `;
-
       const orderId = result[0]?.id;
       console.log("Order created successfully with ID:", orderId);
       return orderId; // 👈 Return the generated order ID

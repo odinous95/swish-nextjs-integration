@@ -7,6 +7,7 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 - **PostgreSQL** as the database.
 - **Resend** for sending emails.
 - **Zod** for schema validation.
+- **Zustand** for state management.
 - **Next.js Server Actions** with `useActionState` for handling server-side logic.
 
 ## Getting Started
@@ -36,6 +37,7 @@ This project uses [`next/font`](https://nextjs.org/docs/app/building-your-applic
 - **Database Layer:** Use Drizzle ORM with PostgreSQL for robust data management.
 - **Email Sending:** Send transactional emails via Resend.
 - **Validation:** Ensure data integrity with Zod schemas.
+- **State Management:** Manage client-side state efficiently with Zustand.
 - **Server Actions:** Use Next.js server actions and `useActionState` for seamless server-side logic and state management.
 
 ## Learn More
@@ -46,6 +48,7 @@ This project uses [`next/font`](https://nextjs.org/docs/app/building-your-applic
 - [Drizzle ORM](https://orm.drizzle.team/)
 - [Resend](https://resend.com/)
 - [Zod](https://zod.dev/)
+- [Zustand](https://zustand-demo.pmnd.rs/)
 
 ## Deploy on Vercel
 
