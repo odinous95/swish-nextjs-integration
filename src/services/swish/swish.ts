@@ -15,8 +15,6 @@ type SwishConfig = {
 
 const isProd = process.env.SWISH_ENV === "production";
 
-console.log(isProd);
-
 const prodConfig: SwishConfig = {
   payeeAlias: "1232005668",
   host: "https://cpc.getswish.net/swish-cpcapi",
