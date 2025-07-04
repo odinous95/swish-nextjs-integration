@@ -1,140 +1,145 @@
+// src/global-ui/OrderButton.tsx
 "use client";
-import React, { useState } from 'react';
-import { Check } from 'lucide-react';
-import { HeroButton } from './HeroButton';
-import { QuantityControls } from '../features/orders/ui/QuantityControls';
-import { SauceSelection } from '../features/orders/ui/SauceSelection';
-import Image from 'next/image';
-import { OrderButtonProps } from '@/features/orders/types';
+import React, { useState, useCallback, memo } from "react";
+import { Check } from "lucide-react";
+import { QuantityControls } from "../features/orders/ui/QuantityControls";
+import { SauceSelection } from "../features/orders/ui/SauceSelection";
+import Image from "next/image";
+import { OrderButtonProps } from "@/features/orders/types";
+import { HeroButton } from "@/global-ui/HeroButton";  // <-- Här importen som saknades
 
-export function OrderButton({
+function OrderButtonComponent({
   id,
-  name = '',
+  name = "",
   price = 0,
   small = false,
-  className = '',
+  className = "",
   isHeroButton = false,
-  // showQuantity = {},
   quantities = {},
   buttonStates = {},
-  handleButtonClick = () => { },
-  adjustQuantity = () => { },
-  scrollToSection = () => { },
+  handleButtonClick = () => {},
+  adjustQuantity = () => {},
+  scrollToSection = () => {},
 }: OrderButtonProps) {
-  const [selectedSauce, setSelectedSauce] = useState<string>('');
+  const [selectedSauce, setSelectedSauce] = useState<string>("");
   const [selectedLemon, setSelectedLemon] = useState<boolean>(false);
 
-  const needsSauceSelection = ['shawarma', 'spett', 'cevapcici', 'lax', 'teriyaki'].includes(id);
+  const needsSauceSelection = React.useMemo(
+    () =>
+      ["shawarma", "spett", "cevapcici", "lax", "teriyaki"].includes(id),
+    [id]
+  );
 
-  const handleSauceSelect = (sauce: string) => {
+  const handleSauceSelect = useCallback((sauce: string) => {
     setSelectedSauce(sauce);
-  };
+  }, []);
 
-  const handleAddToCart = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
+  const handleLemonToggle = useCallback(() => {
+    setSelectedLemon((prev) => !prev);
+  }, []);
 
-    if (needsSauceSelection && !selectedSauce) {
-      return;
-    }
+  const handleAddToCart = useCallback(
+    (e: React.MouseEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      if (needsSauceSelection && !selectedSauce) return;
 
-    // const mealQuantity = quantities[id] || 1;
-    let finalName = name;
+      let finalName = name;
+      if (selectedSauce && selectedSauce !== "Ingen") {
+        finalName = `${name} (${selectedSauce})`;
+      }
+      handleButtonClick(id, finalName, price);
 
-    // Add sauce to the meal name if selected
-    if (selectedSauce && selectedSauce !== 'Ingen') {
-      finalName = `${name} (${selectedSauce})`;
-    }
+      if ((id === "lax" || id === "teriyaki") && selectedLemon) {
+        handleButtonClick("extra-lemon", "Citron", 7);
+      }
 
-    // Add the meal with the updated name
-    handleButtonClick(id, finalName, price);
+      setSelectedSauce("");
+      setSelectedLemon(false);
+    },
+    [
+      id,
+      name,
+      price,
+      needsSauceSelection,
+      selectedSauce,
+      selectedLemon,
+      handleButtonClick,
+    ]
+  );
 
-    // Add lemon if selected for specific meals
-    if ((id === 'lax' || id === 'teriyaki') && selectedLemon) {
-      handleButtonClick(
-        'extra-lemon',
-        'Citron',
-        7
-      );
-    }
-
-    // Reset selections
-    setSelectedSauce('');
-    setSelectedLemon(false);
-  };
+  const onAdjust = useCallback(
+    (delta: number) => adjustQuantity(id, delta),
+    [adjustQuantity, id]
+  );
 
   if (isHeroButton) {
-    return <HeroButton small={small} className={className} scrollToSection={scrollToSection} />;
+    return (
+      <HeroButton
+        small={small}
+        className={className}
+        scrollToSection={scrollToSection}
+      />
+    );
   }
 
   const currentQuantity = quantities[id] || 1;
-  const totalPrice = price * currentQuantity;
-
-  // Calculate total price including extras
-  let extrasPrice = 0;
-  if ((id === 'lax' || id === 'teriyaki') && selectedLemon) {
-    extrasPrice += 7;
-  }
-  const finalTotalPrice = totalPrice + extrasPrice;
+  const baseTotal = price * currentQuantity;
+  const extrasPrice =
+    (id === "lax" || id === "teriyaki") && selectedLemon ? 7 : 0;
+  const finalTotalPrice = baseTotal + extrasPrice;
 
   return (
     <div className="relative">
-      <div className="flex flex-col space-y-2">
-        {(id === 'lax' || id === 'teriyaki') && (
-          <div className="mb-4">
-            <p className="text-sm font-medium text-gray-700 mb-2">Tillval:</p>
-            <button
-              onClick={() => setSelectedLemon(!selectedLemon)}
-              className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${selectedLemon
-                ? 'bg-gradient-to-r from-[#FFD54F] to-[#FFB300] text-black'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                }`}
-            >
-              <Image
-                src="https://i.ibb.co/nsxDDpRs/IMAGE-2025-04-20-00-21-30-removebg-preview.png"
-                alt="Citron"
-                width={24}
-                height={24}
-                className="rounded-full"
-              />
-              Citron (+7 kr)
-            </button>
-          </div>
-        )}
+      {(id === "lax" || id === "teriyaki") && (
+        <div className="mb-4">
+          <p className="text-sm font-medium text-gray-700 mb-2">Tillval:</p>
+          <button
+            onClick={handleLemonToggle}
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-150 ${
+              selectedLemon
+                ? "bg-gradient-to-r from-yellow-500 to-yellow-300 text-black"
+                : "bg-gray-100 text-gray-700"
+            }`}
+          >
+            <Image
+              src="https://i.ibb.co/nsxDDpRs/IMAGE-2025-04-20-00-21-30-removebg-preview.png"
+              alt="Citron"
+              width={24}
+              height={24}
+              className="rounded-full"
+            />
+            Citron (+7 kr)
+          </button>
+        </div>
+      )}
 
-        <SauceSelection
-          selectedSauce={selectedSauce}
-          onSauceSelect={handleSauceSelect}
-          needsSauceSelection={needsSauceSelection}
-          mealId={id}
-        />
+      <SauceSelection
+        selectedSauce={selectedSauce}
+        onSauceSelect={handleSauceSelect}
+        needsSauceSelection={needsSauceSelection}
+        mealId={id}
+      />
 
-        <div className="flex flex-col space-y-2">
-          <QuantityControls
-            quantity={currentQuantity}
-            onAdjust={(delta) => adjustQuantity(id, delta)}
-          />
-
-          <div className="text-center text-sm text-gray-600">
-            Totalt: {finalTotalPrice.toFixed(2).replace('.', ',')} kr
-          </div>
+      <div className="flex items-end py-2">
+        <div className="flex flex-col items-center">
+          <span className="text-sm text-gray-600 mb-1">
+            Totalt: {finalTotalPrice.toFixed(2).replace(".", ",")} kr
+          </span>
+          <QuantityControls quantity={currentQuantity} onAdjust={onAdjust} />
         </div>
 
         <button
           onClick={handleAddToCart}
           disabled={needsSauceSelection && !selectedSauce}
-          className={`relative bg-gradient-to-r from-[#FFD54F] to-[#FFB300] text-black rounded-xl font-semibold hover:from-[#FFE082] hover:to-[#FFB300] transition-all duration-300 shadow-[0_8px_30px_rgb(255,213,79,0.15)] hover:scale-105 hover:shadow-[0_8px_30px_rgb(255,213,79,0.25)] overflow-hidden group ${needsSauceSelection && !selectedSauce ? 'opacity-50 cursor-not-allowed' : ''
-            } ${small ? 'px-8 py-3 text-sm' : 'w-full px-6 py-3'} ${className}`}
+          className={`ml-auto flex items-center justify-center px-6 py-3 text-sm font-semibold text-black bg-gradient-to-r from-yellow-500 to-yellow-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed ${className}`}
         >
-          <span className={`absolute inset-0 flex items-center justify-center transition-opacity duration-300 ${buttonStates[id] ? 'opacity-100' : 'opacity-0'}`}>
-            <Check className="w-6 h-6" />
-          </span>
-          <span className={`transition-opacity duration-300 ${buttonStates[id] ? 'opacity-0' : 'opacity-100'}`}>
-            LÄGG TILL I VARUKORGEN
-          </span>
-          <span className="absolute inset-0 pointer-events-none group-active:animate-ripple bg-white/25 rounded-full scale-0" />
+          {buttonStates[id] && <Check className="mr-2 w-5 h-5" />}
+          Lägg till
         </button>
       </div>
     </div>
   );
-};
+}
+
+export const OrderButton = memo(OrderButtonComponent);

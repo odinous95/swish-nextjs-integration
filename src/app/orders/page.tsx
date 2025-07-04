@@ -1,39 +1,12 @@
 
+import { ORDER } from "@/features/orders/types";
 import { OrdersTable } from "@/features/orders/ui";
 import React from "react";
 
-type Order = {
-    id: number;
-    first_name: string;
-    last_name: string;
-    email: string;
-    phone: string;
-    address: string;
-    postal_code: string;
-    city: string;
-    comment: string | null;
-    door_code: string;
-    floor: string;
-    extra_comment: string | null;
-    delivery_date: string; // ISO string
-    payment_method: string;
-    swish_id: string | null;
-    swish_url: string | null;
-    qr_code_url: string | null;
-    payment_status: string | null;
-    total_price: string;
-    discount: string;
-    delivery_fee: string;
-    discount_applied: boolean;
-    campaign_code: string;
-    terms_accepted: boolean;
-    created_at: string; // ISO string
-    delivery_time_window: string;
-};
 
 const ORDERS_PER_PAGE = 20;
 
-async function fetchOrders(): Promise<Order[]> {
+async function fetchOrders(): Promise<ORDER[]> {
     const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/orders/get-orders`, {
         cache: "no-store",
     });
@@ -43,7 +16,7 @@ async function fetchOrders(): Promise<Order[]> {
 }
 
 export default async function OrdersPage() {
-    let orders: Order[] = [];
+    let orders: ORDER[] = [];
 
     try {
         orders = await fetchOrders();

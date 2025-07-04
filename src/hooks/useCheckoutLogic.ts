@@ -1,8 +1,7 @@
 // hooks/useCheckoutLogic.ts
 import { useCheckoutForm } from "@/hooks/useCheckoutForm";
 import { useCartStore } from "@/store";
-import { useState, useEffect } from "react";
-import { COUPON_USAGE_KEY, MAX_COUPON_USES, validPostalCodes } from "@/data";
+import { useState } from "react";
 
 export function useCheckoutLogic() {
   const cartItems = useCartStore((state) => state.cartItems);

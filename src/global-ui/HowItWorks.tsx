@@ -2,9 +2,9 @@ import React from "react";
 
 export function HowItWorks() {
   return (
-    <section id="how-it-works" className="py-20 px-6 bg-white text-black">
-      <div className="max-w-7xl mx-auto">
-        <h2 className="font-heading font-extrabold text-4xl md:text-5xl text-center mb-20 tracking-tight">
+    <section id="how-it-works" className="py-16 px-4 bg-white text-black">
+      <div className="max-w-6xl mx-auto">
+        <h2 className="font-heading font-bold text-3xl md:text-4xl text-center mb-12 tracking-tight">
           Hälsosam Mat – På Ett Enkelt Sätt
         </h2>
 
@@ -12,7 +12,7 @@ export function HowItWorks() {
           {/* Steg 1 */}
           <div className="relative h-64 rounded-2xl overflow-hidden">
             <img
-              src="/Assets/ChatGPT Image 2 juni 2025 19_03_15.png"
+              src="/Assets/jawadihpone.jpg"
               alt="Välj dina måltider"
               className="w-full h-full object-cover"
             />
@@ -30,7 +30,7 @@ export function HowItWorks() {
           {/* Steg 2 */}
           <div className="relative h-64 rounded-2xl overflow-hidden">
             <img
-              src="/Assets/ChatGPT Image 2 juni 2025 19_05_27.png"
+              src="/Assets/jawadiphone2.jpg"
               alt="Vi lagar och packar färskt"
               className="w-full h-full object-cover"
             />

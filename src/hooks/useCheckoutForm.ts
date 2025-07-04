@@ -1,6 +1,6 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
-import { CheckoutForm, InputRefs } from "../types";
+import { CheckoutForm } from "../types";
 
 export const useCheckoutForm = () => {
   const [checkoutForm, setCheckoutForm] = useState<CheckoutForm>({

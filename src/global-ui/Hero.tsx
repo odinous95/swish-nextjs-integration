@@ -29,9 +29,8 @@ export function Hero() {
   };
 
   // Lokala bildvägar
-  const mobileBg = "https://i.ibb.co/KzXrSCy6/heromobil.png";
-  const desktopBg = "https://i.ibb.co/5W262T46/herosection.png";
-
+  const mobileBg = "https://i.ibb.co/Lh51K3ZD/Sk-rmbild-2025-06-29-112848.png";
+  const desktopBg = "https://i.ibb.co/HLCV9WRX/Whats-App-Bild-2025-06-26-kl-12-32-10-f4452f37.jpg";
   return (
     <section className="relative -mt-[70px] h-[calc(100vh+70px)] flex items-center justify-center overflow-hidden">
       {/* Bakgrundsbild */}
@@ -79,4 +78,3 @@ export function Hero() {
   );
 }
 
-export default Hero;

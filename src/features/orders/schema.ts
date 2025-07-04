@@ -37,6 +37,7 @@ export const orders = pgTable("orders", {
   delivery_fee: numeric("delivery_fee").default("0"),
   discount_applied: boolean("discount_applied").default(false),
   campaign_code: varchar("campaign_code", { length: 100 }),
+  cart_items: text("cart_items").notNull(), // JSON string of cart items
 
   terms_accepted: boolean("terms_accepted").notNull(),
   created_at: timestamp("created_at").defaultNow(),

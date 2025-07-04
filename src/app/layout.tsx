@@ -1,4 +1,3 @@
-
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
@@ -11,16 +10,26 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+import ScrollToTop from "./ScrollToTop";
 import ClientWrapper from "./ClientWrapper";
 import { Providers } from "./provider";
 import { ReactNode } from "react";
 
+export const metadata = {
+  title: "Healthy Eating - Färdiga Matlådor i Örebro",
+  description: "Beställ nyttiga och färdiglagade matlådor från Healthy Eating. Perfekt för en aktiv livsstil – leverans direkt till dörren.",
+};
+
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" className="light" style={{ colorScheme: "light" }}>
+    <html lang="sv" className="light" style={{ colorScheme: "light" }}>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <Providers>
-          <ClientWrapper>{children}</ClientWrapper>
+          <ClientWrapper>
+            {/* ScrollToTop ser till att varje ny route börjar längst upp */}
+            <ScrollToTop />
+            {children}
+          </ClientWrapper>
         </Providers>
       </body>
     </html>

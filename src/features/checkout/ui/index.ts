@@ -4,6 +4,8 @@ export * from "./OrderSummary";
 export * from "./ErrorText";
 export * from "./DesktopPaymentStatus";
 export * from "./MobilePaymentStatus";
+export * from "./DeliveryForm";
 export * from "./CheckoutLayout";
 export * from "./QrFallbackView";
 export * from "./SuccessView";
+export * from "./StripeSuccess";

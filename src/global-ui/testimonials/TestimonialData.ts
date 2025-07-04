@@ -1,10 +1,10 @@
 export const testimonials = [
   {
-    name: "Amina",
+    name: "Arvin",
     text: "Fantastiska matlådor som gör det så enkelt att äta hälsosamt. Kvaliteten är alltid på topp!"
   },
   {
-    name: "Azad",
+    name: "Lucas",
     text: "Perfekt för mig som tränar. Bra portioner och alltid fräscha råvaror. Rekommenderas starkt!"
   },
   {
@@ -12,7 +12,7 @@ export const testimonials = [
     text: "Underbar service och utsökta måltider. Har sparat så mycket tid på matlagning!"
   },
   {
-    name: "Hanna",
+    name: "Elin",
     text: "Smakerna satt perfekt och portionerna var lagom stora. Rekommenderar starkt!"
   },
   {

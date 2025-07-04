@@ -15,10 +15,14 @@ export const faqItems: FAQItem[] = [
     },
     {
         question: "Vilka betalningsmetoder accepterar ni?",
-        answer: "Vi accepterar endast Swish. Betalning sker i samband med beställning."
+        answer: "Vi accepterar Swish och Klarna. Betalning sker i samband med beställning."
     },
     {
         question: "Vad gör jag om jag inte är hemma när leveransen är schemalagd?",
         answer: "Om du inte är hemma vid leverans lämnar vi maten vid din dörr, om du inte har angett andra önskemål i kommentarsfältet i kassan.\n\n<strong>Observera att ingen återbetalning sker efter genomförd betalning.</strong>"
+    },
+    {
+        question: "När tillagas matlådorna?",
+        answer: "Våra matlådor tillagas samma dag som de levereras för att garantera färskhet och god smak."
     }
 ];

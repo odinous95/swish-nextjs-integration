@@ -26,16 +26,15 @@ const prodConfig: SwishConfig = {
   passphrase: null,
 };
 
-// const testConfig: SwishConfig = {
-//   payeeAlias: "1234679304",
-//   host: "https://mss.cpc.getswish.net/swish-cpcapi",
-//   qrHost: "https://mpc.getswish.net/qrg-swish",
-//   cert: fs.readFileSync(path.resolve(process.env.SWISH_CERT_TEST || "")),
-//   key: fs.readFileSync(path.resolve(process.env.SWISH_KEY_TEST || "")),
-//   ca: fs.readFileSync(path.resolve(process.env.SWISH_CA_TEST || "")),
-
-//   passphrase: "swish",
-// };
+const testConfig: SwishConfig = {
+  payeeAlias: "1234679304",
+  host: "https://mss.cpc.getswish.net/swish-cpcapi",
+  qrHost: "https://mpc.getswish.net/qrg-swish",
+  cert: fs.readFileSync(path.resolve(process.env.SWISH_CERT_TEST || "")),
+  key: fs.readFileSync(path.resolve(process.env.SWISH_KEY_TEST || "")),
+  ca: fs.readFileSync(path.resolve(process.env.SWISH_CA_TEST || "")),
+  passphrase: "swish",
+};
 
 export async function swishRequest<T>(
   method: "POST" | "GET",

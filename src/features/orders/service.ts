@@ -12,6 +12,37 @@ export function createService(repository: Repository) {
       return { success: false, error: "Failed to create order." };
     }
   }
+  async function getOrderById(orderId: number) {
+    try {
+      const order = await repository.getOrderByIdDb(orderId);
+      if (!order) {
+        return { success: false, error: "Order not found." };
+      }
+      // console.log("Order fetched successfully:", order);
+      return { success: true, order };
+    } catch (error) {
+      console.error("Error fetching order:", error);
+      return { success: false, error: "Failed to fetch order." };
+    }
+  }
+  async function updateOrderPaymentStatus(
+    orderId: number,
+    payment_status: string
+  ) {
+    try {
+      const updatedOrder = await repository.updateOrderPaymentStatus(
+        orderId,
+        payment_status
+      );
+      if (!updatedOrder) {
+        return { success: false, error: "Order not found." };
+      }
+      return { success: true, order: updatedOrder };
+    } catch (error) {
+      console.error("Error updating payment status:", error);
+      return { success: false, error: "Failed to update payment status." };
+    }
+  }
   async function getAllOrders() {
     try {
       const orders = await repository.getAllOrdersDb();
@@ -24,6 +55,8 @@ export function createService(repository: Repository) {
   }
   return {
     createOrder,
+    getOrderById,
+    updateOrderPaymentStatus,
     getAllOrders,
   };
 }

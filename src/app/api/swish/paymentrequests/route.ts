@@ -2,14 +2,15 @@ import { swishConfig, swishRequest } from "@/services/swish/swish";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
+  const SWISH_CALLBACK_URL = process.env.SWISH_CALLBACK_URL!;
   try {
     const body = await req.json();
-    const { payerAlias, amount, message } = body;
+    const { amount, message } = body;
+
     const swishBody = {
       payeePaymentReference: "0123456789",
-      callbackUrl: `https://healthy-eating-next.vercel.app/api/swish/webhook`,
+      callbackUrl: SWISH_CALLBACK_URL,
       payeeAlias: swishConfig.payeeAlias,
-      payerAlias,
       amount,
       currency: "SEK",
       message,

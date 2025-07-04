@@ -27,6 +27,11 @@ interface CartState {
     price: number,
     isExtra?: boolean
   ) => void;
+  addToCartDirect: (
+    buttonId: string,
+    itemName: string,
+    price: number
+  ) => void;
 }
 
 export const useCartStore = create<CartState>()(
@@ -45,6 +50,7 @@ export const useCartStore = create<CartState>()(
       setIsCheckoutOpen: (open) => set({ isCheckoutOpen: open }),
       setIsExtrasOpen: (open) => set({ isExtrasOpen: open }),
       setPendingCartItem: (item) => set({ pendingCartItem: item }),
+
       getTotalCartItems: () =>
         get().cartItems.reduce((total, item) => total + item.quantity, 0),
 
@@ -75,19 +81,57 @@ export const useCartStore = create<CartState>()(
         }));
       },
 
+      // Ändrad: slå ihop extras med samma id/name
       handleAddExtras: (extras) => {
-        set((state) => ({
-          cartItems: [
-            ...state.cartItems,
-            ...extras.map((extra) => ({
-              id: extra.id,
-              name: extra.name,
-              price: extra.price,
-              quantity: extra.quantity,
-              isExtra: true,
-            })),
-          ],
-        }));
+        set((state) => {
+          const newCartItems: CartItem[] = [...state.cartItems];
+
+          extras.forEach((extra) => {
+            const idx = newCartItems.findIndex(
+              (item) => item.id === extra.id && item.name === extra.name
+            );
+            if (idx !== -1) {
+              // finns redan, öka bara quantity
+              newCartItems[idx].quantity += extra.quantity;
+            } else {
+              // nytt extra
+              newCartItems.push({
+                id: extra.id,
+                name: extra.name,
+                price: extra.price,
+                quantity: extra.quantity,
+                isExtra: true,
+              });
+            }
+          });
+
+          return { cartItems: newCartItems };
+        });
+      },
+
+      // Direkt-lägg-till utan popup
+      addToCartDirect: (buttonId, itemName, price) => {
+        set((state) => {
+          const newItem: CartItem = {
+            id: buttonId,
+            name: itemName,
+            price,
+            quantity: 1,
+          };
+          const existingIndex = state.cartItems.findIndex(
+            (item) => item.id === buttonId && item.name === itemName
+          );
+          if (existingIndex >= 0) {
+            const updated = state.cartItems.map((item, idx) =>
+              idx === existingIndex
+                ? { ...item, quantity: item.quantity + 1 }
+                : item
+            );
+            return { cartItems: updated };
+          } else {
+            return { cartItems: [...state.cartItems, newItem] };
+          }
+        });
       },
 
       handleButtonClick: (buttonId, itemName, price, isExtra = false) => {
@@ -181,6 +225,7 @@ export const useCartStore = create<CartState>()(
           }));
         }, 150);
       },
+
       resetCart: () => {
         set({
           cartItems: [],
@@ -200,14 +245,14 @@ export const useCartStore = create<CartState>()(
         typeof window !== "undefined"
           ? {
               getItem: (name) => {
-                const item = localStorage.getItem(name);
+                const item = sessionStorage.getItem(name);
                 return item ? JSON.parse(item) : null;
               },
               setItem: (name, value) => {
-                localStorage.setItem(name, JSON.stringify(value));
+                sessionStorage.setItem(name, JSON.stringify(value));
               },
               removeItem: (name) => {
-                localStorage.removeItem(name);
+                sessionStorage.removeItem(name);
               },
             }
           : undefined,

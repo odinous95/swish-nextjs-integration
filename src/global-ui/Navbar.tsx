@@ -9,17 +9,18 @@ export function Navbar() {
     setIsCartOpen,
     getTotalCartItems,
   } = useCartStore();
+  const navigate = useRouter();
   const [hasMounted, setHasMounted] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   useEffect(() => {
     setHasMounted(true);
   }, []);
 
-  const [isScrolled, setIsScrolled] = useState(false);
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
     };
-
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -37,8 +38,8 @@ export function Navbar() {
       });
     }
   };
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const navigate = useRouter();
+
+
 
   const handleMobileMenuClick = (sectionId: string) => {
     navigate.push('/');
@@ -48,9 +49,6 @@ export function Navbar() {
     setIsMobileMenuOpen(false);
   };
 
-  const handleLogoClick = () => {
-    navigate.push('/');
-  };
 
   const handleNavClick = (sectionId: string) => {
     if (window.location.pathname === '/') {
@@ -80,13 +78,8 @@ export function Navbar() {
               <Menu className="w-6 h-6" />
             )}
           </button>
-          <div
-            className="w-[200px] flex items-center gap-3 cursor-pointer"
-            onClick={handleLogoClick}
-          >
-            <Logo />
-            <h3 className="font-heading text-transparent bg-gradient-to-r from-[#FFD54F] to-[#FFB300] bg-clip-text text-xl font-bold whitespace-nowrap">HEALTHY EATING</h3>
-          </div>
+
+          <Logo />
 
           <div className="flex-1 flex justify-center">
             <div className="hidden md:flex items-center justify-center space-x-8">

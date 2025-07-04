@@ -1,5 +1,5 @@
+// src/features/orders/ui/QuantityControls.tsx
 import React from 'react';
-import { Plus, Minus } from 'lucide-react';
 
 interface QuantityControlsProps {
   quantity: number;
@@ -8,30 +8,28 @@ interface QuantityControlsProps {
 
 export function QuantityControls({ quantity, onAdjust }: QuantityControlsProps) {
   return (
-    <div className="flex items-center justify-center space-x-4 mb-2">
+    <div className="inline-flex items-center bg-gray-100 rounded-full">
       <button
-        onClick={(e) => {
+        onClick={e => {
           e.preventDefault();
           e.stopPropagation();
           onAdjust(-1);
         }}
-        className="text-black bg-gray-200 rounded-full w-8 h-8 flex items-center justify-center hover:bg-gray-300 transition-colors"
+        className="px-4 py-2 text-xl text-gray-700 hover:bg-gray-200 rounded-l-full transition-colors"
       >
-        <Minus className="w-4 h-4" />
+        −
       </button>
-      <span className="text-black font-semibold text-lg min-w-[20px] text-center">
-        {quantity}
-      </span>
+      <span className="px-6 text-black">{quantity}</span>
       <button
-        onClick={(e) => {
+        onClick={e => {
           e.preventDefault();
           e.stopPropagation();
           onAdjust(1);
         }}
-        className="text-black bg-gray-200 rounded-full w-8 h-8 flex items-center justify-center hover:bg-gray-300 transition-colors"
+        className="px-4 py-2 text-xl text-gray-700 hover:bg-gray-200 rounded-r-full transition-colors"
       >
-        <Plus className="w-4 h-4" />
+        +
       </button>
     </div>
   );
-};
+}

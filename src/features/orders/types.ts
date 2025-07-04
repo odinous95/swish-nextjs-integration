@@ -1,25 +1,28 @@
 export type ORDER = {
-  firstName: string;
-  lastName: string;
+  first_name: string;
+  last_name: string;
   email: string;
   phone: string;
   address: string;
-  postalCode: string;
+  postal_code: string;
   city: string;
   extra_comment?: string;
   floor?: string;
-  doorCode?: string;
-  deliveryDate: Date;
-  cartItems: CartItem[]; // You should already have a CartItem type defined
-  total: number;
-  deviceType: string;
-  campaignCode?: string;
+  door_code?: string;
+
+  cart_items: CartItem[]; // You should already have a CartItem type defined
+  total_price: number;
+  device_type: string;
+  campaign_code?: string;
   discount?: number;
-  discountApplied?: boolean;
-  paymentMethod?: string; // e.g. "CARD", "SWISH", etc.
-  deliveryTimeWindow?: string; // e.g. "Fredag 30/5 (08:00 – 13:00)"
-  termsAccepted?: boolean; // true if the user has accepted terms and conditions
-  requestId?: string; // For Swish payment requests
+  discount_applied?: boolean;
+  payment_method?: string; // e.g. "CARD", "SWISH", etc.
+  delivery_time_window?: string; // e.g. "Fredag 30/5 (08:00 – 13:00)"
+  delivery_date: Date;
+  terms_accepted?: boolean; // true if the user has accepted terms and conditions
+  request_id?: string; // For Swish payment requests
+  payment_status: string;
+  created_at?: Date; // Timestamp of when the order was created
 };
 
 export interface CartItem {

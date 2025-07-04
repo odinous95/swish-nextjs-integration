@@ -1,39 +1,13 @@
 "use client";
 
 import React, { useState } from "react";
+import { ORDER } from "../types";
 
-type Order = {
-    id: number;
-    first_name: string;
-    last_name: string;
-    email: string;
-    phone: string;
-    address: string;
-    postal_code: string;
-    city: string;
-    comment: string | null;
-    door_code: string;
-    floor: string;
-    extra_comment: string | null;
-    delivery_date: string;
-    payment_method: string;
-    swish_id: string | null;
-    swish_url: string | null;
-    qr_code_url: string | null;
-    payment_status: string | null;
-    total_price: string;
-    discount: string;
-    delivery_fee: string;
-    discount_applied: boolean;
-    campaign_code: string;
-    terms_accepted: boolean;
-    created_at: string;
-    delivery_time_window: string;
-};
+
 
 type Props = {
-    initialOrders: Order[];
-    allOrders: Order[];
+    initialOrders: ORDER[];
+    allOrders: ORDER[];
 };
 
 const ORDERS_PER_PAGE = 20;
@@ -81,9 +55,9 @@ export function OrdersTable({ initialOrders, allOrders }: Props) {
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-200">
-                                {visibleOrders.map((order) => (
-                                    <tr key={order.id} className="hover:bg-yellow-50">
-                                        <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-700">{order.id}</td>
+                                {visibleOrders.map((order, index) => (
+                                    <tr key={index} className="hover:bg-yellow-50">
+                                        <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-700">{index}</td>
                                         <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-700">
                                             {order.first_name} {order.last_name}
                                         </td>
@@ -96,17 +70,17 @@ export function OrdersTable({ initialOrders, allOrders }: Props) {
                                         </td>
                                         <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-700">{order.city}</td>
                                         <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-700">
-                                            {new Date(order.delivery_date).toLocaleDateString()} ({order.delivery_time_window})
+                                            {new Date(order.delivery_date).toLocaleDateString()}
                                         </td>
                                         <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-700">{order.payment_method}</td>
                                         <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-700">
                                             {order.payment_status || "N/A"}
                                         </td>
                                         <td className="px-4 py-2 whitespace-nowrap text-sm font-semibold text-gray-900">
-                                            {parseFloat(order.total_price).toFixed(2)} SEK
+                                            {order.total_price} SEK
                                         </td>
                                         <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-700">
-                                            {new Date(order.created_at).toLocaleString()}
+                                            {order.created_at ? new Date(order.created_at).toLocaleString() : "N/A"}
                                         </td>
                                     </tr>
                                 ))}
